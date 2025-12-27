@@ -1,0 +1,27 @@
+﻿OPEN-CLOSED PRINCIPLE
+
+O OCP afima que as classes devem estar abertas para extensão, mas fechadas para modificação.
+
+Benefícios: Novas funcionalidades sem alterar o código existente, minimiza o risco em funcionalidades ja implementadas.
+
+- Exemplo má pratica: Modificar uma classe diretamente para adicionar um novo comportamento {
+
+	Uma classe Calculadora com um método calcular, dentro dele tem if(soma) elseif(divisao) elseif(multiplicação).
+	Sempre que for adicionar um novo método de calculo teria que adicionar um novo if, perigoso afetar quem já utiliza o método...
+
+}
+
+- Exemplo boa pratica: Classe base com Polimorfismo {
+
+	Calculo com um método abstract Calcular (valor) -> 
+	varias classes herdando Calculo e aplicando um override sobre o método 'Calcular' (somar -> calcular => valor1 + valor2)
+
+	*Base ficou fechada para modificação, mas aberta para quem quiser extende-la
+}
+
+O abstract class informa que a classe base não pode ser instanciada, apenas herdada.
+
+O ideal é usar o polimorfirismo para estender o comportamento sem modificar a classe base (Extensão).
+
+====================
+Sempre pensar em criar um código extensivo, novas adições NÃO PODEM alterar o código existente sempre extender...

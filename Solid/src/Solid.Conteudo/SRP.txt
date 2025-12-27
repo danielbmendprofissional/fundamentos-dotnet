@@ -1,0 +1,22 @@
+﻿SINGLE RESPOSIBILITY PRINCIPLE
+
+O SRP afirma que uma classe deve ter apenas uma responsabilidade e uma razão para mudar.
+
+Benefícios: manutenção, reutilização e testes.
+
+- Exemplo má pratica: Uma classe que lida com lógica de negócio e salva dados no banco também. (report.cs)
+
+- Exemplo boa pratica: Uma classe com lógica de regra de negócio e outra que salva dados no banco (report, printService e reportRepository)
+
+- Cada classe tem um propósito claro e pode ser alterada sem impactar outras partes.
+
+- Sempre perguntar, essa classe tem mais de uma razão para mudar? Se sim é melhor separar
+=========================
+
+Não é para sair criando classe e separando por método, mas um exemplo prático seria
+
+Pessoa.cs (entidade dominio somente pessoa (propriedades, construtor, métodos e validações de domínio))
+Pessoa.Controller (Endpoints controller somente de pessoa)
+Pessoa.Application.Service (Métodos de negócio somente de pessoa (cadastrar, obter, obterLista, Atualizar, Remover))
+Pessoa.Application.Service (Validação de negócio somente de pessoa)
+Pessoa.Infrastructure.Repository (Métodos de banco somente de pessoa (create, read, update, delete, save))

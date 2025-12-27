@@ -1,0 +1,10 @@
+﻿INTERFACE SEGREGATION PRINCIPLE (ISP)
+
+o ISP afirma que uma interface não deve forçar classes a implementar métodos que elas não utilizam.
+
+Benefícios: Flexibilidade e clareza (Interfaces especificas evitam que classes implementem métodos desnecessários);
+
+Má prática: Interfaces grandes que obrigam classes a implementar métodos irrelevantes para elas.
+
+
+não vou escrever muito esse é o mais óbvio, só seguir o exemplo no código (intuitivo).

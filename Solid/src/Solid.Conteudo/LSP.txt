@@ -1,0 +1,37 @@
+﻿LISKOV SUBSTITUTION PRINCIPLE
+
+O LSP afirma que objetos de uma classe derivada devem poder substituir objetos da sua classe base sem alterar a funcionalidade do programa.
+
+Benefícios: Consistência e confiabilidade (classes derivadas mantém o comportamento esperado da classe base.) e Polimorfismo seguro (substituições 
+sem quebra de código.)
+
+Exemplo de má prática: Classes derivadas que alteram ou invalidam funcionalidades da classe base.
+
+a ídeia de classe derivada deve poder ser substituída por sua classe base é para entender se realmente essa classe derivada deveria herdar a base mesmo.
+
+por exemplo:
+{
+	tenho a class CLIENTE que tem um método obrigatório de ClientePremium que calcula pela DataCadastro se ele é cliente premium ou não.
+
+	CLIENTE CONTRATADO herda ela e calcula normalmente.
+	CLEINTE ALVO herda ela, mas quebra pois ainda não possui dataCadastro e não implementa o método.
+
+	isso está errado, de duas ou uma OU CLIENTE ALVO não herda CLIENTE (nesse cenário não faz sentido) ou CLIENTE deve mudar a obrigatoriedade de 
+	implementar o método (mais sentido nesse contexto).
+
+
+	na prática:
+
+	-- Calcula normalmente (ok, passou no LSP)
+	Cliente cliente = new ClienteContratado(DateTime.Now);
+	var premium = cliente.ClientePremium();
+
+	-- Ou quebra ou altera o comportamento (vai retornar um notImplemented) (False, reprovou no LSP)
+	Cliente cliente = new ClienteAlvo(null);
+	var premium = cliente.ClientePremium();
+}
+
+=======================
+SEMPRE BOM PENSAR
+
+se ao herdar você precisa escrever algo como NotSupported ou NotImplemented, descartar método do pai, if(x acontece o método pai ou não) você já violou o LSP
