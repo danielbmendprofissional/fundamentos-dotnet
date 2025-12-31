@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Solid.ISP.Bad
+﻿namespace Solid.ISP.Bad
 {
-    public class Bad {}
+    public class Bad { }
 
-    public interface IAcoesAnimal
+    public interface IAnimalActions
     {
-        void Andar();
-        void Voar();
-        void Nadar();
+        void Walk();
+        void Fly();
+        void Swim();
     }
 
-    public class Cachorro : IAcoesAnimal
+    public class Dog : IAnimalActions
     {
-        public void Andar() => Console.WriteLine("Cachorro comendo");
+        public void Walk() => Console.WriteLine("Dog walking");
 
-        //Problema
-        public void Voar() => throw new NotImplementedException(); //Cachoro não voa
-        public void Nadar() => throw new NotImplementedException(); //Cachoro não nada
+        // Problem
+        public void Fly() => throw new NotImplementedException(); // Dogs don’t fly
+        public void Swim() => throw new NotImplementedException(); // Dogs don’t swim
     }
 }

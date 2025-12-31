@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Solid.LSP.Good
+﻿namespace Solid.LSP.Good
 {
-
-    //agora eu ja deixei o set protected para só poder ser alteradoo para quem derivou.
-    //agora o pai é abstrato e ele obriga o filho a decidir o comportamento dele.
+    // now I set the property as protected so it can only be changed by derived classes.
+    // the parent is abstract and forces the child to decide its own behavior.
     public abstract class BankAccount
     {
         public decimal Balance { get; protected set; }
@@ -24,7 +17,7 @@ namespace Solid.LSP.Good
         }
     }
 
-    public class SavingsAccount : BankAccount 
+    public class SavingsAccount : BankAccount
     {
         public override void WithDraw(decimal amount)
         {

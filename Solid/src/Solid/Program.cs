@@ -10,14 +10,14 @@ using Solid.SRP.Good;
  * ===========================================================
 */
 
-//BAD -> Uma classe com varias responsabilidades e várias razões para mudar, problemas futuro de manutenção e escalabilidade de código.
+// BAD -> A class with multiple responsibilities and multiple reasons to change, leading to future maintenance and scalability issues.
 
 var badReport = new Solid.SRP.Bad.Report();
 badReport.Generate();
 badReport.Print();
 badReport.Save();
 
-//GOOD -> Cada classe com sua responsabilidade definida, melhor para testes, manutenção, interpretação e crescimento da aplicação.
+// GOOD -> Each class has its defined responsibility, making testing, maintenance, interpretation, and application growth easier.
 var goodReport = new Report();
 goodReport.Generate();
 
@@ -34,15 +34,15 @@ reportRepository.Save(goodReport);
  * ===========================================================
 */
 
-//BAD -> varias funcionalidades no mesmo código existente aberto para modificação (se aparecer um novo produto vira um novo if).
+// BAD -> Multiple functionalities inside the same existing code, open to modification (if a new product appears, another if is added).
 
 var badDesconto = new Solid.OCP.Bad.Discount();
 var badValor = badDesconto.Calculate(Solid.OCP.Bad.EProductType.Eletronics, 100);
 Console.WriteLine(badValor);
 
 /* 
-    GOOD -> Usando do polimorfismo com abstração obrigatória para override obrigando cada produto implementar o seu calculo de desconto,
-    agora para criar está aberto a extensão sem modificar os códigos existentes.
+    GOOD -> Using polymorphism with mandatory abstraction and override, forcing each product to implement its own discount calculation.
+    Now the system is open to extension without modifying existing code.
 */
 
 var beautyDesconto = new BeautyDiscount();
@@ -61,21 +61,21 @@ Console.WriteLine(eletronicValor);
 */
 
 /*
-    BAD -> duas ou uma, ou a base está errada ou o objeto que a herda não deveria herda-la.
-    - Caso 1: o BankAccount tem um método nele (WithDraw), mas o another class não o utiliza, "anula" o método da classe pai. Incorreto, irá retornar InvalidOperationException!
-    - Caso 2: o BankAccount tem um método nele (WithDraw), mas o Savings class altera o método (override), "invalidando" o já existente do pai. 
+    BAD -> Either the base class is wrong or the object inheriting it should not inherit at all.
+    - Case 1: BankAccount has a method (Withdraw), but another class doesn’t use it, “nullifying” the parent method. Incorrect, will throw InvalidOperationException!
+    - Case 2: BankAccount has a method (Withdraw), but Savings overrides it, invalidating the parent’s existing behavior.
 */
-//1
+// 1
 Solid.LSP.Bad.BankAccount badAccount1 = new Solid.LSP.Bad.AnotherClass();
 badAccount1.Withdraw(100);
 
-//2
+// 2
 Solid.LSP.Bad.BankAccount badAccount2 = new Solid.LSP.Bad.Savings();
 badAccount2.Withdraw(100);
 
 /*
-    GOOD -> Nesse caso agora o pai obriga o filho a definir o comportamento (evita o caso 2) e para evitar o caso 1 é analisar se o filho realmente deveria estar ali ou se o método do pai
-    deveria ou não estar ali.
+    GOOD -> In this case, the parent forces the child to define the behavior (avoids case 2).
+    To avoid case 1, analyze whether the child should really inherit or whether the parent’s method belongs there.
 */
 
 BankAccount goodAccount1 = new CheckingAccount();
@@ -87,13 +87,13 @@ goodAccount1.WithDraw(100);
  * ===========================================================
 */
 
-// BAD -> Cachorro está herdando uma interface com um contrato muito extenso com funções de todos animais, muitas que cachorro nem usa.
+// BAD -> Dog inherits an interface with an overly extensive contract containing functions for all animals, many of which dogs don’t use.
 
 var badCachorro = new Solid.ISP.Bad.Cachorro();
-badCachorro.Voar(); //cachorro nem voa kkkkk
-badCachorro.Nadar(); //cachorro até nada, mas vamos fingir que não
+badCachorro.Voar(); // dogs don’t fly lol
+badCachorro.Nadar(); // dogs can swim, but let’s pretend they don’t
 
-// GOOD -> Agora sim interfaces separadas corretamente por sua função permitindo as classes herdarem seus contratos.
+// GOOD -> Interfaces are now properly separated by function, allowing classes to inherit only the contracts they need.
 
 var goodCachorro = new Cachorro();
 goodCachorro.Andar();
@@ -109,7 +109,7 @@ goodPombo.Ciscar();
  * ===========================================================
 */
 
-// BAD -> Nesse caso o usuário sabe da classe concreta e vai quebrar no e-mail de teste.
+// BAD -> In this case, the user knows the concrete class, which will break in the test email scenario.
 
 var emailService = new Solid.DIP.Bad.EmailService();
 var usuario = new Solid.DIP.Bad.UserService(emailService);
@@ -118,7 +118,7 @@ var emailServiceTest = new Solid.DIP.Bad.EmailServiceTest();
 var usuarioTest = new Solid.DIP.Bad.UserService(emailServiceTest);
 
 
-// GOOD -> O Usuario só sabe que vai receber um e-mail service pelo contrato, não precisa saber nada da classe concreta.
+// GOOD -> The User only knows it will receive an email service via the contract, without needing to know the concrete class.
 
 var goodEmailService = new EmailService();
 var goodUsuario = new UserService(goodEmailService);

@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Solid.LSP.Bad
+﻿namespace Solid.LSP.Bad
 {
-    //o filho (savings) está sobrescrevendo o pai alterando o seu comportamento
+    // the child class (Savings) is overriding the parent and changing its behavior
 
     public class BankAccount
     {
-        //virtual = pode ou não sobrescrever o método, abstract sempre precisa do override
+        // virtual = may or may not override the method, abstract always requires an override
         public virtual void Withdraw(decimal amount)
         {
-            Console.WriteLine("Comportamento pai");
+            Console.WriteLine("Parent behavior");
         }
     }
 
@@ -29,20 +23,19 @@ namespace Solid.LSP.Bad
             }
 
             Balance -= amount;
-            Console.WriteLine("Comportamento alterado");
+            Console.WriteLine("Behavior changed");
         }
     }
 
-        
-    //Ele herda a classe pai e altera seu comportamento, agora essa conta simplesmente não pode sacar (o pai espera que sim).
-    //É aqui que devemos pensar se precisamos alterar as "regras" do pai ou se a filha realmente é filha desse pai e deve  herdar.
+    // It inherits from the parent class and changes its behavior, now this account simply cannot withdraw (the parent expects it can).
+    // This is where we should consider whether we need to change the parent’s “rules” or if the child really belongs as a subclass.
     public class AnotherClass : BankAccount
     {
         public decimal Balance { get; set; }
 
         public override void Withdraw(decimal amount)
         {
-            throw new InvalidOperationException("Conta não pode salvar");
+            throw new InvalidOperationException("Account cannot withdraw");
         }
     }
 }

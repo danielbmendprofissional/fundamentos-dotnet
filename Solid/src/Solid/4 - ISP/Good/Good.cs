@@ -1,38 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Solid.ISP.Good
+﻿namespace Solid.ISP.Good
 {
     internal class Good { }
 
-    public interface IAcoesCachorro
+    public interface IDogActions
     {
-        void Andar();
-        void Latir();
+        void Walk();
+        void Bark();
     }
-    public interface IAcoesPombo
+    public interface IPigeonActions
     {
-        void Voar();
-        void Ciscar();
+        void Fly();
+        void Peck();
     }
-    public interface IAcoesPeixe
+    public interface IFishActions
     {
-        void Nadar();
-        void MorderIsca();
-    }
-
-    public class Cachorro : IAcoesCachorro
-    {
-        public void Andar() => Console.WriteLine("Cachorro comendo");
-        public void Latir() => Console.WriteLine("Cachorro latindo");
+        void Swim();
+        void BiteHook();
     }
 
-    public class Pombo : IAcoesPombo
+    public class Dog : IDogActions
     {
-        public void Voar() => Console.WriteLine("Pombo voando");
-        public void Ciscar() => Console.WriteLine("Pombo ciscando");
+        public void Walk() => Console.WriteLine("Dog walking");
+        public void Bark() => Console.WriteLine("Dog barking");
+    }
+
+    public class Pigeon : IPigeonActions
+    {
+        public void Fly() => Console.WriteLine("Pigeon flying");
+        public void Peck() => Console.WriteLine("Pigeon pecking");
     }
 }

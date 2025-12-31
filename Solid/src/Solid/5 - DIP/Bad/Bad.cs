@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Solid.DIP.Bad
+﻿namespace Solid.DIP.Bad
 {
     internal class Bad
     {
@@ -12,12 +6,12 @@ namespace Solid.DIP.Bad
         {
             var emailService = new EmailService();
             var usuario = new UserService(emailService);
-            
-          /*
-            var emailServiceTest = new EmailServiceTest();
-            var usuarioTest = new UserService(emailServiceTest);
-          */
-         //Agora o usuário está sabendo da classe concreta e agora ~vai quebrar no email de teste.
+
+            /*
+              var emailServiceTest = new EmailServiceTest();
+              var usuarioTest = new UserService(emailServiceTest);
+            */
+            // Now the user is aware of the concrete class, and this will break in the test email scenario.
         }
     }
 
@@ -25,7 +19,7 @@ namespace Solid.DIP.Bad
     {
         public void Send()
         {
-            Console.WriteLine("Enviado.");
+            Console.WriteLine("Sent.");
         }
     }
 
@@ -33,7 +27,7 @@ namespace Solid.DIP.Bad
     {
         public void Send()
         {
-            Console.WriteLine("Teste enviado.");
+            Console.WriteLine("Test email sent.");
         }
     }
 

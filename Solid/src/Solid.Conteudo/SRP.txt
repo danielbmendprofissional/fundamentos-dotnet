@@ -1,22 +1,23 @@
-﻿SINGLE RESPOSIBILITY PRINCIPLE
+﻿===================================== SINGLE RESPOSIBILITY PRINCIPLE =====================================
 
-O SRP afirma que uma classe deve ter apenas uma responsabilidade e uma razão para mudar.
+The SRP states that a class should have only one responsibility and one reason to change.
 
-Benefícios: manutenção, reutilização e testes.
+- Benefits: Easier maintenance, reusability, and testing.
 
-- Exemplo má pratica: Uma classe que lida com lógica de negócio e salva dados no banco também. (report.cs)
+- Bad practice example: A class that handles business logic and also saves data to the database (e.g., report.cs).
 
-- Exemplo boa pratica: Uma classe com lógica de regra de negócio e outra que salva dados no banco (report, printService e reportRepository)
+- Good practice example: One class for business logic and another for database operations (report, printService, and reportRepository).
 
-- Cada classe tem um propósito claro e pode ser alterada sem impactar outras partes.
+- Each class has a clear purpose and can be modified without impacting other parts of the system.
 
-- Sempre perguntar, essa classe tem mais de uma razão para mudar? Se sim é melhor separar
-=========================
+- Always ask: Does this class have more than one reason to change? If yes, it’s better to split it.
 
-Não é para sair criando classe e separando por método, mas um exemplo prático seria
+================
+PRATICAL EXAMPLE
+It’s not about creating a new class for every single method, but rather separating responsibilities in a meaningful way:
 
-Pessoa.cs (entidade dominio somente pessoa (propriedades, construtor, métodos e validações de domínio))
-Pessoa.Controller (Endpoints controller somente de pessoa)
-Pessoa.Application.Service (Métodos de negócio somente de pessoa (cadastrar, obter, obterLista, Atualizar, Remover))
-Pessoa.Application.Service (Validação de negócio somente de pessoa)
-Pessoa.Infrastructure.Repository (Métodos de banco somente de pessoa (create, read, update, delete, save))
+Pessoa.cs -> Domain entity for Person (properties, constructor, domain methods, and validations).
+Pessoa.Controller -> Controller endpoints for Person.
+Pessoa.Application.Service -> Business methods for Person (create, get, list, update, delete).
+Pessoa.Application.Service -> Business validations for Person.
+Pessoa.Infrastructure.Repository -> Database methods for Person (create, read, update, delete, save).

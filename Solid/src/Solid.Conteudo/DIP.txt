@@ -1,16 +1,18 @@
-﻿DEPENDENCY INVERSION PRINCIPLE (DIP)
+﻿===================================== DEPENDENCY INVERSION PRINCIPLE (DIP) =====================================
 
-O DIP afirma que módulos de alto nível não devem depender de módulos de baixo nível, mas sim de abstrações. 
-Abstrações não devem depender de detalhes; os detalhes é que devem depender das abstrações.
+The DIP states that high-level modules should not depend on low-level modules, but rather on abstractions.
+Abstractions must not depend on details; instead, details should depend on abstractions.
 
-- Benefícios: Desacoplamento (facilita a troca de imlpementações sem impactar o código) e facilidade de teste.
 
-- Exemplo má pratica: Um módulo de alto nível que depende diretamente de uma classe concreta de baixo nível.
+- Benefits: Decoupling (makes it easier to swap implementations without impacting the code) and improved 
+testability.
 
-Ao invés de depender de uma classe concreta eu dependo de abstrações, de contratos (interfaces) --> 
-	tipo a controller chamando serviços da serivce por meio da sua interface.
+- Bad pratice example: A high-level module that directly depends on a concrete low-level class.
 
-Meio que o contrato é fixo, não importa o que está acontecendo por debaixo dos panos, independente se for alterar algo no código vai continuar funcionando
-se mantida a mesma interface.
+Instead of relying on a concrete class, we depend on abstractions—contracts (interfaces).
+For example, a controller calling a service through its interface.
 
-Isso sempre ajuda na hora de manutenção e evolução de código.
+The contract remains fixed, regardless of what happens under the hood. Even if the implementation changes, as 
+long as the interface stays the same, the system continues to work.
+
+This approach always helps with code maintenance and evolution.

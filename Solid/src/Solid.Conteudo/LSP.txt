@@ -1,37 +1,32 @@
-﻿LISKOV SUBSTITUTION PRINCIPLE
+﻿===================================== LISKOV SUBSTITUTION PRINCIPLE =====================================
 
-O LSP afirma que objetos de uma classe derivada devem poder substituir objetos da sua classe base sem alterar a funcionalidade do programa.
+The LSP states that objects of a derived class should be able to replace objects of their base class 
+without changing the program’s behavior.
 
-Benefícios: Consistência e confiabilidade (classes derivadas mantém o comportamento esperado da classe base.) e Polimorfismo seguro (substituições 
-sem quebra de código.)
+- Benefits: Consistency and reliability (derived classes preserve the expected behavior of the base class)
+and safe polymorphism (substitutions do not break the code).
 
-Exemplo de má prática: Classes derivadas que alteram ou invalidam funcionalidades da classe base.
+- Bad pratice example: Derived classes that alter or invalidate the base class’s functionality.
 
-a ídeia de classe derivada deve poder ser substituída por sua classe base é para entender se realmente essa classe derivada deveria herdar a base mesmo.
+The idea behind “a derived class should be substitutable for its base class” is to validate whether that 
+class truly should inherit from the base. If substituting the derived class causes unexpected behavior, 
+the inheritance model is likely wrong.
 
-por exemplo:
-{
-	tenho a class CLIENTE que tem um método obrigatório de ClientePremium que calcula pela DataCadastro se ele é cliente premium ou não.
+Practical example in .NET:
+	Consider a base class Customer with a required method IsPremium that determines premium status based on 
+	RegistrationDate. 
 
-	CLIENTE CONTRATADO herda ela e calcula normalmente.
-	CLEINTE ALVO herda ela, mas quebra pois ainda não possui dataCadastro e não implementa o método.
+		- HiredCustomer inherits and works fine. 
+		- ProspectCustomer inherits but breaks because it doesn’t have RegistrationDate yet, so it can’t 
+		implement IsPremium correctly. 
 
-	isso está errado, de duas ou uma OU CLIENTE ALVO não herda CLIENTE (nesse cenário não faz sentido) ou CLIENTE deve mudar a obrigatoriedade de 
-	implementar o método (mais sentido nesse contexto).
+	In this scenario, either ProspectCustomer should not inherit from Customer, or the base contract must
+	change to avoid forcing behavior that doesn’t make sense for all children.
 
 
-	na prática:
+========================
+ALWAYS WORTH CONSIDERING
 
-	-- Calcula normalmente (ok, passou no LSP)
-	Cliente cliente = new ClienteContratado(DateTime.Now);
-	var premium = cliente.ClientePremium();
-
-	-- Ou quebra ou altera o comportamento (vai retornar um notImplemented) (False, reprovou no LSP)
-	Cliente cliente = new ClienteAlvo(null);
-	var premium = cliente.ClientePremium();
-}
-
-=======================
-SEMPRE BOM PENSAR
-
-se ao herdar você precisa escrever algo como NotSupported ou NotImplemented, descartar método do pai, if(x acontece o método pai ou não) você já violou o LSP
+If, upon inheriting, you find yourself writing NotSupported, NotImplemented, discarding the parent’s method, 
+or adding “if (X) use parent method, else don’t,” you’ve already violated LSP. The fix is to redesign the 
+hierarchy or extract a more appropriate abstraction so every derived type can honor the base contract.

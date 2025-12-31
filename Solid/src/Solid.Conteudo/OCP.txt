@@ -1,27 +1,35 @@
-﻿OPEN-CLOSED PRINCIPLE
+﻿===================================== OPEN-CLOSED PRINCIPLE =====================================
 
-O OCP afima que as classes devem estar abertas para extensão, mas fechadas para modificação.
+The OCP states that classes should be open for extension but closed for modification
 
-Benefícios: Novas funcionalidades sem alterar o código existente, minimiza o risco em funcionalidades ja implementadas.
+- Benefits: New functionality can be added without altering existing code, minimizing risks to 
+already implemented features.
 
-- Exemplo má pratica: Modificar uma classe diretamente para adicionar um novo comportamento {
+- Bad practice example: Modifying a class directly to add new behavior {
 
-	Uma classe Calculadora com um método calcular, dentro dele tem if(soma) elseif(divisao) elseif(multiplicação).
-	Sempre que for adicionar um novo método de calculo teria que adicionar um novo if, perigoso afetar quem já utiliza o método...
+	A Calculator class with a Calculate method that uses if (sum), else if (division), else if 
+	(multiplication). Every time a new calculation method is added, another if must be introduced, 
+	which risks breaking existing functionality.
 
 }
 
-- Exemplo boa pratica: Classe base com Polimorfismo {
 
-	Calculo com um método abstract Calcular (valor) -> 
-	varias classes herdando Calculo e aplicando um override sobre o método 'Calcular' (somar -> calcular => valor1 + valor2)
 
-	*Base ficou fechada para modificação, mas aberta para quem quiser extende-la
+- Good pratice example: Classe base com Polimorfismo {
+
+	A Calculation base class with an abstract Calculate(value) method.
+	Several classes inherit from Calculation and override the Calculate method 
+	(e.g., Sum → Calculate => value1 + value2).
+
+	The base class remains closed for modification but open for extension.
 }
 
-O abstract class informa que a classe base não pode ser instanciada, apenas herdada.
+The base class remains closed to modification but open to extension through inheritance.
 
-O ideal é usar o polimorfirismo para estender o comportamento sem modificar a classe base (Extensão).
+An abstract class cannot be instantiated directly—it serves only as a base to be inherited. The 
+ideal approach is to use polymorphism to extend behavior without modifying the base class.
 
-====================
-Sempre pensar em criar um código extensivo, novas adições NÃO PODEM alterar o código existente sempre extender...
+========================
+ALWAYS WORTH CONSIDERING
+
+Always aim to create extensible code. New additions must never alter existing code — they should always extend it...
