@@ -1,80 +1,83 @@
-# Clean Architecture Studies + CQRS + MEDIATOR
+# Clean Architecture Studies + CQRS + Mediator
 
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Language](https://img.shields.io/github/languages/top/danibmend/CleanArchitecture)
 ![Stars](https://img.shields.io/github/stars/danibmend/CleanArchitecture?style=social)
 
-## 📌 Sobre
+## 📌 About
 
-Este projeto é um **estudo prático da Clean Architecture**, aplicada em **C# / .NET**, com separação clara de responsabilidades entre **Domain**, **Application**, **Infrastructure** e **Presentation**.
-Usando também conceitos de CQRS e MEDIATOR
+This repository is a **hands-on study of Clean Architecture** applied in **C# / .NET**, with a clear separation of responsibilities across **Domain**, **Application**, **Infrastructure**, and **Presentation** layers.  
+It also explores **CQRS** and the **Mediator** pattern.
 
-O objetivo **não é entregar um sistema pronto**, mas sim **consolidar conceitos arquiteturais**, decisões de design e boas práticas utilizadas em projetos reais e escaláveis.
+The goal here is **not** to ship a production-ready system, but to **solidify architectural concepts**, design decisions, and best practices used in real-world and scalable projects.
 
-> ⚠️ **Importante:** este é um projeto de **estudo pessoal**.  
-> O foco principal **não é a funcionalidade em si**, mas **a leitura, entendimento e aplicação consciente dos conceitos**.
-
----
-
-## 🚀 Motivação
-
-- Entender profundamente a **Clean Architecture (Robert C. Martin)**.
-- Praticar **separação de responsabilidades** em nível arquitetural.
-- Aplicar princípios como **SOLID**, **DIP**, **DDD** e **boas práticas de camadas**.
-- Criar um **material de referência pessoal** para projetos futuros.
-- Evitar acoplamento entre regras de negócio e detalhes técnicos.
+> ⚠️ **Important:** this is a **personal study project**.  
+> The main focus is **not** the features themselves, but the **reading, understanding, and conscious application of the concepts**.
 
 ---
 
-## 📂 Estrutura do Projeto
+## 🚀 Motivation
 
-O projeto está organizado seguindo o modelo clássico da **Clean Architecture**, onde as dependências sempre apontam **para dentro**.
-LEMBRANDO (Leia o arquivo Possibilidades de conceitos para ver mais sobre possíveis objetos na estrutura.
+- Gain a deeper understanding of **Clean Architecture (Robert C. Martin)**.
+- Practice **architectural-level separation of concerns**.
+- Apply principles like **SOLID**, **DIP**, **DDD**, and solid **layering practices**.
+- Build a **personal reference** for future projects.
+- Reduce coupling between business rules and technical details.
+
+---
+
+## 📂 Project Structure
+
+The solution follows the classic **Clean Architecture** model, where dependencies always point **inward**.  
+Also, check the **"Possibilities of Concepts"** file for more examples of what can live in each layer.
 
 ```text
 /src
- ├── CleanArchitecture.Domain          # Camada de domínio (regras de negócio)
- │   ├── Entities                      # Entidades do domínio
- │   └── Interfaces                    # Contratos do domínio
+ ├── CleanArchitecture.Domain          # Domain layer (business rules)
+ │   ├── Entities                      # Domain entities
+ │   └── Interfaces                    # Domain contracts
  │
- ├── CleanArchitecture.Application     # Casos de uso e orquestração
- │   ├── Mapper                        # Existem discordancias, mas no contexto .NET é aceito
- │   ├── Services                      # Services Extensions (Application DI)
- │   ├── Shares                        # Behaviors
- │   ├── UseCases                      # Casos de uso (Commands / Queries)
- │   ├── Validators                    # Validações de entrada. Existem discordancias, mas no contexto .NET é aceito
+ ├── CleanArchitecture.Application     # Use cases and orchestration
+ │   ├── Mapper                        # Debated, but commonly used in .NET contexts
+ │   ├── Services                      # Service extensions (Application DI)
+ │   ├── Shares                        # Behaviors (pipeline, cross-cutting concerns)
+ │   ├── UseCases                      # Use cases (Commands / Queries)
+ │   └── Validators                    # Input validation (commonly accepted in .NET)
  │
- ├── CleanArchitecture.Infrastructure  # Detalhes técnicos
- │   ├── Context                      # DbContext / EF Core
- │   ├── Repositories                 # Implementações de repositórios
- │   ├── Services                     # Serviços externos (ex: Email, Files)
+ ├── CleanArchitecture.Infrastructure  # Technical details
+ │   ├── Context                       # DbContext / EF Core
+ │   ├── Repositories                  # Repository implementations
+ │   └── Services                      # External services (e.g., Email, Files)
  │
- ├── CleanArchitecture.WebAPI          # Camada de apresentação
- │   ├── Controllers                  # Endpoints HTTP
- │   └── Program.cs                   # Bootstrap da aplicação
+ ├── CleanArchitecture.WebAPI          # Presentation layer
+ │   ├── Controllers                   # HTTP endpoints
+ │   └── Program.cs                    # Application bootstrap
  │
- ├── CleanArchitecture.sln             # Solution .NET
+ ├── CleanArchitecture.sln             # .NET solution
  ├── LICENSE                           # MIT License
- └── README.md                         # Documentação principal
+ └── README.md                         # Main documentation
+
 
 ```
 
-## 🚀 Como Rodar os Exemplos
+## 🚀 Running the Examples
 
-  Certifique-se de ter o **.NET SDK** instalado (recomendado .NET 7 ou superior).
+Make sure you have the **.NET SDK** installed (recommended: **.NET 7+**).
 
-  1. Clone o repositório:
-     ```bash
-     git clone https://github.com/danibmend/Solid.git
-  2. Navegue até a pasta raiz:
-    cd Solid
-  4. Abra no IDE preferido (Visual Studio, VS Code, Rider etc.)
-  5. Execute cada projeto exemplo (ex.: Solid.SRP.Console) para ver os resultados de cada princípio.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/danibmend/Solid.git
+2. Navigate to the project root:
+   ```bash
+   cd Solid
+3. Open the solution in your preferred IDE (Visual Studio, VS Code, Rider, etc.).
+4. Run each example project (e.g., `Solid.SRP.Console`) to see the results for each principle.
 
-Requisitos
-  .NET 7+ SDK
-  Editor/IDE com suporte C# (.NET)
-  Familiaridade com POO, SOLID e DDD (básico).
+## Requirements
+- .NET 7+ SDK  
+- A C#/.NET-capable editor or IDE  
+- Basic familiarity with OOP, SOLID, and DDD  
 
-Licença
-  Este projeto está licenciado sob a MIT License — veja o arquivo LICENSE para mais detalhes.
+
+## License
+This project is licensed under the **MIT License** — see the `LICENSE` file for more details.
