@@ -4,75 +4,77 @@
 ![Language](https://img.shields.io/github/languages/top/danibmend/Solid)
 ![Stars](https://img.shields.io/github/stars/danibmend/Solid?style=social)
 
-## 📌 Sobre
+## 📌 About
 
-Este projeto é um **estudo prático dos princípios SOLID** aplicados em **C# / .NET**.  
-Ele contém exemplos de como aplicar cada um dos cinco princípios de design de software orientado a objetos — **Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation e Dependency Inversion**.
-Lembrando que é um projeto para estudo PESSOAL, talvez não esteja tão didático assim...
-Mais importante do projeto é ler os CONCEITOS.
+This repository is a **hands-on study of the SOLID principles** applied in **C# / .NET**.  
+It includes practical examples showing how to apply each of the five object-oriented design principles — **Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, and Dependency Inversion**.
 
----
-
-## 🚀 Motivação
-
-- Compreender profundamente os **princípios SOLID**.
-- Ver exemplos reais de código que demonstram boas práticas.
-- Aplicar conceitos de **Clean Code**, **Design Patterns** e **Arquitetura Limpa** em exemplos simples.
-- Criar um material de referência pessoal para estudo e aprimoramento.
+Note: this is a **personal learning project**, so it may not be perfectly “teaching-friendly” in every section. The main goal here is to focus on the **core concepts**.
 
 ---
 
-## 📂 Estrutura do Projeto
+## 🚀 Motivation
 
-O repositório está organizado para facilitar o estudo de cada princípio:
+- Build a solid understanding of the **SOLID principles**.
+- Explore real code examples that demonstrate good practices.
+- Apply ideas from **Clean Code**, **Design Patterns**, and **Clean Architecture** through simple scenarios.
+- Keep a personal reference to revisit and improve over time.
+
+---
+
+## 📂 Project Structure
+
+The repository is organized to make it easy to study each principle:
 
 ```text
-
 /src
  ├── Solid.SRP/        # Single Responsibility Principle
  ├── Solid.OCP/        # Open/Closed Principle
  ├── Solid.LSP/        # Liskov Substitution Principle
  ├── Solid.ISP/        # Interface Segregation Principle
  ├── Solid.DIP/        # Dependency Inversion Principle
- ├── *.Console/        # Apps para executar os exemplos
- ├── Solid.sln         # Solution .NET
+ ├── *.Console/        # Console apps to run the examples
+ ├── Solid.sln         # .NET solution
  ├── LICENSE           # MIT License
- └── README.md         # Documentação principal
+ └── README.md         # Main documentation
+
 ```
 
 
 ---
 
-## 📖 Conceitos Abordados
+## 📖 Covered Concepts
 
-Este projeto cobre os **5 princípios SOLID**:
+This project focuses on the **five SOLID principles**:
 
-| Princípio | Significado |
-|-----------|-------------|
-| **S** – Single Responsibility Principle (SRP) | Cada classe/módulo tem uma única responsabilidade. |
-| **O** – Open/Closed Principle (OCP) | Entidades devem estar abertas à extensão, mas fechadas à modificação. |
-| **L** – Liskov Substitution Principle (LSP) | Subtipos podem substituir seus tipos base sem quebrar o programa. |
-| **I** – Interface Segregation Principle (ISP) | Interfaces específicas são melhores que interfaces “gordas”. |
-| **D** – Dependency Inversion Principle (DIP) | Dependa de abstrações, não de implementações. |
+| Principle | Meaning |
+|----------|---------|
+| **S** – Single Responsibility Principle (SRP) | Each class/module should have a single responsibility (one reason to change). |
+| **O** – Open/Closed Principle (OCP) | Entities should be open for extension, but closed for modification. |
+| **L** – Liskov Substitution Principle (LSP) | Subtypes should be able to replace their base types without breaking expected behavior. |
+| **I** – Interface Segregation Principle (ISP) | Small, specific interfaces are better than large “fat” ones. |
+| **D** – Dependency Inversion Principle (DIP) | Depend on abstractions, not on concrete implementations. |
 
-> Estes princípios foram definidos por Robert C. Martin e são essenciais para escrever código **limpo, sustentável e testável**.
+> These principles were popularized by Robert C. Martin and are essential for writing **clean, maintainable, and testable** code.
 
-## 🚀 Como Rodar os Exemplos
+## 🚀 Running the Examples
 
-  Certifique-se de ter o **.NET SDK** instalado (recomendado .NET 7 ou superior).
+Make sure you have the **.NET SDK** installed (recommended: **.NET 7+**).
 
-  1. Clone o repositório:
-     ```bash
-     git clone https://github.com/danibmend/Solid.git
-  2. Navegue até a pasta raiz:
-    cd Solid
-  4. Abra no IDE preferido (Visual Studio, VS Code, Rider etc.)
-  5. Execute cada projeto exemplo (ex.: Solid.SRP.Console) para ver os resultados de cada princípio.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/danibmend/Solid.git
+2. Navigate to the project root:
+   ```bash
+   cd Solid
+3. Open the solution in your preferred IDE (Visual Studio, VS Code, Rider, etc.).
+4. Run each example project (e.g., `Solid.SRP.Console`) to see the output for each principle.
 
-Requisitos
-  .NET 7+ SDK
-  Editor/IDE com suporte C# (.NET)
-  Familiaridade básica com POO
+## Requirements
+- .NET 7+ SDK  
+- A C#/.NET-capable editor or IDE  
+- Basic knowledge of OOP  
 
-Licença
-  Este projeto está licenciado sob a MIT License — veja o arquivo LICENSE para mais detalhes.
+## License
+This project is licensed under the **MIT License** — see the `LICENSE` file for more details.
+
