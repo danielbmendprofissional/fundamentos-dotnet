@@ -1,0 +1,16 @@
+=================================================== Commands ===================================================
+
+IRequest é uma interface que representa uma solicitação (como um command ou uma query).
+
+	- Ela é implementada pelas classes de Command para representar a solicitação de uma execução de um comando ou
+	pelas classes de Query para representar a solicitação de uma consulta.
+
+IRequestHandler é uma interface genérica que define a assinatura do método Handle para processar uma solicitação
+(IRequest) e retornar um resultado.
+
+	- Implementada pela CommandHandler para processar um comando específico e contém a lógica de negócios asso-
+	ciada à execução do comando e recebe a instância do comando como entrada e executa a ação correspondente no
+	sistema.
+
+	- Implementada pela QueryHandler por processar uma query específica e retornar os dados solicitados e contém
+	a lógica para executar a consulta no sistema.

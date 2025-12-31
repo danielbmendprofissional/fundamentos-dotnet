@@ -1,0 +1,31 @@
+=================================================== CQRS ===================================================
+*Recomendado para projetos complexos com alta escalabilidade*
+*Alguns cenários optam por separa os bancos, eu prefiro um banco só com contextos diferentes*
+
+O padrão CQRS (Command Query Responsibility Segregation) separa as operações de leitura (queries) das opera-
+ções de escrita (commands) em um sistema e, isso significa que as ações que alteram o estado do ssitema (co-
+mo criar, atualizar ou excluir dados) são tratadas separadamente das ações que apenas consultam o estado do
+sistema.
+
+Essa separação de responsabilidades permite otimizar cada caminho de forma independente para atender às ne-
+cessidades específicas podendo maximizar o desempenho, a escalabilidade e a segurança.
+
+Pontos mais importantes do CQRS:
+
+1- Separa as responsabilidades:
+	- Separa leituras e gravações em modelos diferentes, usando comandos para atualizar dados e consultar
+	dados.
+	
+2- Usa modelos de domínio distintos:
+	- Você pode criar modelos de domínio diferentes para operações de leitura e operações de escrita.
+
+3- Favorece a escalabilidade:
+	- Facilita a escalabilidade, pois as operações de leitura e escrita podem ser dimensionadas independen-
+	te umas das outras.
+
+4- Controle de Acesso e Segurança:
+	- Permite um controle mais granular sobre a segurança e o acesso de dados.
+
+5- Favorece a flexibilidade:
+	- Com o CQRS, você pode escolher as tecnologias e estratégias mais adequadas para manipular comandos e
+	consultas.

@@ -1,0 +1,12 @@
+=================================================== Queries ===================================================
+
+Query representa uma solicitação de leitura de dados do sistema sem modificar seu estado. 
+
+	- É uma classe que contém os parâmetros e informações necessárias para a consulta e não contém lógica de 
+	negócios, seu objetivo principal é transportar dados de entrada para a consulta.
+
+QueryHandler é uma classe usara para processar uma consulta específica e contém a lógica para buscar dados no
+sistema com base na consulta.
+
+	- Ela recebe a query como entrada, executa a consulta no banco de dados ou em outras fontes de dados, trans-
+	forma os dados em um modelo de visualização (Response) e retorna o resultado.
