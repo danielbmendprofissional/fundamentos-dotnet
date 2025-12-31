@@ -3,7 +3,7 @@
 namespace CleanArchitecture.Domain.Entities
 {
     /*
-        Entidade de domínio não anêmica, precisa escrever as validações e métodos
+        Non-anemic domain entity, must include validations and methods
     */
     public class User : BaseEntity
     {

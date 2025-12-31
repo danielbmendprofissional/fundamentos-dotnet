@@ -1,10 +1,10 @@
 =================================================== MEDIATR ===================================================
-- MEDIATOR: PADRÃO
-- MEDIATR: Package que permite trabalhar com CQRS utilizando o padrão Mediator.
+- MEDIATOR: PATTERN
+- MEDIATR: Package that allows working with CQRS using the Mediator pattern.
 
-O Padrão Mediator lida com o desacoplamento, colocando uma camada intermediária entre os componentes, chamade 
-de "Mediador", que será sua única fonte de dependências.
+The Mediator Pattern deals with decoupling by placing an intermediate layer between components, called
+the "Mediator," which becomes their single source of dependencies.
 
-Esquema de implementação utilizando o MEDIATR:
+Implementation scheme using MEDIATR:
 
 API -> Controller -> Query/Command -> Mediator -> QueryHandler/CommandHandler -> DataStore

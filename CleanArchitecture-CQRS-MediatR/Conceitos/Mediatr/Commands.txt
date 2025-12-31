@@ -1,12 +1,12 @@
 =================================================== Commands ===================================================
 
-Um command é uma classe simples que representa uma solicitação para modificar o estado do sistema e contém in-
-formações sobre a ação a ser executada, como os parâmetros necessários para realizar a operação.
+A command is a simple class that represents a request to modify the state of the system and contains
+information about the action to be executed, such as the parameters required to perform the operation.
 
-	- A classe de comando (Command) não deve conter lógica de negócio, seu papel é de transportar dados.
+    - The command class (Command) should not contain business logic; its role is to transport data.
 
-Um command Handler é uma classe que processa um comando específico e contém a lógica de negócios associada à e-
-xecuçaõ do comanod.
-	
-	- A classe handler é responsável por receber o comando, validar seus dados, executar a ação apropriada no 
-	domínio e opcionalmente, atualizar o estado do sistema.
+A command Handler is a class that processes a specific command and contains the business logic associated
+with the execution of the command.
+    
+    - The handler class is responsible for receiving the command, validating its data, executing the appropriate
+      action in the domain, and optionally updating the state of the system.

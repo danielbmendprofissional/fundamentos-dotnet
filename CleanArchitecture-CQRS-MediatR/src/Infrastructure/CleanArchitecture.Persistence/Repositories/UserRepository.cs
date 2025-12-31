@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CleanArchitecture.Persistence.Repositories
 {
     /*
-        Implementação do IUserRepository
+        Implementation of IUserRepository
     */
     public class UserRepository : BaseRepository<User>, IUserRepository
     {

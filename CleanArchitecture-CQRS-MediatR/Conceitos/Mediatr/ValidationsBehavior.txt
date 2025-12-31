@@ -1,15 +1,13 @@
 =================================================== BEHAVIOR ===================================================
 
-O Behavior é uma caracteristica que permite adicionar lógica comum a todos ou alguns manipuladores (handlers) de 
-requests na implementação do CQRS com MediatR.
+Behavior is a feature that allows adding common logic to all or some request handlers in the
+implementation of CQRS with MediatR.
 
-	- É usado para encapsular funcionalidades que devem ser executadas antes ou depois do processamento de um re-
-	quest.
+    - It is used to encapsulate functionalities that must be executed before or after the processing
+      of a request.
 
+Pipeline Behavior is used to add processing logic before and after a request handler and allows
+adding global behaviors to all requests or to a specific subset of them.
 
-O Pipeline Behavior é usado para adicionar lógica de processamento antes e depois de um manipulador de solicita-
-ção e permite adicionar comportamentos globais a todas as solicitações ou a um subconjunto específico delas.
-
-
-O Notification Handler são usados para reagir as notificações dos eventos no ssitema executando ações específicas
-quando os eventos ocorrem.
+Notification Handlers are used to react to system event notifications, executing specific actions
+when those events occur.

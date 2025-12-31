@@ -1,0 +1,63 @@
+=================================================== POSSIBILITIES ===================================================
+
+Since I used the concepts of CQRS and mediator together with the MediatR library in a simple way, some possible objects
+were left out.
+
+==================================================== QUICK REFERENCE =====================================================
+DTOS -> APPLICATION.
+OPTIONS -> INFRASTRUCTURE.
+EXTENSIONS -> INFRASTRUCTURE.
+PROVIDERS -> INFRASTRUCTURE.
+IPROVIDERS -> APPLICATION (Provider interfaces).
+AUTHHANDLER + REQUIREMENT -> PRESENTATION.
+FILES -> INFRASTRUCTURE.
+MIDDLEWARE (EXCEPTION/AUTH/OTHER) -> PRESENTATION.
+
+EXCEPTIONS should be evaluated according to their purpose
+    - Business exceptions -> DOMAIN
+    - Exceptions for invalid flow, not found, conflict -> APPLICATION
+    - Exceptions for DB errors, external API errors -> INFRASTRUCTURE
+
+CONSTANTS should be evaluated according to their purpose
+    - Validation error messages -> APPLICATION
+    - Business rule violation messages -> DOMAIN
+    - Business/domain concepts -> DOMAIN
+    - API text -> PRESENTATION
+
+ENUMS should be evaluated according to their purpose
+    - Status/Indicator (database) -> DOMAIN
+    - Flow -> APPLICATION
+
+FACTORIES should be evaluated according to their purpose
+    - Normally interfaces and implementation -> APPLICATION
+    - ExternalService Factory (Email) -> Interface (APPLICATION) / Implementation (INFRASTRUCTURE)
+
+
+==================================================== ORGANIZED ====================================================
+
+DOMAIN:
+    - Business exceptions
+    - Constant for business rule violation messages
+    - Constant for business/domain concepts
+    - Enum for Status/Indicator (database)
+
+APPLICATION:
+    - DTOs
+    - Exceptions for invalid flow, not found, conflict
+    - Constant for validation error messages
+    - Enum for flow
+    - Factories: always interfaces and usually implementation
+
+INFRASTRUCTURE:
+    - Options
+    - Extensions
+    - Files
+    - Exceptions for DB errors, external API errors
+    - Factories for external services (IMPLEMENTATION ONLY)
+
+PRESENTATION:
+    - Middlewares (Exception/Auth)
+    - Auth Handler + Requirement
+    - Constant for API text
+    - Providers that depend on HttpContext, Claim, Request...
+    - Extensions for HttpContext, Claim, Request...

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CleanArchitecture.Persistence.Context
 {
     /*
-        Arquivo de contexto do EF CORE 
+        EF CORE context file
     */
     public class AppDbContext : DbContext
     {

@@ -6,7 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Conceitos", "Conceitos", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
 		Conceitos\CleanArchitecture.txt = Conceitos\CleanArchitecture.txt
-		Conceitos\PossibilidadesNaoTrabalhadas.txt = Conceitos\PossibilidadesNaoTrabalhadas.txt
+		Conceitos\NotWorkedPossibilities.txt = Conceitos\NotWorkedPossibilities.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{4FB96621-B64E-4D1E-8A96-C022FE6C92C1}"

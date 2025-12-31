@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CleanArchitecture.Persistence
 {
     /*
-        Método de extensão ConfigurePersistenceApp para IServiceCollection
+        Extension method ConfigurePersistenceApp for IServiceCollection
     */
     public static class ServiceExtensions
     {

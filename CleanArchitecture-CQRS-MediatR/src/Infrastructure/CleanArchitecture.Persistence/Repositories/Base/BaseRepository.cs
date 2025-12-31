@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CleanArchitecture.Persistence.Repositories.Base
 {
     /*
-        Implementação do IBaseRepository
+        Implementation of IBaseRepository
     */
     public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {

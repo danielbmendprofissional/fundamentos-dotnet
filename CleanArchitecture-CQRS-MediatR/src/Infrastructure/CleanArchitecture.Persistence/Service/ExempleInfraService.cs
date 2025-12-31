@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CleanArchitecture.Persistence.Service
+﻿namespace CleanArchitecture.Persistence.Service
 {
     internal class ExempleInfraService
     {
-        //Aqui ficaria os external services (consultas a serviços externos)
+        // This is where external services would be placed (calls to external services)
 
         /*   
-            SOBRE ONDE FICA A INTERFACE DE EXTERNAL SERVICE:
+            ABOUT WHERE THE INTERFACE FOR AN EXTERNAL SERVICE SHOULD BE:
 
-            - Application: quando o service é algo "extra" a regra de negócio, como enviar um e-mail após concluir cadastro.
+            - Application: when the service is something "extra" to the business rule,
+              such as sending an email after completing a registration.
 
-            - Domain: quando a regra de negócio depende do service para existir.
+            - Domain: when the business rule depends on the service in order to exist.
         */
-
     }
 }

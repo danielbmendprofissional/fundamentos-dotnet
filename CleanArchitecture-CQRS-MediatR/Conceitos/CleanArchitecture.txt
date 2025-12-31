@@ -1,80 +1,80 @@
 =================================================== CLEAN ARCHITECTURE ===================================================
 
-É um padrão de arquitetura de software proposto por Robert C. Martin que visa criar sistemas de software bem estruturados,
-altamente testáveis e de fácil manutenção sendo focada na separação de responsabilidades e na criação de camadas indepen -
-dentes, permitindo que o código seja mais flexível e adaptável a mudanças.
+It is a software architecture pattern proposed by Robert C. Martin that aims to create well-structured,
+highly testable, and easily maintainable software systems, focusing on the separation of responsibilities
+and the creation of independent layers, allowing the code to be more flexible and adaptable to changes.
 
-Oficialmente é dividida em circulos:
+Officially it is divided into circles:
 
-- APPLICATION atua como uma ponte entre a camada de domínio e as interfaces externas da aplicação
+- APPLICATION acts as a bridge between the domain layer and the external interfaces of the application.
 
-OBS: Infrastructure e Persistence pode ser tudo Infrastructure...
-OBS: Não é super rigido a separação, varia de cenário para cenário, mas essa é a base.
+NOTE: Infrastructure and Persistence can both be considered Infrastructure...
+NOTE: The separation is not super rigid, it varies from scenario to scenario, but this is the foundation.
 
-círculo mais externo{
-	Presentation (Interface Adapters):
-		- Web Pages
-		- Web Components
-		- Web APIs
-		- Controllers
-		- Views
-		- Filters
-		- Attributes
-		- View Models
-		- Style Sheets
-		- JavaScript
+outer circle {
+    Presentation (Interface Adapters):
+        - Web Pages
+        - Web Components
+        - Web APIs
+        - Controllers
+        - Views
+        - Filters
+        - Attributes
+        - View Models
+        - Style Sheets
+        - JavaScript
 
-	Infrastructure (Frameworks & Drivers):
-		- Auth e Identity
-		- File e object Storage
-		- Message Queue Storage
-		- Services
-		- Email/Notification Services
-		- Logging Services
-		- Paymant Services
-		- Social Logins
+    Infrastructure (Frameworks & Drivers):
+        - Auth and Identity
+        - File and Object Storage
+        - Message Queue Storage
+        - Services
+        - Email/Notification Services
+        - Logging Services
+        - Payment Services
+        - Social Logins
 
-	Persistence (Frameworks & Drivers):
-		- Data Context
-		- Repositories
-		- Data Migrations
-		- Data Seeding
-		- In Memory caching
-		- Cache
+    Persistence (Frameworks & Drivers):
+        - Data Context
+        - Repositories
+        - Data Migrations
+        - Data Seeding
+        - In-Memory Caching
+        - Cache
 }
-círculo do meio{
-	Application (Use cases):
-		- Abstractions
-		- Contracts
-		- Ports
-		- Business Services
-		- Commands e Queries
-		- Application Exceptions
-		- DTOs
-		- Request e Response Models
-		- Mapping DTOs
-		- Validators
-		- Behaviors
-		- Specifications
-		- Interfaces de persistência.
-}	
-círculo interno{
-	Domain:
-		- Domain Entities
-		- Aggregates
-		- Value Object
-		- Domain Events
-		- Enumerations
-		- Constants
-		- Interfaces de regras
-		- Exceções de domínio
+middle circle {
+    Application (Use cases):
+        - Abstractions
+        - Contracts
+        - Ports
+        - Business Services
+        - Commands and Queries
+        - Application Exceptions
+        - DTOs
+        - Request and Response Models
+        - Mapping DTOs
+        - Validators
+        - Behaviors
+        - Specifications
+        - Persistence Interfaces
+}    
+inner circle {
+    Domain:
+        - Domain Entities
+        - Aggregates
+        - Value Objects
+        - Domain Events
+        - Enumerations
+        - Constants
+        - Rule Interfaces
+        - Domain Exceptions
 }
 
-Existe um conceito claro acerca das dependências:
-- É de fora para dentro.
-- Nada do circulo interno sabe do circulo externo, mas o externo sabe do interno.
-*Analisar as dependências do projeto para melhor compreensão*
-	- Domain não possui nenhuma dependência.
-	- Application depende do Domain.
-	- Persistence depende do Application.
-	- API depende do Application e Persistence(Somente em tempo de execução).
+There is a clear concept regarding dependencies:
+- It goes from outside to inside.
+- Nothing in the inner circle knows about the outer circle, but the outer circle knows about the inner one.
+*Analyze the project dependencies for better understanding*
+    - Domain has no dependencies.
+    - Application depends on Domain.
+    - Persistence depends on Application.
+    - API depends on Application and Persistence (only at runtime).

@@ -4,7 +4,7 @@ using CleanArchitecture.Persistence.Context;
 namespace CleanArchitecture.Persistence.Repositories.Base
 {
     /*
-        Implementação do IUnitOfWork
+        Implementation of IUnitOfWork
     */
     public class UnitOfWork : IUnitOfWork
     {

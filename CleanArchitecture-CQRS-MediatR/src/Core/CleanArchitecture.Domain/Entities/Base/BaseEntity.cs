@@ -1,7 +1,7 @@
 ﻿namespace CleanArchitecture.Domain.Entities.Base
 {
     /*
-        Entidade base abstrata
+        abstract base entity
     */
     public abstract class BaseEntity
     {

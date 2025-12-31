@@ -4,8 +4,8 @@ using MediatR;
 namespace CleanArchitecture.Application.Shared.Behavior
 {
     /* 
-       Comportamento (behavior) personalizado do MediatR, um padrão que permite a execução de lógica antes ou depois do processamento
-       da solicitação por um manipulador
+       Custom MediatR behavior, a pattern that allows the execution of logic before or after the request 
+       is handled by a handler
     */
 
     public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>

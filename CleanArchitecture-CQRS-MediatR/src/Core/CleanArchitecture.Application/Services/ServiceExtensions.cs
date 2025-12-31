@@ -7,9 +7,9 @@ using System.Reflection;
 namespace CleanArchitecture.Application.Services
 {
     /*
-        Método de extensão ConfigureApplicationApp para IServiceCollection
-        - Assembly.GetExecutingAssembly() fala que o serviço deve ser configurado para atuar dentro 
-        do Assembly onde o método está definido (nesse caso Application).
+          Extension method ConfigureApplicationApp for IServiceCollection --- DI
+        - Assembly.GetExecutingAssembly() indicates that the service must be configured to operate 
+          within the Assembly where the method is defined (in this case, Application).
     */
     public static class ServiceExtensions
     {
