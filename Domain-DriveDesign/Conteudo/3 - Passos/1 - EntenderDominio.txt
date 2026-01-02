@@ -1,0 +1,56 @@
+﻿========================== PASSOS ==========================
+
+==========================
+ENTENDENDO O DOMÍNIO:
+
+Sentar os desenvolvedores, stakeholders, especialistas do domínio, restante da equipe, para juntos entendermos
+o domínio.
+
+==========================
+EXEMPLO: Sistema de Vendas
+
+DOMÍNIO GERAL - Sistema de Vendas.
+
+Dentro do sistema de vendas temos
+{Vendas, Suporte, Marketing e Financeiro} -> Perguntas:
+
+	- Para o departamento Vendas, o que é mais crítico no dia a dia? O que gera mais dor de cabeça?
+	- Como o Financeiro se relaciona com o Vendas? O que eles precisam saber?
+	- O Marketing precisa de quais informações do Vendas para planejar as campanhas?
+	- O Suporte precisa de acesso aos dados de vendas para que?
+
+Domínio - Vendas
+
+Subdomínios:
+	- Clientes (Endereço). -> Supporting (Sem ele o sistema ainda sobrevive.)
+	- Catálogo (Produto e Categoria). -> Supporting (Sem ele o sistema ainda sobrevive.)
+	- Pedidos (Item e Endereço). -> Core
+	- Pagamentos (Transações). -> Supporting (provavelmente vai usar uma API externa, não sera construído tudo no domínio)
+	
+	- Cupom -> Supporting.
+	- Notificações -> Generic.
+
+	*OBS: Não gaste seu tempo (Core) com subdomínios que outras pessoas ja resolveram/existentes no mercado a fora,
+	gaste seu tempo aonde você realmente gera valor para o seu negócio.*
+
+Bounded Contexts:
+	- Gestão de Clientes:
+	- Gestão de Catálogo:
+	- Gestão de Pedidos:
+	- Gestão de Pagamentos:
+	- Cupons:
+	- Notificações:
+
+==========================
+O que é um Produto?
+
+- para a gestão de catálogo: um produto tem um código, uma descrição detalhada, um preço e pertence a uma caregoria.
+- para a gestão de pedidos: um produto tem um id, um nome para exibição, um preço vigente e um custo.
+- para a gestão de clientes: um produto tem a data de compra, um número de série, um status de garantia.
+
+Se formos tentar criar uma única entidade produto vai se tornar um emaranhado de código...
+então na verdade nós temos, cada um em seu context:
+
+	- ProdutoCatalogo
+	- ItemDePedido
+	- ItemComprado

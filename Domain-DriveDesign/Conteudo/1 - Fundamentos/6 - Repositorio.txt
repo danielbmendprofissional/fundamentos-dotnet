@@ -1,0 +1,43 @@
+﻿========================== FUNDAMENTOS ==========================
+
+==========================
+REPOSITÓRIOS:
+
+	- Padrão utilizado para realização de operações em conjuntos de informações, agnóstico à tecnologia utilizada.
+	- Geralmente associado a um agregado.
+	- A definição da sua interface ficaria mais próxima do core do domínio e sua implementação da infraestrutura.
+	- Não é para leitura complexa.
+	- Não é genérico.
+	- Não substitui queries.
+
+	EXEMPLO CORRETO:
+
+	// INTERFACE -> Domain.
+	public interface IPessoaRepository
+	{
+		Task<Pessoa?> ObterPorIdAsync(long id, CancellationToken ct);
+		Task AdicionarAsync(Pessoa pessoa, CancellationToken ct);
+	}
+
+	//Implementação -> Infrastructure.
+	internal sealed class PessoaRepository : IPessoaRepository
+	{
+		private readonly AppDbContext _context;
+
+		public PessoaRepository(AppDbContext context)
+		{
+			_context = context;
+		}
+
+		public async Task<Pessoa?> ObterPorIdAsync(long id, CancellationToken ct)
+		{
+			return await _context.Pessoas
+				.Include(p => p.Bancos)
+				.FirstOrDefaultAsync(p => p.Id == id, ct);
+		}
+
+		public async Task AdicionarAsync(Pessoa pessoa, CancellationToken ct)
+		{
+			await _context.Pessoas.AddAsync(pessoa, ct);
+		}
+	}

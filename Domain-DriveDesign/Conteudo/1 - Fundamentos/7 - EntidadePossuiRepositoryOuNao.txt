@@ -1,0 +1,10 @@
+﻿NÃO POSSUI REPOSITORY:    
+    - Se a entidade não vive sozinha.
+    - Só existe no contexto de outra entidade (só existe dentro de um aggragate único).
+    - Não faz sentido busca-la isoladamente.
+
+POSSUI REPOSITORY:
+    - Se a entidade vive sozinha.
+    - Se a entidade tem histórico próprio.
+    - Se a entidade é reutilizada entre entidades e entre objetos da mesma entidade. (entre Pessoas)
+    - Precisa consultar isoladamente.
