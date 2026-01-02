@@ -21,6 +21,12 @@ namespace Vendas.Domain.Common.Validations
                 throw new DomainException($"{paramName} cannot be null");
         }
 
+        public static void AgainstNullOrWhiteSpace(string value, string paramName)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new DomainException($"{paramName} cannot be null or empty");
+        }
+
         public static void Against<TException>(bool condition, string message) where TException : Exception
         { 
             if (condition) throw (TException)Activator.CreateInstance(typeof(TException), message)!;
