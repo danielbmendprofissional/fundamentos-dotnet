@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Vendas.Domain.Common.Base
+{
+    public abstract class ValueObject
+    {   // Entities are compared by identity.
+        // Value Objects are compared by value.
+
+        // Método que deve ser implementado nas classes filhas para retornar todos os atributos
+        // que definem a igualdade estrutural.
+
+        protected abstract IEnumerable<object> GetEqualityComponents();
+
+        // Implementação de igualdade profunda (estrutural)
+        public override bool Equals(object? obj)
+        {
+            if(obj == null || obj.GetType() != GetType()) return false;
+
+            var other = (ValueObject)obj;
+            return GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
+        }
+
+        public override int GetHashCode() 
+        { 
+            //Combina os HashCodes de todos os components
+            return GetEqualityComponents()
+                .Select(x => x != null ? x.GetHashCode() : 0)
+                .Aggregate((x, y) => x ^ y);
+        }
+    }
+}
