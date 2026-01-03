@@ -31,5 +31,11 @@ namespace Vendas.Domain.Common.Base
                 .Select(x => x != null ? x.GetHashCode() : 0)
                 .Aggregate((x, y) => x ^ y);
         }
+
+        public static bool operator ==(ValueObject a, ValueObject b)
+            => a?.Equals(b) ?? b is null;
+
+        public static bool operator !=(ValueObject a, ValueObject b)
+            => !(a == b);
     }
 }
