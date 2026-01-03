@@ -1,0 +1,57 @@
+﻿========================== CONCEITOS ==========================
+
+==========================
+DOMAIN EVENTS:
+
+Um DOMAIN EVENT representa um fato importante que aconteceu dentro do domínio -> algo que já ocorreu
+e que pode interessar a outras partes do sistema.
+
+No DDD, eventos são sempre expressos no passado. Por exemplo:
+	- PagamentoAprovadoEvent -> Indica que o pagamento já foi aprovado.
+	- PedidoCanceladoEvent -> Indica que o pedido foi cancelado.
+	- ClienteCadastradoEvent -> Indica que um novo cliente foi criado.
+
+O papel de um evento de domínio é notificar o resto do sistema de que algo relevante aconteceu, sem
+que a entidade precise saber quem vai reagir a isso.
+
+Dessa forma, desacoplamos o comportamento:
+	- A entidade apenas registrar o evento.
+	- A camada de aplicação publica esse evento.
+	- E outros componentes podem reagir a ele, de forma assíncrona.
+
+
+==========================
+DOMAIN EVENTS INTERNOS:
+	- Publicados e consumidos dentro do mesmo Bounded Context.
+	- Usados para propagar mudanças locais dentro do domínio.
+	- ItemPedidoAdicionadoEvent, PagamentoCriadoEvent.
+
+==========================
+DOMAIN EVENTS DE NEGÓCIO:
+	- Os eventos atravessam os limites do Bounded Context.
+	- Comunicam fatos importantes para outros contextos.
+	- PagamentoAprovadoEvent, PagamentoRejeitadoEvent.
+
+
+==========================
+EXEMPLO:
+	- Após a confirmação/recusa de pagamento outros BC precisam saber para controle de estoque, controle de pedido,
+	envio de notificação, etc.
+
+
+BC PAGAMENTO -> CONFIRMARPAGAMENTO (Muda o estado para aprovado)
+				-> Gera um AddDomainEvent(PagamentoAprovadoEvent).
+
+APPLICATION LAYER -> DomainEventDispatcher -> Handler.
+
+
+===========================
+FLUXO COMPLETO:
+
+1 - Entidade Sofre uma ação.
+2 - Entidade adiciona um evento.
+3 - Evento é guardado em _domainEvents.
+4 - Application Layer salva o agregado.
+5 - Após o SaveChanges() -> Dispatcher publica eventos.
+6 - ClearDomainEvents() -> limpa a lista.
+
