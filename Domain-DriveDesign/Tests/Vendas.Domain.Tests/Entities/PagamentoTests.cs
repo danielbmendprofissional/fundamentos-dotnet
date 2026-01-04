@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Vendas.Domain.Common.Enum;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Entities;
-using Vendas.Domain.Events;
+using Vendas.Domain.Events.Pagamento;
 
 namespace Vendas.Domain.Tests.Entities
 {

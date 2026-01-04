@@ -8,6 +8,7 @@ using Vendas.Domain.Common.Enum;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Common.Validations;
 using Vendas.Domain.Events;
+using Vendas.Domain.Events.Pagamento;
 
 namespace Vendas.Domain.Entities
 {

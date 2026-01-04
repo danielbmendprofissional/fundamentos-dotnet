@@ -26,10 +26,6 @@ namespace Vendas.Domain.Common.Base
         private readonly List<IDomainEvent> _domainEvents = new();
         public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
-        // Construtor usado pelo EF
-        protected Entity() { }
-
-
         // Construtor protegido: Entidades devem ser criadas via construtor ou factory
         // Construtor usado pelo domínio (criação real)
         protected Entity(Guid? id = null)
