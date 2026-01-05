@@ -1,15 +1,20 @@
+using Vendas.Application.Extensions;
+using Vendas.Infrastructure.Extensions;
+using Vendas.Infrastructure.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.ConfigureInfrastructureApp(builder.Configuration);
+builder.Services.ConfigureApplicationApp();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+CreateDatabase(app);
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -17,9 +22,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
+
+static void CreateDatabase(WebApplication app)
+{
+    var serviceScope = app.Services.CreateScope();
+    var dataContext = serviceScope.ServiceProvider.GetService<VendasDbContext>();
+    dataContext?.Database.EnsureCreated();
+}

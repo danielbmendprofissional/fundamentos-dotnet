@@ -15,8 +15,7 @@ namespace Vendas.Domain.Pedidos.Interfaces
         Task AdicionarAsync(Pedido pedido, 
             CancellationToken cancellationToken = default);
 
-        Task AtualizarAsync(Pedido pedido, 
-            CancellationToken cancellationToken = default);
+        void Atualizar(Pedido pedido);
 
     }
 }

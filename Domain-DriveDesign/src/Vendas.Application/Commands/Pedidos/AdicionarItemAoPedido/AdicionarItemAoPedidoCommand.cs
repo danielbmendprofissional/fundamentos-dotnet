@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Vendas.Application.Commands.Pedidos.AdicionarItemAoPedido
 {
-    public sealed class AdicionarItemAoPedidoCommand
+    public sealed class AdicionarItemAoPedidoCommand : IRequest<AdicionarItemAoPedidoResultDTO>
     {
         public Guid PedidoId { get; }
         public Guid ProdutoId { get; }

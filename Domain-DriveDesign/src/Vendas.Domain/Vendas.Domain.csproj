@@ -7,13 +7,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-			<_Parameter1>Vendas.Domain.Tests</_Parameter1>
-		</AssemblyAttribute>
+	  <Folder Include="Common\Enums\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Common\Enums\" />
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.1" />
 	</ItemGroup>
 
 
