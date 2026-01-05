@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vendas.Domain.Common.Exceptions;
+﻿using Vendas.Domain.Common.Exceptions;
 
 namespace Vendas.Domain.Common.Validations
 {
@@ -28,7 +23,7 @@ namespace Vendas.Domain.Common.Validations
         }
 
         public static void Against<TException>(bool condition, string message) where TException : Exception
-        { 
+        {
             if (condition) throw (TException)Activator.CreateInstance(typeof(TException), message)!;
         }
     }

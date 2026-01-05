@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vendas.Domain.Interfaces.Events;
+﻿using Vendas.Domain.Interfaces.Events;
 
 namespace Vendas.Domain.Common.Base
 {   // Entities are compared by identity.
@@ -47,7 +42,7 @@ namespace Vendas.Domain.Common.Base
         public void RemoveDomainEvent(IDomainEvent domainEvent)
             => _domainEvents.Remove(domainEvent);
 
-        public void ClearDomainEvents() 
+        public void ClearDomainEvents()
             => _domainEvents.Clear();
 
         // Sobrescrever Equals e GetHashCode é crucial para comparar entidades
@@ -55,8 +50,8 @@ namespace Vendas.Domain.Common.Base
 
         public override bool Equals(object? obj)
         {
-            if(obj is not Entity other) return false;
-            if(ReferenceEquals(this, other)) return true;
+            if (obj is not Entity other) return false;
+            if (ReferenceEquals(this, other)) return true;
 
             // Se o ID ainda não foi persistido (é GUID.Empty), compara por referência.
             // No nosso caso incializamos no construtor, essa checagem pode ser simples
@@ -73,14 +68,14 @@ namespace Vendas.Domain.Common.Base
 
         public static bool operator ==(Entity a, Entity b)
         {
-            if(ReferenceEquals(a, null)) 
+            if (ReferenceEquals(a, null))
                 return ReferenceEquals(b, null);
 
             return a.Equals(b);
         }
 
         public static bool operator !=(Entity a, Entity b)
-        { 
+        {
             return !(a == b);
         }
 

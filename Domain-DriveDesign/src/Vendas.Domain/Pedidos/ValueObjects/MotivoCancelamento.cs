@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vendas.Domain.Common.Base;
+﻿using Vendas.Domain.Common.Base;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Common.Validations;
 
@@ -29,7 +24,7 @@ namespace Vendas.Domain.Pedidos.ValueObjects
         {
 
             Guard.AgainstNullOrWhiteSpace(codigo, nameof(codigo));
-            Guard.Against<DomainException>( !_motivosPadrao.ContainsKey(codigo),
+            Guard.Against<DomainException>(!_motivosPadrao.ContainsKey(codigo),
                     $"Motivo de cancelamento '{codigo}' não é válido.");
 
             Codigo = codigo;

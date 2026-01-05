@@ -1,13 +1,8 @@
 ﻿using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Pedidos.Entities;
 
-namespace Vendas.Domain.Tests.Entities
+namespace Vendas.Domain.Tests.Pedidos.Entities
 {
     //ItemPedido possui o constructor internal (somente o Domain o enxerga), sendo assim
     //configuramos no domain informando que os internals do assembly é visible to us...

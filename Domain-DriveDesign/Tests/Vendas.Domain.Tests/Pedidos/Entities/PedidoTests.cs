@@ -1,17 +1,12 @@
 ﻿using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Vendas.Domain.Common.Enum;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Pedidos.Entities;
 using Vendas.Domain.Pedidos.Events.Pedido;
 using Vendas.Domain.Pedidos.ValueObjects;
 
-namespace Vendas.Domain.Tests.Entities
+namespace Vendas.Domain.Tests.Pedidos.Entities
 {
     public class PedidoTests
     {

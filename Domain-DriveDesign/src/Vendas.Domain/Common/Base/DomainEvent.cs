@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vendas.Domain.Interfaces.Events;
+﻿using Vendas.Domain.Interfaces.Events;
 
 namespace Vendas.Domain.Common.Base
 {

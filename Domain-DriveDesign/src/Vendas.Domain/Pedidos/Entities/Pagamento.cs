@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vendas.Domain.Common.Base;
+﻿using Vendas.Domain.Common.Base;
 using Vendas.Domain.Common.Enum;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Common.Validations;
-using Vendas.Domain.Events;
-using Vendas.Domain.Events.Pagamento;
+using Vendas.Domain.Pedidos.Events.Pagamento;
 
 namespace Vendas.Domain.Pedidos.Entities
 {
@@ -18,7 +12,7 @@ namespace Vendas.Domain.Pedidos.Entities
         //Prefiro utilização de INDICADOR, mas é apenas um projeto DDD educacional
         public MetodoPagamento MetodoPagamento { get; private set; }
         public StatusPagamento StatusPagamento { get; private set; }
-        public decimal Valor {  get; private set; } //Poderia criar um ValueObject
+        public decimal Valor { get; private set; } //Poderia criar um ValueObject
         public DateTime? DataPagamento { get; private set; }
         public string? CodigoTransacao { get; private set; }
 

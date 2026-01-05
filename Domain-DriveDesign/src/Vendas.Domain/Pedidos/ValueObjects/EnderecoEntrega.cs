@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Vendas.Domain.Common.Base;
-using Vendas.Domain.Common.Exceptions;
+﻿using Vendas.Domain.Common.Base;
 using Vendas.Domain.Common.Validations;
 
 namespace Vendas.Domain.Pedidos.ValueObjects
@@ -20,7 +13,7 @@ namespace Vendas.Domain.Pedidos.ValueObjects
         public string Cidade { get; private set; }
         public string Pais { get; private set; }
 
-        private EnderecoEntrega(Cep cep, string logradouro, string complemento, 
+        private EnderecoEntrega(Cep cep, string logradouro, string complemento,
                                 string bairro, string estado, string cidade, string pais)
         {
             Guard.AgainstNull(cep, nameof(cep));
