@@ -1,10 +1,11 @@
 ﻿using Vendas.Domain.Common.Base;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Common.Validations;
+using Vendas.Domain.Pedidos.Interfaces;
 
 namespace Vendas.Domain.Pedidos.Entities
 {
-    public sealed class ItemPedido : Entity
+    internal sealed class ItemPedido : Entity, IItemPedido
     {/*
         NESSE CASO ESTAMOS REALIZANDO UM SNAPSHOT EM ALGUMAS PROPRIEDADES
         como por NomeProduto, ValorTotal, PrecoUnitario... Isso porque se
@@ -35,7 +36,7 @@ namespace Vendas.Domain.Pedidos.Entities
             CalcularValorTotal();
         }
 
-        public void AplicarDesconto(decimal desconto)
+        internal void AplicarDesconto(decimal desconto)
         {
             Guard.Against<DomainException>(desconto <= 0, "Desconto não pode ser 0 ou negativo.");
             Guard.Against<DomainException>(desconto > PrecoUnitario * Quantidade,
@@ -46,7 +47,7 @@ namespace Vendas.Domain.Pedidos.Entities
             CalcularValorTotal();
         }
 
-        public void AdicionarUnidades(int quantidade)
+        internal void AdicionarUnidades(int quantidade)
         {
             Guard.Against<DomainException>(quantidade <= 0, "Deve-se adicionar pelo menos uma unidade.");
 
@@ -55,7 +56,7 @@ namespace Vendas.Domain.Pedidos.Entities
             CalcularValorTotal();
         }
 
-        public void RemoverUnidades(int quantidade)
+        internal void RemoverUnidades(int quantidade)
         {
             Guard.Against<DomainException>(quantidade <= 0, "Deve-se remover pelo menos uma unidade.");
             Guard.Against<DomainException>(quantidade > Quantidade,
@@ -70,7 +71,7 @@ namespace Vendas.Domain.Pedidos.Entities
             CalcularValorTotal();
         }
 
-        public void AtualizarPrecoUnitario(decimal novoPreco)
+        internal void AtualizarPrecoUnitario(decimal novoPreco)
         {
             Guard.Against<DomainException>(novoPreco <= 0, "O preço unitário deve ser maior que zero.");
 

@@ -1,4 +1,4 @@
-﻿namespace Vendas.Domain.Common.Enum
+﻿namespace Vendas.Domain.Pedidos.Enums
 {
     public enum MetodoPagamento
     {

@@ -1,12 +1,13 @@
 ﻿using Vendas.Domain.Common.Base;
-using Vendas.Domain.Common.Enum;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Common.Validations;
+using Vendas.Domain.Pedidos.Enums;
 using Vendas.Domain.Pedidos.Events.Pagamento;
+using Vendas.Domain.Pedidos.Interfaces;
 
 namespace Vendas.Domain.Pedidos.Entities
 {
-    public sealed class Pagamento : Entity
+    internal sealed class Pagamento : Entity, IPagamento
     {
         public Guid PedidoId { get; private set; }
         //Prefiro utilização de INDICADOR, mas é apenas um projeto DDD educacional
@@ -38,7 +39,7 @@ namespace Vendas.Domain.Pedidos.Entities
             CodigoTransacao = null;
         }
 
-        public void GerarCodigoTransacaoLocal()
+        internal void GerarCodigoTransacaoLocal()
         {
             if (CodigoTransacao is not null)
                 return; // já foi gerado
@@ -47,7 +48,7 @@ namespace Vendas.Domain.Pedidos.Entities
             DefinirCodigoTransacao(codigo);
         }
 
-        public void DefinirCodigoTransacao(string codigo)
+        internal void DefinirCodigoTransacao(string codigo)
         {
             Guard.AgainstNullOrWhiteSpace(codigo, nameof(codigo));
 
@@ -64,7 +65,7 @@ namespace Vendas.Domain.Pedidos.Entities
             SetDataAtualizacao();
         }
 
-        public void ConfirmarPagamento()
+        internal void ConfirmarPagamento()
         {
             Guard.Against<DomainException>(
                 StatusPagamento != StatusPagamento.Pendente,
@@ -86,7 +87,7 @@ namespace Vendas.Domain.Pedidos.Entities
                 CodigoTransacao));
         }
 
-        public void RecusarPagamento()
+        internal void RecusarPagamento()
         {
             Guard.Against<DomainException>(
                 StatusPagamento != StatusPagamento.Pendente,

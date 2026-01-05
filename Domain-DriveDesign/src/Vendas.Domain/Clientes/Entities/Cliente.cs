@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vendas.Domain.Clientes.Enums;
 using Vendas.Domain.Clientes.Events;
+using Vendas.Domain.Clientes.Interfaces;
 using Vendas.Domain.Clientes.ValueObjects;
 using Vendas.Domain.Common.Base;
 using Vendas.Domain.Common.Exceptions;
@@ -24,7 +25,7 @@ namespace Vendas.Domain.Clientes.Entities
         public Guid EnderecoPrincipalId { get; private set; }
 
         private readonly List<Endereco> _enderecos = new();
-        public IReadOnlyCollection<Endereco> Enderecos => _enderecos.AsReadOnly();
+        public IReadOnlyCollection<IEndereco> Enderecos => _enderecos.Cast<IEndereco>().ToList().AsReadOnly();
 
         private Cliente(
         NomeCompleto nome,
@@ -55,16 +56,55 @@ namespace Vendas.Domain.Clientes.Entities
                 Cpf: Cpf.Numero,
                 Email: Email.Endereco));
         }
-        public static Cliente Criar(NomeCompleto nome, Cpf cpf, Email email, Telefone telefone, Endereco enderecoPrincipal,
-            Sexo sexo = Sexo.NaoInformado, EstadoCivil estadoCivil = EstadoCivil.NaoInformado)
-            => new(nome, cpf, email, telefone, enderecoPrincipal, sexo, estadoCivil);
-
-        public void AdicionarEndereco(Endereco endereco)
+        public static Cliente Criar(
+            NomeCompleto nome, Cpf cpf, Email email, Telefone telefone, 
+            DadosEndereco enderecoPrincipal, Sexo sexo = Sexo.NaoInformado,
+            EstadoCivil estadoCivil = EstadoCivil.NaoInformado)
         {
-            Guard.AgainstNull(endereco, nameof(endereco));
+            Guard.AgainstNull(nome, nameof(nome));
+            Guard.AgainstNull(cpf, nameof(cpf));
+            Guard.AgainstNull(email, nameof(email));
+            Guard.AgainstNull(telefone, nameof(telefone));
+            Guard.AgainstNull(enderecoPrincipal, nameof(enderecoPrincipal));
+
+            var endereco = new Endereco(
+                enderecoPrincipal.Cep,
+                enderecoPrincipal.Logradouro,
+                enderecoPrincipal.Numero,
+                enderecoPrincipal.Bairro,
+                enderecoPrincipal.Cidade,
+                enderecoPrincipal.Estado,
+                enderecoPrincipal.Pais,
+                enderecoPrincipal.Complemento);
+
+            return new Cliente(
+                nome,
+                cpf,
+                email,
+                telefone,
+                endereco,
+                sexo,
+                estadoCivil);
+        }
+
+        public void AdicionarEndereco(DadosEndereco dados)
+        {
+            Guard.AgainstNull(dados, nameof(dados));
+
+            var endereco = new Endereco(
+                dados.Cep,
+                dados.Logradouro,
+                dados.Numero,
+                dados.Bairro,
+                dados.Cidade,
+                dados.Estado,
+                dados.Pais,
+                dados.Complemento);
+
             _enderecos.Add(endereco);
             SetDataAtualizacao();
         }
+
 
         public void RemoverEndereco(Guid enderecoId)
         {
@@ -123,7 +163,7 @@ namespace Vendas.Domain.Clientes.Entities
             SetDataAtualizacao();
         }
 
-        public Endereco ObterEnderecoPrincipal()
+        public IEndereco ObterEnderecoPrincipal()
         {
             return _enderecos.First(e => e.Id == EnderecoPrincipalId);
         }

@@ -1,11 +1,12 @@
 ﻿using System.Text.RegularExpressions;
+using Vendas.Domain.Clientes.Interfaces;
 using Vendas.Domain.Common.Base;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Common.Validations;
 
 namespace Vendas.Domain.Clientes.Entities
 {
-    public sealed class Endereco : Entity
+    internal sealed class Endereco : Entity, IEndereco
     {
         public string Cep { get; private set; }
         public string Logradouro { get; private set; }
@@ -16,7 +17,7 @@ namespace Vendas.Domain.Clientes.Entities
         public string Pais { get; private set; }
         public string Complemento { get; private set; }
 
-        public Endereco(
+        internal Endereco(
         string cep,
         string logradouro,
         string numero,

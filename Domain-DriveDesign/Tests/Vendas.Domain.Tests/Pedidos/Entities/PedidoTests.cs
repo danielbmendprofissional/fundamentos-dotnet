@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using System.Reflection;
-using Vendas.Domain.Common.Enum;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Pedidos.Entities;
 using Vendas.Domain.Pedidos.Enums;
@@ -252,9 +251,7 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             var pagamento = pedido.IniciarPagamento(MetodoPagamento.CartaoCredito);
 
             // Assert
-            pagamento.Should().NotBeNull();
-            pagamento.Valor.Should().Be(200m);
-            pedido.Pagamentos.Should().Contain(pagamento);
+            pedido.Pagamentos.Should().Contain(x => x.Id == pagamento);
             pedido.StatusPedido.Should().Be(StatusPedido.Pendente);
         }
 
@@ -299,7 +296,7 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             var pagamento = pedido.IniciarPagamento(MetodoPagamento.Pix);
 
             // Act
-            pedido.HandlePagamentoAprovado(pagamento.Id);
+            pedido.HandlePagamentoAprovado(pagamento);
 
             // Assert
             pedido.StatusPedido.Should().Be(StatusPedido.PagamentoConfirmado);
@@ -314,7 +311,7 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             var pagamento = pedido.IniciarPagamento(MetodoPagamento.Pix);
 
             // Act
-            pedido.HandlePagamentoRejeitado(pagamento.Id);
+            pedido.HandlePagamentoRejeitado(pagamento);
 
             // Assert
             pedido.StatusPedido.Should().Be(StatusPedido.Cancelado);
@@ -332,7 +329,7 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             SetStatusPedido(pedido, StatusPedido.EmSeparacao); // Simula status incorreto
 
             // Act
-            Action act = () => pedido.HandlePagamentoAprovado(pagamento.Id);
+            Action act = () => pedido.HandlePagamentoAprovado(pagamento);
 
             // Assert
             act.Should().Throw<DomainException>()
@@ -348,7 +345,7 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             var pedido = Pedido.Criar(ClienteIdValido, CriarEnderecoValido());
             pedido.AdicionarItem(ProdutoIdValido, "Produto", 100m, 1);
             var pagamento = pedido.IniciarPagamento(MetodoPagamento.CartaoCredito);
-            pedido.HandlePagamentoAprovado(pagamento.Id); // Status: PagamentoConfirmado
+            pedido.HandlePagamentoAprovado(pagamento); // Status: PagamentoConfirmado
 
             // Act
             pedido.MarcarComoEmSeparacao();
@@ -451,9 +448,9 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             var pedido = Pedido.Criar(ClienteIdValido, CriarEnderecoValido());
             pedido.AdicionarItem(ProdutoIdValido, "Produto", 50m, 1);
             var pagamento = pedido.IniciarPagamento(MetodoPagamento.Pix);
-            pedido.HandlePagamentoAprovado(pagamento.Id); // Status: PagamentoConfirmado
+            pedido.HandlePagamentoAprovado(pagamento); // Status: PagamentoConfirmado
 
-            // Act
+            // Act  
             pedido.CancelarPedido();
 
             // Assert

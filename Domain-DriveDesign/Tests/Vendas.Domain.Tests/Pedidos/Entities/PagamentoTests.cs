@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using Vendas.Domain.Common.Enum;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Pedidos.Entities;
+using Vendas.Domain.Pedidos.Enums;
 using Vendas.Domain.Pedidos.Events.Pagamento;
 
 namespace Vendas.Domain.Tests.Pedidos.Entities

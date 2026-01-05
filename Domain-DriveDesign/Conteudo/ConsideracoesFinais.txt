@@ -1,0 +1,88 @@
+﻿========================== FUNDAMENTOS ==========================
+
+=================================
+- EndereçoEntrega (pedido) = VO e Endereço (cliente) = Entity:
+	- É interessante entender que dependendo do contexto e a função que exercem no domínio
+	dentro do contexto, pode ser tanto entity, quanto VO.
+
+	- no PEDIDO, endereço de entrega não muda depois de criado, não tem identidade própria
+	não importa "qual endereço é", importa somente onde é. Se qualquer campo mudar, muda o endereço.
+
+	- no CLIENTE, endereço é algo que o cliente mantém, pode ser atualizado, pode ser referenciado,
+	pode ser endereço principal e pode ser usado em vários contextos. Se algum campo muda, o endereço
+	continua sendo o endereço daquele cliente, mas atualizado somente.
+
+	BOAS PERGUNTAS:
+		- Eu preciso atualizar isso? Sim (entidade).
+		- Se atualiza, cria outro? Sim (Value Object).
+		- Se mudar todos os dados é a mesma coisa? Sim  (entidade).
+		- São apenas dados do pedido ou um objeto independete? Apenas dados (Value Object).
+
+=================================
+- Visibilidade (Construtor e Factory):
+
+	- VO : public (sem regras) / private + factory (com regras)
+	- Entidade Interna do agregado : internal.
+	- Aggregate Root: private + facotry.
+	- para o ORM (EF) : protected vazio 
+	- Métodos entidade {
+	
+		- Aggregate Root: public
+		- Entidade interna{
+		
+			- Muda estado + pai decide? internal
+			- Muda estado + entity decide? private
+			- Não muda estado? public
+
+			*Mudar/Setar valor em propriedades é mudar estado*
+
+		}
+	
+	}
+
+=================================
+REGRAS:
+
+1. Regra de negócio:
+	- Define o que é permitido no negócio.
+	- Se quebrar, o sistema estaria CONCEITUALMENTE errado.
+	- existe mesmo sem aplicação, api ou banco.
+
+	- EXEMPLOS:
+		- Pedido só pode ser cancelado se estiver pendente.
+		- Cliente bloqueado não pode atualizar perfil.
+		- ItemPedido não pode ter quantidade zero.
+
+2. Regra de domínio:
+	- é uma regra de negócio aplicada a um modelo (Aggregate, VO)
+	- Toda regra de domínio é uma regra de negócio, mas nem toda regra de negócio virá código complexo.
+
+	- EXEMPLOS:
+		- Pedido.Cancelar() valida status.
+		- Cpf valida formato
+		- Endereco valida CEP
+		- Pagamento.Confirmar () valida status.
+
+3. Regra de Use Cases:
+	- Define se um fluxo pode acontecer.
+
+	- EXEMPLOS:
+		- Não iniciar pagamento se não houver itens.
+		- Não permitir dois pagamentos pendentes.
+		- Usuário precisa estar autenticado.
+		- Pedido precisa existir.
+
+4. Regra Técnica:
+	- Existe por causa de tecnologia, não do negócio.
+
+	- EXEMPLOS:
+		- Json inválido.
+		- Campos obrigatórios no formulário.
+		- Fk Inexistente.
+		- Tamanho máximo de string.
+
+=================================
+REGRAS (Camadas):
+	Domain: Negócio e Domínio
+	Application: UseCases, Auth, Validações de existência
+	Presentation: DTO required

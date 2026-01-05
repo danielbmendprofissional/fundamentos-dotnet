@@ -1,9 +1,9 @@
 ﻿using Vendas.Domain.Common.Base;
-using Vendas.Domain.Common.Enum;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Common.Validations;
 using Vendas.Domain.Pedidos.Enums;
 using Vendas.Domain.Pedidos.Events.Pedido;
+using Vendas.Domain.Pedidos.Interfaces;
 using Vendas.Domain.Pedidos.ValueObjects;
 
 namespace Vendas.Domain.Pedidos.Entities
@@ -20,10 +20,10 @@ namespace Vendas.Domain.Pedidos.Entities
         public string NumeroPedido { get; private set; } = string.Empty;
 
         private readonly List<ItemPedido> _itens = new();
-        public IReadOnlyCollection<ItemPedido> Itens => _itens.AsReadOnly();
+        public IReadOnlyCollection<IItemPedido> Itens => _itens.Cast<IItemPedido>().ToList().AsReadOnly();
 
         private readonly List<Pagamento> _pagamentos = new();
-        public IReadOnlyCollection<Pagamento> Pagamentos => _pagamentos.AsReadOnly();
+        public IReadOnlyCollection<IPagamento> Pagamentos => _pagamentos.Cast<IPagamento>().ToList().AsReadOnly();
 
         private Pedido(Guid clienteId, EnderecoEntrega enderecoEntrega)
         {
@@ -89,7 +89,7 @@ namespace Vendas.Domain.Pedidos.Entities
             SetDataAtualizacao();
         }
 
-        public Pagamento IniciarPagamento(MetodoPagamento metodoPagamento)
+        public Guid IniciarPagamento(MetodoPagamento metodoPagamento)
         {
             Guard.Against<DomainException>(
                 !_itens.Any(),
@@ -106,7 +106,7 @@ namespace Vendas.Domain.Pedidos.Entities
             _pagamentos.Add(novoPagamento);
 
             SetDataAtualizacao();
-            return novoPagamento;
+            return novoPagamento.Id;
         }
 
         public void HandlePagamentoAprovado(Guid pagamentoId)

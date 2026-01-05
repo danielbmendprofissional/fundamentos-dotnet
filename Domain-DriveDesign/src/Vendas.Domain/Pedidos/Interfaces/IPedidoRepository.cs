@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vendas.Domain.Pedidos.Entities;
 
-namespace Vendas.Application.Abstractions.Persistence
+namespace Vendas.Domain.Pedidos.Interfaces
 {
     public interface IPedidoRepository
     {

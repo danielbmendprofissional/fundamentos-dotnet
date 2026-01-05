@@ -66,7 +66,7 @@ namespace Vendas.Domain.Common.Base
                 : base.GetHashCode();
         }
 
-        public static bool operator ==(Entity a, Entity b)
+        public static bool operator ==(Entity? a, Entity? b)
         {
             if (ReferenceEquals(a, null))
                 return ReferenceEquals(b, null);
@@ -74,7 +74,7 @@ namespace Vendas.Domain.Common.Base
             return a.Equals(b);
         }
 
-        public static bool operator !=(Entity a, Entity b)
+        public static bool operator !=(Entity? a, Entity? b)
         {
             return !(a == b);
         }

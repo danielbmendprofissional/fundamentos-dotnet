@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Vendas.Domain.Clientes.Entities;
 using Vendas.Domain.Clientes.Enums;
 using Vendas.Domain.Clientes.Events;
+using Vendas.Domain.Clientes.Interfaces;
 using Vendas.Domain.Clientes.ValueObjects;
 using Vendas.Domain.Common.Exceptions;
 
@@ -26,16 +27,21 @@ namespace Vendas.Domain.Tests.Clientes.Entities
         private static Telefone CriarTelefone(string telefone = "11999999999")
             => new(telefone);
 
-        private static Endereco CriarEndereco(
-        string cep = "01310100",
-        string logradouro = "Avenida Paulista",
-        string numero = "1000",
-        string bairro = "Bela Vista",
-        string cidade = "São Paulo",
-        string estado = "SP",
-        string pais = "Brasil",
-        string complemento = "")
-            => new(cep, logradouro, numero, bairro, cidade, estado, pais, complemento);
+        private static DadosEndereco CriarDadosEndereco(
+            string cep = "01310100",
+            string logradouro = "Avenida Paulista",
+            string numero = "1000",
+            string bairro = "Bela Vista",
+            string cidade = "São Paulo",
+            string estado = "SP",
+            string pais = "Brasil",
+            string complemento = "")
+        {
+            return new DadosEndereco(
+                cep, logradouro, numero, bairro, cidade, estado, pais, complemento);
+        }
+
+
 
         private static Cliente CriarClienteValido()
             => Cliente.Criar(
@@ -43,7 +49,7 @@ namespace Vendas.Domain.Tests.Clientes.Entities
                 CriarCpf(),
                 CriarEmail(),
                 CriarTelefone(),
-                CriarEndereco(),
+                CriarDadosEndereco(),
                 Sexo.Masculino,
                 EstadoCivil.Solteiro);
 
@@ -81,7 +87,7 @@ namespace Vendas.Domain.Tests.Clientes.Entities
             Cpf? cpf = campo == "Cpf" ? null : CriarCpf();
             Email? email = campo == "Email" ? null : CriarEmail();
             Telefone? telefone = campo == "Telefone" ? null : CriarTelefone();
-            Endereco? endereco = campo == "Endereco" ? null : CriarEndereco();
+            DadosEndereco? endereco = campo == "Endereco" ? null : CriarDadosEndereco();
 
             Action act = () => Cliente.Criar(nome!, cpf!, email!, telefone!, endereco!);
 
@@ -92,7 +98,7 @@ namespace Vendas.Domain.Tests.Clientes.Entities
         public void AdicionarEndereco_DeveAdicionar()
         {
             var cliente = CriarClienteValido();
-            var novo = CriarEndereco("02134000", "Rua Augusta");
+            var novo = CriarDadosEndereco();
 
             cliente.AdicionarEndereco(novo);
 
@@ -105,7 +111,7 @@ namespace Vendas.Domain.Tests.Clientes.Entities
         public void AdicionarEndereco_ValidacaoDeNulo(bool usarNulo)
         {
             var cliente = CriarClienteValido();
-            Endereco? endereco = usarNulo ? null : CriarEndereco();
+            DadosEndereco? endereco = usarNulo ? null : CriarDadosEndereco();
 
             Action act = () => cliente.AdicionarEndereco(endereco!);
 
@@ -121,22 +127,40 @@ namespace Vendas.Domain.Tests.Clientes.Entities
             var cliente = CriarClienteValido();
             var dataAnterior = cliente.DataAtualizacao ?? DateTime.UtcNow;
 
-            System.Threading.Thread.Sleep(5);
-            cliente.AdicionarEndereco(CriarEndereco("02134000", "Rua Augusta"));
+            Thread.Sleep(5);
+
+            cliente.AdicionarEndereco(new DadosEndereco(
+                cep: "02134000",
+                logradouro: "Rua Augusta",
+                numero: "100",
+                bairro: "Consolação",
+                cidade: "São Paulo",
+                estado: "SP",
+                pais: "Brasil",
+                complemento: ""
+            ));
+
             cliente.DataAtualizacao.Should().BeAfter(dataAnterior);
         }
+
 
         [Fact]
         public void RemoverEndereco_ComSegundoEndereco_DeveRemover()
         {
             var cliente = CriarClienteValido();
-            var segundo = CriarEndereco("02134000", "Rua Augusta");
-            cliente.AdicionarEndereco(segundo);
 
-            cliente.RemoverEndereco(segundo.Id);
+            cliente.AdicionarEndereco(CriarDadosEndereco(
+                cep: "02134000",
+                logradouro: "Rua Augusta"
+            ));
+
+            var segundoEnderecoId = cliente.Enderecos.Last().Id;
+
+            cliente.RemoverEndereco(segundoEnderecoId);
 
             cliente.Enderecos.Should().HaveCount(1);
         }
+
 
         [Theory]
         [InlineData("NaoExiste")]
@@ -160,14 +184,18 @@ namespace Vendas.Domain.Tests.Clientes.Entities
         public void RemoverEndereco_Principal_DeveRedefinirPrincipal()
         {
             var cliente = CriarClienteValido();
-            var segundo = CriarEndereco("02134000", "Rua Augusta");
-            cliente.AdicionarEndereco(segundo);
+
+            var dadosSegundo = CriarDadosEndereco("02134000", "Rua Augusta");
+            cliente.AdicionarEndereco(dadosSegundo);
+
+            var segundoEnderecoId = cliente.Enderecos.Last().Id;
 
             cliente.RemoverEndereco(cliente.EnderecoPrincipalId);
 
-            cliente.EnderecoPrincipalId.Should().Be(segundo.Id);
+            cliente.EnderecoPrincipalId.Should().Be(segundoEnderecoId);
             cliente.DomainEvents.Should().Contain(e => e is EnderecoPrincipalAlteradoEvent);
         }
+
 
         [Theory]
         [InlineData(true)]
@@ -204,22 +232,26 @@ namespace Vendas.Domain.Tests.Clientes.Entities
         public void DefinirEnderecoPrincipal_DeveDefinir()
         {
             var cliente = CriarClienteValido();
-            var novo = CriarEndereco("02134000", "Rua Augusta");
+            var novo = CriarDadosEndereco("02134000", "Rua Augusta");
             cliente.AdicionarEndereco(novo);
 
-            cliente.DefinirEnderecoPrincipal(novo.Id);
+            var novoEnderecoId = cliente.Enderecos.Last().Id;
 
-            cliente.EnderecoPrincipalId.Should().Be(novo.Id);
+            cliente.DefinirEnderecoPrincipal(novoEnderecoId);
+
+            cliente.EnderecoPrincipalId.Should().Be(novoEnderecoId);
         }
 
         [Fact]
         public void DefinirEnderecoPrincipal_DeveGerarEvento()
         {
             var cliente = CriarClienteValido();
-            var novo = CriarEndereco("02134000", "Rua Augusta");
+            var novo = CriarDadosEndereco("02134000", "Rua Augusta");
             cliente.AdicionarEndereco(novo);
 
-            cliente.DefinirEnderecoPrincipal(novo.Id);
+            var novoEnderecoId = cliente.Enderecos.Last().Id;
+
+            cliente.DefinirEnderecoPrincipal(novoEnderecoId);
 
             cliente.DomainEvents.Should().Contain(e => e is EnderecoPrincipalAlteradoEvent);
         }
@@ -325,12 +357,14 @@ namespace Vendas.Domain.Tests.Clientes.Entities
         {
             var cliente = CriarClienteValido();
 
-            var e1 = CriarEndereco("02134000", "Rua Augusta");
+            var e1 = CriarDadosEndereco("02134000", "Rua Augusta");
             cliente.AdicionarEndereco(e1);
 
-            cliente.DefinirEnderecoPrincipal(e1.Id);
+            var e1Id = cliente.Enderecos.Last().Id;
 
-            cliente.EnderecoPrincipalId.Should().Be(e1.Id);
+            cliente.DefinirEnderecoPrincipal(e1Id);
+
+            cliente.EnderecoPrincipalId.Should().Be(e1Id);
             cliente.Enderecos.Should().HaveCount(2);
         }
 
