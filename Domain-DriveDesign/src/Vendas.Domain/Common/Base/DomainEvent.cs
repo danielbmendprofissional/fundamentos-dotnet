@@ -1,4 +1,4 @@
-﻿using Vendas.Domain.Interfaces.Events;
+﻿using Vendas.Domain.Common.Interfaces.Events;
 
 namespace Vendas.Domain.Common.Base
 {

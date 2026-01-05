@@ -1,4 +1,4 @@
-﻿namespace Vendas.Domain.Common.Enum
+﻿namespace Vendas.Domain.Clientes.Enums
 {
     public enum Sexo
     {

@@ -2,6 +2,7 @@
 using Vendas.Domain.Common.Enum;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Common.Validations;
+using Vendas.Domain.Pedidos.Enums;
 using Vendas.Domain.Pedidos.Events.Pedido;
 using Vendas.Domain.Pedidos.ValueObjects;
 
