@@ -13,7 +13,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Catalogo\ValueObjects\" />
 	  <Folder Include="Common\Enums\" />
 	</ItemGroup>
 

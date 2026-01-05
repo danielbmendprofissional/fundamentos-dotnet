@@ -16,7 +16,7 @@ namespace Vendas.Domain.Catalogo.Entities
         public string? Descricao { get; private set; }
         public bool Ativa { get; private set; }
 
-        private Categoria(string nome, string descricao)
+        private Categoria(string nome, string? descricao)
         {
             Guard.AgainstNullOrWhiteSpace(nome, nameof(nome));
             Guard.Against<DomainException>(nome.Length < 3, "Nome deve ter ao menos 3 caracteres.");
