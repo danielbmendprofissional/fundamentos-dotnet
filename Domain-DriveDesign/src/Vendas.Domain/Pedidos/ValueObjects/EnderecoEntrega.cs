@@ -8,7 +8,7 @@ using Vendas.Domain.Common.Base;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Common.Validations;
 
-namespace Vendas.Domain.ValueObjects
+namespace Vendas.Domain.Pedidos.ValueObjects
 {
     public sealed class EnderecoEntrega : ValueObject
     {

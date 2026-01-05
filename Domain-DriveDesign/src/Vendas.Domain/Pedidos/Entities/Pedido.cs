@@ -8,9 +8,9 @@ using Vendas.Domain.Common.Enum;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Common.Validations;
 using Vendas.Domain.Events.Pedido;
-using Vendas.Domain.ValueObjects;
+using Vendas.Domain.Pedidos.ValueObjects;
 
-namespace Vendas.Domain.Entities
+namespace Vendas.Domain.Pedidos.Entities
 {
     //sealed: não ser alterada e nem herdada.
     //AggragateRoot: clarear o domínio e conseguir controlar melhor como por exemplo

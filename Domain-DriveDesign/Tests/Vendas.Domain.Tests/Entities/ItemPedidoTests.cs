@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vendas.Domain.Common.Exceptions;
-using Vendas.Domain.Entities;
+using Vendas.Domain.Pedidos.Entities;
 
 namespace Vendas.Domain.Tests.Entities
 {

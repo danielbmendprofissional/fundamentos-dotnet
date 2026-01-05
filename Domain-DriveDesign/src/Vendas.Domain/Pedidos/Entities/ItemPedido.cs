@@ -8,7 +8,7 @@ using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Common.Validations;
 using Vendas.Domain.ValueObjects;
 
-namespace Vendas.Domain.Entities
+namespace Vendas.Domain.Pedidos.Entities
 {
     public sealed class ItemPedido : Entity
     {/*
@@ -87,7 +87,7 @@ namespace Vendas.Domain.Entities
 
         private void CalcularValorTotal()
         {
-            ValorTotal = Math.Max(0, (PrecoUnitario * Quantidade) - DescontoAplicado);
+            ValorTotal = Math.Max(0, PrecoUnitario * Quantidade - DescontoAplicado);
         }
     }
 }

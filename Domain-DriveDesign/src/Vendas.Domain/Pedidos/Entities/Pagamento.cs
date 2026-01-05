@@ -10,7 +10,7 @@ using Vendas.Domain.Common.Validations;
 using Vendas.Domain.Events;
 using Vendas.Domain.Events.Pagamento;
 
-namespace Vendas.Domain.Entities
+namespace Vendas.Domain.Pedidos.Entities
 {
     public sealed class Pagamento : Entity
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vendas.Domain.Common.Exceptions;
-using Vendas.Domain.ValueObjects;
+using Vendas.Domain.Pedidos.ValueObjects;
 
 namespace Vendas.Domain.Tests.ValueObjects
 {

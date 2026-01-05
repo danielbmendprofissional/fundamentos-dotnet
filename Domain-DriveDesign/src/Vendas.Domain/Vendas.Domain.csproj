@@ -12,5 +12,11 @@
 		</AssemblyAttribute>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Clientes\Entities\" />
+	  <Folder Include="Clientes\Events\" />
+	  <Folder Include="Clientes\ValueObjects\" />
+	</ItemGroup>
+
 
 </Project>

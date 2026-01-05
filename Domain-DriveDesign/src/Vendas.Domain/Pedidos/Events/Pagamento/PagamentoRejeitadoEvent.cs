@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Vendas.Domain.Common.Base;
 
-namespace Vendas.Domain.Events.Pagamento
+namespace Vendas.Domain.Pedidos.Events.Pagamento
 {
     //Record é usado porque eventos de domínio são fatos que JÁ OCORRERAM devem ser imutaveis.
     //Sealed sem herança e sem alteração
-    public sealed record PagamentoAprovadoEvent(Guid PagamentoId,
+    public sealed record PagamentoRejeitadoEvent(Guid PagamentoId,
                                          Guid PedidoId,
                                          decimal Valor,
                                          DateTime DataPagamento,
