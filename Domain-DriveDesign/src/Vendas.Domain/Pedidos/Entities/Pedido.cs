@@ -9,9 +9,9 @@ using Vendas.Domain.Pedidos.ValueObjects;
 namespace Vendas.Domain.Pedidos.Entities
 {
     //sealed: não ser alterada e nem herdada.
-    //AggragateRoot: clarear o domínio e conseguir controlar melhor como por exemplo
-    //IRepository only accepts AggragateRoot type
-    public sealed class Pedido : AggragateRoot
+    //AggregateRoot: clarear o domínio e conseguir controlar melhor como por exemplo
+    //IRepository only accepts AggregateRoot type
+    public sealed class Pedido : AggregateRoot
     {
         public Guid ClienteId { get; private set; }
         public EnderecoEntrega EnderecoEntrega { get; private set; }

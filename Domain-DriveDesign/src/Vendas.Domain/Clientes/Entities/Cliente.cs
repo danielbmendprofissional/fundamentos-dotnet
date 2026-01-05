@@ -12,7 +12,7 @@ using Vendas.Domain.Common.Validations;
 
 namespace Vendas.Domain.Clientes.Entities
 {
-    public sealed class Cliente : AggragateRoot
+    public sealed class Cliente : AggregateRoot
     {
         public NomeCompleto Nome { get; private set; }
         public Cpf Cpf { get; private set; }
@@ -26,14 +26,14 @@ namespace Vendas.Domain.Clientes.Entities
         private readonly List<Endereco> _enderecos = new();
         public IReadOnlyCollection<Endereco> Enderecos => _enderecos.AsReadOnly();
 
-        public Cliente(
+        private Cliente(
         NomeCompleto nome,
         Cpf cpf,
         Email email,
         Telefone telefone,
         Endereco enderecoPrincipal,
-        Sexo sexo = Sexo.NaoInformado,
-        EstadoCivil estadoCivil = EstadoCivil.NaoInformado)
+        Sexo sexo,
+        EstadoCivil estadoCivil)
         {
             Validar(nome, cpf, email, telefone, enderecoPrincipal);
 
@@ -55,6 +55,9 @@ namespace Vendas.Domain.Clientes.Entities
                 Cpf: Cpf.Numero,
                 Email: Email.Endereco));
         }
+        public static Cliente Criar(NomeCompleto nome, Cpf cpf, Email email, Telefone telefone, Endereco enderecoPrincipal,
+            Sexo sexo = Sexo.NaoInformado, EstadoCivil estadoCivil = EstadoCivil.NaoInformado)
+            => new(nome, cpf, email, telefone, enderecoPrincipal, sexo, estadoCivil);
 
         public void AdicionarEndereco(Endereco endereco)
         {

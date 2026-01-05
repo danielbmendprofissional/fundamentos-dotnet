@@ -38,7 +38,7 @@ namespace Vendas.Domain.Tests.Clientes.Entities
             => new(cep, logradouro, numero, bairro, cidade, estado, pais, complemento);
 
         private static Cliente CriarClienteValido()
-            => new Cliente(
+            => Cliente.Criar(
                 CriarNomeCompleto(),
                 CriarCpf(),
                 CriarEmail(),
@@ -83,7 +83,7 @@ namespace Vendas.Domain.Tests.Clientes.Entities
             Telefone? telefone = campo == "Telefone" ? null : CriarTelefone();
             Endereco? endereco = campo == "Endereco" ? null : CriarEndereco();
 
-            Action act = () => new Cliente(nome!, cpf!, email!, telefone!, endereco!);
+            Action act = () => Cliente.Criar(nome!, cpf!, email!, telefone!, endereco!);
 
             act.Should().Throw<DomainException>();
         }

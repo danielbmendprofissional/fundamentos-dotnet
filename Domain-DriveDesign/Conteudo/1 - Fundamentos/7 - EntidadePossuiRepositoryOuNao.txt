@@ -1,6 +1,6 @@
 ﻿NÃO POSSUI REPOSITORY:    
     - Se a entidade não vive sozinha.
-    - Só existe no contexto de outra entidade (só existe dentro de um aggragate único).
+    - Só existe no contexto de outra entidade (só existe dentro de um aggregate único).
     - Não faz sentido busca-la isoladamente.
 
 POSSUI REPOSITORY:
