@@ -64,7 +64,7 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             pagamento.DataAtualizacao.Should().NotBeNull();
 
             var evento = pagamento.DomainEvents
-                .OfType<PagamentoAprovadoEvent>()
+                .OfType<PagamentoConfirmadoEvent>()
                 .FirstOrDefault();
 
             evento.Should().NotBeNull();

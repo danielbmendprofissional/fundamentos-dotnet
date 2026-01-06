@@ -78,13 +78,6 @@ namespace Vendas.Domain.Pedidos.Entities
             StatusPagamento = StatusPagamento.Aprovado;
             DataPagamento = DateTime.UtcNow;
             SetDataAtualizacao();
-
-            AddDomainEvent(new PagamentoAprovadoEvent(
-                Id,
-                PedidoId,
-                Valor,
-                DataPagamento.Value,
-                CodigoTransacao));
         }
 
         internal void RecusarPagamento()

@@ -1,6 +1,8 @@
-﻿namespace Vendas.Domain.Common.Interfaces.Events
+﻿using MediatR;
+
+namespace Vendas.Domain.Common.Interfaces.Events
 {
-    public interface IDomainEvent
+    public interface IDomainEvent : INotification
     {
         DateTime DateOccurred { get; }
     }

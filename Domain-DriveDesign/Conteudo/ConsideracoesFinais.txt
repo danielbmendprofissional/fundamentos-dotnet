@@ -86,3 +86,32 @@ REGRAS (Camadas):
 	Domain: Negócio e Domínio
 	Application: UseCases, Auth, Validações de existência
 	Presentation: DTO required
+
+
+=================================
+EVENTOS X USE CASE DIRETO NO MESMO AGREGADO:
+
+User Case / Command	“Quero que algo aconteça”
+Domain Event	“Algo JÁ aconteceu”
+
+- Se a regra for imediata (Root chama entidade interna)	
+	 - EXEMPLO: Quando o pagamento for aprovado, SEMPRE muda pedido para PagamentoConfirmado.
+
+	 - Não tem decisão.
+	 - Não tem espera.
+	 - Não tem variação.
+
+	 public void ConfirmarPagamento(Guid pagamentoId)
+	 {
+		var pagamento = _pagamentos.First(p => p.Id == pagamentoId);
+
+		pagamento.ConfirmarPagamento();
+
+		StatusPedido = StatusPedido.PagamentoConfirmado;
+		SetDataAtualizacao();
+	 }
+
+- Se a regra não for imediata (processo) = EVENTO
+	- Exemplo: Pagamento aprovado, talvez vá para separação, talvesz passe por antifraude, talvez aguarda confirmação.
+
+- Evento ele NOTIFICA

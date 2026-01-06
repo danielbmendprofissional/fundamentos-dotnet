@@ -2,6 +2,7 @@
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Common.Validations;
 using Vendas.Domain.Pedidos.Enums;
+using Vendas.Domain.Pedidos.Events.Pagamento;
 using Vendas.Domain.Pedidos.Events.Pedido;
 using Vendas.Domain.Pedidos.Interfaces;
 using Vendas.Domain.Pedidos.ValueObjects;
@@ -109,37 +110,57 @@ namespace Vendas.Domain.Pedidos.Entities
             return novoPagamento.Id;
         }
 
-        public void HandlePagamentoAprovado(Guid pagamentoId)
+        public void DefinirCodigoTransacao(Guid pagamentoId, string codigo)
         {
-            var pagamento = _pagamentos.FirstOrDefault(p => p.Id == pagamentoId);
-            if (pagamento is null) return;
+            var pagamento = ObterPagamento(pagamentoId);
+
+            pagamento.DefinirCodigoTransacao(codigo);
+
+            SetDataAtualizacao();
+        }
+
+        public void ConfirmarPagamento(Guid pagamentoId)
+        {
+            var pagamento = ObterPagamento(pagamentoId);
 
             Guard.Against<DomainException>(
                 StatusPedido != StatusPedido.Pendente,
                 "O pedido não está no status esperado para confirmação de pagamento.");
 
+            pagamento.ConfirmarPagamento();
+
             StatusPedido = StatusPedido.PagamentoConfirmado;
             SetDataAtualizacao();
+
+            AddDomainEvent(new PagamentoConfirmadoEvent(
+               PedidoId: Id,
+               PagamentoId: pagamento.Id,
+               CodigoTransacao: pagamento.CodigoTransacao!,
+               Valor: pagamento.Valor,
+               DataPagamento: pagamento.DataPagamento!.Value
+           ));
         }
 
-        public void HandlePagamentoRejeitado(Guid pagamentoId)
+        public void RecusarPagamento(Guid pagamentoId)
         {
-            var pagamento = _pagamentos.FirstOrDefault(p => p.Id == pagamentoId);
-            if (pagamento is null) return;
+            var pagamento = ObterPagamento(pagamentoId);
 
             Guard.Against<DomainException>(
                 StatusPedido != StatusPedido.Pendente,
-                "O pedido não está no status esperado para rejeição de pagamento.");
+                "O pedido não está no status esperado para confirmação de pagamento.");
+
+            pagamento.RecusarPagamento();
 
             StatusPedido = StatusPedido.Cancelado;
             SetDataAtualizacao();
 
-            AddDomainEvent(new PedidoCanceladoEvent(
-                Id,
-                ClienteId,
-                StatusPedido,
-                MotivoCancelamento.ErroPagamento(),
-                pagamento.Id));
+            AddDomainEvent(new PagamentoConfirmadoEvent(
+               PedidoId: Id,
+               PagamentoId: pagamento.Id,
+               CodigoTransacao: pagamento.CodigoTransacao!,
+               Valor: pagamento.Valor,
+               DataPagamento: pagamento.DataPagamento!.Value
+           ));
         }
 
         public void MarcarComoEmSeparacao()
@@ -216,6 +237,14 @@ namespace Vendas.Domain.Pedidos.Entities
 
         private void GerarNumeroPedido()
             => NumeroPedido = $"PED-{Id.ToString()[..8].ToUpper()}";
+
+        private Pagamento ObterPagamento(Guid pagamentoId)
+        {
+            var pagamento = _pagamentos.FirstOrDefault((i => i.Id == pagamentoId));
+            Guard.AgainstNull(pagamento, nameof(pagamento));
+
+            return pagamento!;
+        }
     }
 
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Vendas.Domain.Catalogo.Entities;
 using Vendas.Domain.Clientes.Entities;
 using Vendas.Domain.Common.Base;
@@ -14,9 +15,12 @@ namespace Vendas.Infrastructure.Persistence
         public DbSet<Categoria> Categorias => Set<Categoria>();
         public DbSet<Produto> Produtos => Set<Produto>();
 
-        public VendasDbContext(DbContextOptions<VendasDbContext> options)
+        private readonly IMediator _mediator;
+
+        public VendasDbContext(DbContextOptions<VendasDbContext> options, IMediator mediator)
             : base(options)
         {
+            _mediator = mediator;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,23 +40,27 @@ namespace Vendas.Infrastructure.Persistence
         public override async Task<int> SaveChangesAsync(
             CancellationToken cancellationToken = default)
         {
-
-            var domainEvents = ChangeTracker
+            var entitiesWithEvents = ChangeTracker
                 .Entries<Entity>()
-                .SelectMany(e => e.Entity.DomainEvents)
+                .Where(e => e.Entity.DomainEvents.Any())
+                .Select(e => e.Entity)
+                .ToList();
+
+            var domainEvents = entitiesWithEvents
+                .SelectMany(e => e.DomainEvents)
                 .ToList();
 
             var result = await base.SaveChangesAsync(cancellationToken);
 
-            // Limpa eventos após persistência
-            foreach (var entry in ChangeTracker.Entries<Entity>())
-                entry.Entity.ClearDomainEvents();
+            // publish eventos registrados pelo Domínio
+            foreach (var domainEvent in domainEvents)
+                await _mediator.Publish(domainEvent, cancellationToken);
 
-            // Dispatcher / Outbox entram depois
-            // foreach (var domainEvent in domainEvents)
-            //     await _dispatcher.Dispatch(domainEvent);
+            // clear
+            entitiesWithEvents.ForEach(e => e.ClearDomainEvents());
 
             return result;
+
         }
     }
 }
