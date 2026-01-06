@@ -110,6 +110,15 @@ namespace Vendas.Domain.Pedidos.Entities
             return novoPagamento.Id;
         }
 
+        public void AdicionarCustoFrete(decimal valor)
+        {
+            Guard.AgainstNull(valor, nameof(valor));
+            Guard.Against<DomainException>(valor < 0, "O custo de frete não pode ser negativo.");
+
+            ValorTotal += valor;
+            SetDataAtualizacao();
+        }
+
         public void DefinirCodigoTransacao(Guid pagamentoId, string? codigo = null)
         {
             var pagamento = ObterPagamento(pagamentoId);

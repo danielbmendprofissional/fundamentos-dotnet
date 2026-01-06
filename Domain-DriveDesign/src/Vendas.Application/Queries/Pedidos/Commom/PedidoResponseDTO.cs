@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vendas.Application.Queries.Commom
+namespace Vendas.Application.Queries.Pedidos.Commom
 {
     public sealed record PedidoResponseDTO(
         Guid Id,

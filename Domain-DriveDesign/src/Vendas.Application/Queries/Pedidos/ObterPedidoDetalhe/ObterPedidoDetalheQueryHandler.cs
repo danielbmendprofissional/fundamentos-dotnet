@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vendas.Application.Abstractions.Persistence.Queries;
 
-namespace Vendas.Application.Queries.ObterPedidoDetalhe
+namespace Vendas.Application.Queries.Pedidos.ObterPedidoDetalhe
 {
     public sealed class ObterPedidoDetalheQueryHandler
         : IRequestHandler<

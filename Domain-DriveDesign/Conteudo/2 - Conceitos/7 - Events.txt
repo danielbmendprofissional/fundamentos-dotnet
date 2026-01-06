@@ -1,33 +1,44 @@
 ﻿========================== CONCEITOS ==========================
 
 ==========================
+EVENTS:
+
+==========================
 DOMAIN EVENTS:
 
-Um DOMAIN EVENT representa um fato importante que aconteceu dentro do domínio -> algo que já ocorreu
-e que pode interessar a outras partes do sistema.
+Um DOMAIN EVENT representa um fato importante que aconteceu dentro do domínio -> algo que já ocorreu.
+São internosao Context.
+
+Ele notifica outras partes do mesmo context que algo aconteceu e permite que regras de negócio sejam disparadas,
+sem acoplamento de entidades/serviçs.
 
 No DDD, eventos são sempre expressos no passado. Por exemplo:
 	- PagamentoAprovadoEvent -> Indica que o pagamento já foi aprovado.
 	- PedidoCanceladoEvent -> Indica que o pedido foi cancelado.
 	- ClienteCadastradoEvent -> Indica que um novo cliente foi criado.
 
-O papel de um evento de domínio é notificar o resto do sistema de que algo relevante aconteceu, sem
+O papel de um evento de domínio é notificar o resto do Context de que algo relevante aconteceu, sem
 que a entidade precise saber quem vai reagir a isso.
 
 Dessa forma, desacoplamos o comportamento:
 	- A entidade apenas registrar o evento.
 	- A camada de aplicação publica esse evento.
-	- E outros componentes podem reagir a ele, de forma assíncrona.
+	- E outros componentes do context podem reagir a ele, de forma assíncrona.
 
 
-==========================
-DOMAIN EVENTS INTERNOS:
 	- Publicados e consumidos dentro do mesmo Bounded Context.
 	- Usados para propagar mudanças locais dentro do domínio.
 	- ItemPedidoAdicionadoEvent, PagamentoCriadoEvent.
 
 ==========================
-DOMAIN EVENTS DE NEGÓCIO:
+INTEGRATOIN EVENTS:
+
+São eventos derivados de Domain Events, mas preparados para serem publicados fora do Bounded Context.
+
+Notificam entre Bounded Contexts ou até sistemas externos.
+
+Normalmente publicados pela Application Layer após persistência.
+
 	- Os eventos atravessam os limites do Bounded Context.
 	- Comunicam fatos importantes para outros contextos.
 	- PagamentoAprovadoEvent, PagamentoRejeitadoEvent.
@@ -42,7 +53,7 @@ EXEMPLO:
 BC PAGAMENTO -> CONFIRMARPAGAMENTO (Muda o estado para aprovado)
 				-> Gera um AddDomainEvent(PagamentoAprovadoEvent).
 
-APPLICATION LAYER -> DomainEventDispatcher -> Handler.
+APPLICATION LAYER -> DomainEventDispatcher -> Handler -> PagamentoAprovadoIntegrationEvent (vai notificar os contextos).
 
 
 ===========================
@@ -53,5 +64,8 @@ FLUXO COMPLETO:
 3 - Evento é guardado em _domainEvents.
 4 - Application Layer salva o agregado.
 5 - Após o SaveChanges() -> Dispatcher publica eventos.
-6 - ClearDomainEvents() -> limpa a lista.
+6 - Handlers internos ao CONTEXTO reagem.
+7 - Se necessário comunicar outros contextos, a Application Layer traduz o Domain Event em um Integration Event e 
+publica no barramento.
+8 - ClearDomainEvents() -> limpa a lista.
 

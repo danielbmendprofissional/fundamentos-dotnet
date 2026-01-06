@@ -21,7 +21,7 @@ namespace Vendas.Application.EventHandlers.Pedidos
             // await _emailService.EnviarPagamentoConfirmado(...);
 
             // 2. Chamar outro Aggregado de outro bounded context
-            // lançando outro event
+            // lançando outro event (Integration Event)
 
             // 3. Chamar Outro Aggregado no mesmo contexto (SEM ALTERAR O AGGREGATE ATUAL)
             // chamando a factory direto e realizando o negócio.

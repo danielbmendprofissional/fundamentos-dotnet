@@ -17,13 +17,16 @@ namespace Vendas.Application.Commands.Pedidos.IniciarPagamento
     {
         private readonly IPedidoRepository _pedidoRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ICalculadoraDeFreteService _calculadoraDeFrete;
 
         public IniciarPagamentoCommandHandler(
             IPedidoRepository pedidoRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ICalculadoraDeFreteService calculadoraDeFrete)
         {
             _pedidoRepository = pedidoRepository;
             _unitOfWork = unitOfWork;
+            _calculadoraDeFrete = calculadoraDeFrete;
         }
 
         public async Task<IniciarPagamentoCommandResultDTO> Handle(IniciarPagamentoCommand request, CancellationToken cancellationToken)
@@ -34,8 +37,13 @@ namespace Vendas.Application.Commands.Pedidos.IniciarPagamento
             if (pedido is null)
                 throw new InvalidOperationException("Pedido não encontrado.");
 
+            // Calcula frete via Domain Service
+            var frete = _calculadoraDeFrete.CalcularFrete(pedido);
+            pedido.AdicionarCustoFrete(frete);
+
+
             // REGRA DE NEGÓCIO → DOMAIN
-           var novoPagamentoId = pedido.IniciarPagamento((MetodoPagamento)request.MetodoPagamento);
+            var novoPagamentoId = pedido.IniciarPagamento((MetodoPagamento)request.MetodoPagamento);
 
             // FECHAMENTO TRANSACIONAL
             await _unitOfWork.CommitAsync(cancellationToken);

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vendas.Application.Queries.Commom;
-using Vendas.Application.Queries.ObterPedidoDetalhe;
+using Vendas.Application.Queries.Pedidos.Commom;
+using Vendas.Application.Queries.Pedidos.ObterPedidoDetalhe;
 
 namespace Vendas.Application.Abstractions.Persistence.Queries
 {

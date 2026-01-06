@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vendas.Application.Abstractions.Persistence.Queries;
-using Vendas.Application.Queries.Commom;
 using Vendas.Application.Queries.ListarPedidos;
-using Vendas.Application.Queries.ObterPedidoDetalhe;
+using Vendas.Application.Queries.Pedidos.Commom;
+using Vendas.Application.Queries.Pedidos.ObterPedidoDetalhe;
 using Vendas.Infrastructure.Persistence.Query;
 
 namespace Vendas.Infrastructure.Repositories.Queries

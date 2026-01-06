@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vendas.Application.Abstractions.Persistence.Queries;
-using Vendas.Application.Queries.Commom;
+using Vendas.Application.Queries.Pedidos.Commom;
 
-namespace Vendas.Application.Queries.ListarPedidos
+namespace Vendas.Application.Queries.Pedidos.ListarPedidosCliente
 {
     //Application só conhece ABSTRAÇÕES de infra
     public sealed class ListarPedidosDoClienteQueryHandler

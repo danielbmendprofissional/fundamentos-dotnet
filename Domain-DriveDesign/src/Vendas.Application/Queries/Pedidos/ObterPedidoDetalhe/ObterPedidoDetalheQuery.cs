@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vendas.Application.Queries.ObterPedidoDetalhe
+namespace Vendas.Application.Queries.Pedidos.ObterPedidoDetalhe
 {
     public sealed record ObterPedidoDetalheQuery(Guid ClienteId, Guid Id)
         :IRequest<PedidoDetalheResponseDTO>;
