@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,18 +8,16 @@ using Vendas.Domain.Pedidos.ValueObjects;
 
 namespace Vendas.Application.Commands.Pedidos.CriarPedido
 {
-    public sealed class CriarPedidoCommand
-    {
-        public Guid ClienteId { get; }
-        public EnderecoEntrega EnderecoEntrega { get; }
+    public sealed record CriarPedidoCommand(
+        Guid ClienteId,
+        string Cep,
+        string Logradouro,
+        string Bairro,
+        string Cidade,
+        string Estado,
+        string Pais,
+        string? Complemento
+    ) : IRequest;
 
-        public CriarPedidoCommand(
-            Guid clienteId,
-            EnderecoEntrega enderecoEntrega)
-        {
-            ClienteId = clienteId;
-            EnderecoEntrega = enderecoEntrega;
-        }
-    }
 
 }

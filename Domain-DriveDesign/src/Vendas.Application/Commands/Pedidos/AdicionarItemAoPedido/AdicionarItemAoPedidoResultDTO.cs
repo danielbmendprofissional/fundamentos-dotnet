@@ -6,20 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vendas.Application.Commands.Pedidos.AdicionarItemAoPedido
 {
-    public sealed class AdicionarItemAoPedidoResultDTO
-    {
-        public Guid Pedidold { get; }
-        public decimal ValorTotal { get; }
-        public string Status { get; }
+    public sealed record AdicionarItemAoPedidoResultDTO(
+        Guid PedidoId,
+        decimal ValorTotal,
+        string Status
+    );
 
-        public AdicionarItemAoPedidoResultDTO(
-            Guid pedidold,
-            decimal valorTotal,
-            string status)
-        {
-            Pedidold = pedidold;
-            ValorTotal = valorTotal;
-            Status = status;
-        }
-    }
 }

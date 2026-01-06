@@ -7,27 +7,13 @@ using System.Threading.Tasks;
 
 namespace Vendas.Application.Commands.Pedidos.AdicionarItemAoPedido
 {
-    public sealed class AdicionarItemAoPedidoCommand : IRequest<AdicionarItemAoPedidoResultDTO>
-    {
-        public Guid PedidoId { get; }
-        public Guid ProdutoId { get; }
-        public string NomeProduto { get; }
-        public decimal PrecoUnitario { get; }
-        public int Quantidade { get; }
+    public sealed record AdicionarItemAoPedidoCommand(
+        Guid PedidoId,
+        Guid ItemId,
+        string NomeProduto,
+        decimal PrecoUnitario,
+        int Quantidade
+    ) : IRequest<AdicionarItemAoPedidoResultDTO>;
 
-        public AdicionarItemAoPedidoCommand(
-            Guid pedidoId,
-            Guid produtoId,
-            string nomeProduto,
-            decimal precoUnitario,
-            int quantidade)
-        {
-            PedidoId = pedidoId;
-            ProdutoId = produtoId;
-            NomeProduto = nomeProduto;
-            PrecoUnitario = precoUnitario;
-            Quantidade = quantidade;
-        }
-    }
 
 }

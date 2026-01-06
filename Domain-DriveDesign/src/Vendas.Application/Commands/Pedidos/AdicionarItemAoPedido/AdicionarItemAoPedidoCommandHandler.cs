@@ -1,46 +1,47 @@
 ﻿using MediatR;
-using Vendas.Application.Abstractions;
 using Vendas.Application.Abstractions.Persistence;
-using Vendas.Application.Commands.Pedidos.AdicionarItemAoPedido;
 using Vendas.Domain.Pedidos.Interfaces;
 
-public sealed class AdicionarItemAoPedidoCommandHandler : IRequestHandler<
+namespace Vendas.Application.Commands.Pedidos.AdicionarItemAoPedido
+{
+    public sealed class AdicionarItemAoPedidoCommandHandler : IRequestHandler<
         AdicionarItemAoPedidoCommand,
         AdicionarItemAoPedidoResultDTO>
-{
-    private readonly IPedidoRepository _pedidoRepository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public AdicionarItemAoPedidoCommandHandler(
-        IPedidoRepository pedidoRepository,
-        IUnitOfWork unitOfWork)
     {
-        _pedidoRepository = pedidoRepository;
-        _unitOfWork = unitOfWork;
-    }
+        private readonly IPedidoRepository _pedidoRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-    public async Task<AdicionarItemAoPedidoResultDTO> Handle(AdicionarItemAoPedidoCommand request, CancellationToken cancellationToken)
-    {
-        var pedido = await _pedidoRepository
-            .ObterPorIdAsync(request.PedidoId, cancellationToken);
+        public AdicionarItemAoPedidoCommandHandler(
+            IPedidoRepository pedidoRepository,
+            IUnitOfWork unitOfWork)
+        {
+            _pedidoRepository = pedidoRepository;
+            _unitOfWork = unitOfWork;
+        }
 
-        if (pedido is null)
-            throw new InvalidOperationException("Pedido não encontrado.");
+        public async Task<AdicionarItemAoPedidoResultDTO> Handle(AdicionarItemAoPedidoCommand request, CancellationToken cancellationToken)
+        {
+            var pedido = await _pedidoRepository
+                .ObterPorIdAsync(request.PedidoId, cancellationToken);
 
-        // REGRA DE NEGÓCIO → DOMAIN
-        pedido.AdicionarItem(
-            request.ProdutoId,
-            request.NomeProduto,
-            request.PrecoUnitario,
-            request.Quantidade);
+            if (pedido is null)
+                throw new InvalidOperationException("Pedido não encontrado.");
 
-        // FECHAMENTO TRANSACIONAL
-        await _unitOfWork.CommitAsync(cancellationToken);
+            // REGRA DE NEGÓCIO → DOMAIN
+            pedido.AdicionarItem(
+                request.ItemId,
+                request.NomeProduto,
+                request.PrecoUnitario,
+                request.Quantidade);
 
-        return new AdicionarItemAoPedidoResultDTO(
-            pedido.Id,
-            pedido.ValorTotal,
-            pedido.StatusPedido.ToString()
-        );
+            // FECHAMENTO TRANSACIONAL
+            await _unitOfWork.CommitAsync(cancellationToken);
+
+            return new AdicionarItemAoPedidoResultDTO(
+                pedido.Id,
+                pedido.ValorTotal,
+                pedido.StatusPedido.ToString()
+            );
+        }
     }
 }
