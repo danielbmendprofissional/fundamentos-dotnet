@@ -30,7 +30,7 @@ namespace Vendas.Application.Queries.Pedidos.ObterPedidoDetalhe
                 cancellationToken);
 
             if (retorno == null)
-                throw new NotFoundException("Pedido não encontrado.");
+                throw new ArgumentNullException("Pedido não encontrado.");
 
             return retorno;
         }

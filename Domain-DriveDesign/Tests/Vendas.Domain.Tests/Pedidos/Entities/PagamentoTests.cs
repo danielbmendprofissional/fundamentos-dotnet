@@ -64,7 +64,7 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             pagamento.DataAtualizacao.Should().NotBeNull();
         }
 
-        [Fact(DisplayName = "Deve recusar pagamento pendente e gerar evento de rejeição com dados corretos")]
+        [Fact(DisplayName = "Deve recusar pagamento pendente")]
         public void Deve_Recusar_Pagamento_Pendente_E_Gerar_Evento_Com_Dados()
         {
             var pagamento = new Pagamento(Guid.NewGuid(), MetodoPagamento.Pix, 120m);
@@ -74,17 +74,6 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             pagamento.StatusPagamento.Should().Be(StatusPagamento.Recusado);
             pagamento.DataPagamento.Should().NotBeNull();
             pagamento.DataAtualizacao.Should().NotBeNull();
-
-            var evento = pagamento.DomainEvents
-                .OfType<PagamentoRejeitadoEvent>()
-                .FirstOrDefault();
-
-            evento.Should().NotBeNull();
-            evento!.PagamentoId.Should().Be(pagamento.Id);
-            evento.PedidoId.Should().Be(pagamento.PedidoId);
-            evento.Valor.Should().Be(pagamento.Valor);
-            evento.CodigoTransacao.Should().Be(pagamento.CodigoTransacao);
-            evento.DataPagamento.Should().Be(pagamento.DataPagamento);
         }
 
         #endregion

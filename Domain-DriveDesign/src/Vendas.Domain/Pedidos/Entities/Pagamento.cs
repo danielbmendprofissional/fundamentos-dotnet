@@ -89,13 +89,6 @@ namespace Vendas.Domain.Pedidos.Entities
             StatusPagamento = StatusPagamento.Recusado;
             DataPagamento = DateTime.UtcNow;
             SetDataAtualizacao();
-
-            AddDomainEvent(new PagamentoRejeitadoEvent(
-                Id,
-                PedidoId,
-                Valor,
-                DataPagamento.Value,
-                CodigoTransacao));
         }
 
 

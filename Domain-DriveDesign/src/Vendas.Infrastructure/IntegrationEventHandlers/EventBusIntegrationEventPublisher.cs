@@ -7,6 +7,7 @@ using Vendas.Application.Abstractions.IntegrationEvents;
 
 namespace Vendas.Infrastructure.IntegrationEventHandlers
 {
+    //IDEAL aplicar OUTBOX
     public sealed class EventBusIntegrationEventPublisher
         : IIntegrationEventPublisher
     {

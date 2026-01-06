@@ -41,7 +41,7 @@ namespace Vendas.Infrastructure.Persistence.Command
             CancellationToken cancellationToken = default)
         {
             var entitiesWithEvents = ChangeTracker
-                .Entries<Entity>()
+                .Entries<AggregateRoot>()
                 .Where(e => e.Entity.DomainEvents.Any())
                 .Select(e => e.Entity)
                 .ToList();
@@ -60,6 +60,8 @@ namespace Vendas.Infrastructure.Persistence.Command
             entitiesWithEvents.ForEach(e => e.ClearDomainEvents());
 
             return result;
+
+            //IDEAL aplicar Outbox
 
         }
     }

@@ -15,12 +15,6 @@ namespace Vendas.Domain.Common.Base
         public DateTime DataCriacao { get; protected set; }
         public DateTime? DataAtualizacao { get; protected set; }
 
-        //permitir que entidades do domínio registrem internamente os eventos para que
-        //sejam processados mais tarde, geralmete após SaveChanges();
-
-        private readonly List<IDomainEvent> _domainEvents = new();
-        public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
-
         // Construtor protegido: Entidades devem ser criadas via construtor ou factory
         // Construtor usado pelo domínio (criação real)
         protected Entity(Guid? id = null)
@@ -33,17 +27,6 @@ namespace Vendas.Domain.Common.Base
         {
             DataAtualizacao = DateTime.UtcNow;
         }
-
-        //Add é protected because only root pode adicionar o evento, remover e limpar
-        //normalmente quem faz são outras camadas.
-        protected void AddDomainEvent(IDomainEvent domainEvent)
-            => _domainEvents.Add(domainEvent);
-
-        public void RemoveDomainEvent(IDomainEvent domainEvent)
-            => _domainEvents.Remove(domainEvent);
-
-        public void ClearDomainEvents()
-            => _domainEvents.Clear();
 
         // Sobrescrever Equals e GetHashCode é crucial para comparar entidades
         // baseado APENAS na sua identidade (Id).

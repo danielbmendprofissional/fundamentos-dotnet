@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vendas.Application.Abstractions.Persistence;
-using Vendas.Application.Commands.Pedidos.MarcarComoEmSeparacao;
 using Vendas.Domain.Pedidos.Interfaces;
 
 namespace Vendas.Application.Commands.Pedidos.MarcarComoEntregue
