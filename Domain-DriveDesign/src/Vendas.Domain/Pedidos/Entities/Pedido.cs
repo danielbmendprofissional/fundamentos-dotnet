@@ -5,6 +5,7 @@ using Vendas.Domain.Pedidos.Enums;
 using Vendas.Domain.Pedidos.Events.Pagamento;
 using Vendas.Domain.Pedidos.Events.Pedido;
 using Vendas.Domain.Pedidos.Interfaces;
+using Vendas.Domain.Pedidos.Snapshot;
 using Vendas.Domain.Pedidos.ValueObjects;
 
 namespace Vendas.Domain.Pedidos.Entities
@@ -187,6 +188,14 @@ namespace Vendas.Domain.Pedidos.Entities
 
             StatusPedido = StatusPedido.EmSeparacao;
             SetDataAtualizacao();
+
+            AddDomainEvent(new PedidoEmSeparacaoEvent(
+            Id,
+                _itens.Select(i => new PedidoItemSnapshot(
+                    i.ProdutoId,
+                    i.Quantidade
+                )).ToList()
+            ));
         }
 
         public void MarcarComoEnviado()

@@ -34,6 +34,7 @@ namespace Vendas.Application.Commands.Pedidos.ConfirmarPagamento
                 throw new InvalidOperationException("Pedido não encontrado.");
 
             pedido.ConfirmarPagamento(request.PagamentoId);
+            pedido.MarcarComoEmSeparacao();
 
             await _unitOfWork.CommitAsync(cancellationToken);
         }
