@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Vendas.Domain.Common.Base;
 
-namespace Vendas.Infrastructure.Persistence.Mappings.Base
+namespace Vendas.Infrastructure.Persistence.Command.Mappings.Base
 {
     internal abstract class EntityMap<TEntity>
         : IEntityTypeConfiguration<TEntity>

@@ -5,7 +5,7 @@ using Vendas.Domain.Clientes.Entities;
 using Vendas.Domain.Common.Base;
 using Vendas.Domain.Pedidos.Entities;
 
-namespace Vendas.Infrastructure.Persistence
+namespace Vendas.Infrastructure.Persistence.Command
 {
     public sealed class VendasDbContext : DbContext
     {

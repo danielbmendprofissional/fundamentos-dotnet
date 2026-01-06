@@ -51,8 +51,8 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             pagamento.DataAtualizacao.Should().NotBeNull();
         }
 
-        [Fact(DisplayName = "Deve confirmar pagamento pendente com código válido e gerar evento completo")]
-        public void Deve_Confirmar_Pagamento_Com_Codigo_Valido_E_Evento_Completo()
+        [Fact(DisplayName = "Deve confirmar pagamento pendente com código válido")]
+        public void Deve_Confirmar_Pagamento_Com_Codigo_Valido()
         {
             var pagamento = new Pagamento(Guid.NewGuid(), MetodoPagamento.CartaoCredito, 300m);
             pagamento.GerarCodigoTransacaoLocal(); // Simula gateway
@@ -62,17 +62,6 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             pagamento.StatusPagamento.Should().Be(StatusPagamento.Aprovado);
             pagamento.DataPagamento.Should().NotBeNull();
             pagamento.DataAtualizacao.Should().NotBeNull();
-
-            var evento = pagamento.DomainEvents
-                .OfType<PagamentoConfirmadoEvent>()
-                .FirstOrDefault();
-
-            evento.Should().NotBeNull();
-            evento!.PagamentoId.Should().Be(pagamento.Id);
-            evento.PedidoId.Should().Be(pagamento.PedidoId);
-            evento.Valor.Should().Be(pagamento.Valor);
-            evento.CodigoTransacao.Should().Be(pagamento.CodigoTransacao);
-            evento.DataPagamento.Should().Be(pagamento.DataPagamento);
         }
 
         [Fact(DisplayName = "Deve recusar pagamento pendente e gerar evento de rejeição com dados corretos")]

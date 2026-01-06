@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Vendas.Domain.Clientes.Entities;
 using Vendas.Domain.Clientes.Interfaces;
-using Vendas.Infrastructure.Persistence.Mappings.Base;
+using Vendas.Infrastructure.Persistence.Command.Mappings.Base;
 
-namespace Vendas.Infrastructure.Persistence.Mappings
+namespace Vendas.Infrastructure.Persistence.Command.Mappings
 {
     internal sealed class ClienteMap : EntityMap<Cliente>
     {

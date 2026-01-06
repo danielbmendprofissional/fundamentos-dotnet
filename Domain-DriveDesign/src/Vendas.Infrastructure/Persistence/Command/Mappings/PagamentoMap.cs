@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Vendas.Domain.Pedidos.Entities;
-using Vendas.Infrastructure.Persistence.Mappings.Base;
+using Vendas.Infrastructure.Persistence.Command.Mappings.Base;
 
-namespace Vendas.Infrastructure.Persistence.Mappings
+namespace Vendas.Infrastructure.Persistence.Command.Mappings
 {
     internal sealed class PagamentoMap : EntityMap<Pagamento>
     {

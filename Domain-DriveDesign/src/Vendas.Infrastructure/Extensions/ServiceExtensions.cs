@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Vendas.Infrastructure.Persistence;
 using Vendas.Application.Abstractions.Persistence;
 using Vendas.Domain.Catalogo.Interfaces;
-using Vendas.Infrastructure.Repositories;
 using Vendas.Domain.Pedidos.Interfaces;
+using Vendas.Infrastructure.Persistence.Command;
+using Vendas.Infrastructure.Repositories.Command;
 
 namespace Vendas.Infrastructure.Extensions
 {

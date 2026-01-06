@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vendas.Domain.Catalogo.Entities;
 using Vendas.Domain.Catalogo.Interfaces;
-using Vendas.Infrastructure.Persistence;
+using Vendas.Infrastructure.Persistence.Command;
 
-namespace Vendas.Infrastructure.Repositories
+namespace Vendas.Infrastructure.Repositories.Command
 {
     internal sealed class CategoriaRepository : ICategoriaRepository
     {

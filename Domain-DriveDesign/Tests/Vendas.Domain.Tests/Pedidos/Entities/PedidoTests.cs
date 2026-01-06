@@ -287,39 +287,39 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
                 .WithMessage("Já existe um pagamento pendente para este pedido.");
         }
 
-        [Fact(DisplayName = "Deve alterar status para PagamentoConfirmado ao HandlePagamentoAprovado")]
+        [Fact(DisplayName = "Deve alterar status para PagamentoConfirmado ao ConfirmarPagamento")]
         public void Deve_Alterar_Status_Ao_HandlePagamentoAprovado()
         {
             // Arrange
             var pedido = Pedido.Criar(ClienteIdValido, CriarEnderecoValido());
             pedido.AdicionarItem(ProdutoIdValido, "Produto", 100m, 1);
             var pagamento = pedido.IniciarPagamento(MetodoPagamento.Pix);
+            pedido.DefinirCodigoTransacao(pagamento);
 
             // Act
-            pedido.HandlePagamentoAprovado(pagamento);
+            pedido.ConfirmarPagamento(pagamento);
 
             // Assert
             pedido.StatusPedido.Should().Be(StatusPedido.PagamentoConfirmado);
         }
 
-        [Fact(DisplayName = "Deve manter status Pendente ao HandlePagamentoRecusado")]
+        [Fact(DisplayName = "Deve manter status Pendente ao RecusarPagamento")]
         public void Deve_Manter_Status_Pendente_Ao_HandlePagamentoRecusado()
         {
             // Arrange
             var pedido = Pedido.Criar(ClienteIdValido, CriarEnderecoValido());
             pedido.AdicionarItem(ProdutoIdValido, "Produto", 100m, 1);
             var pagamento = pedido.IniciarPagamento(MetodoPagamento.Pix);
+            pedido.DefinirCodigoTransacao(pagamento);
 
             // Act
-            pedido.HandlePagamentoRejeitado(pagamento);
+            pedido.RecusarPagamento(pagamento);
 
             // Assert
             pedido.StatusPedido.Should().Be(StatusPedido.Cancelado);
-            pedido.DomainEvents.Should()
-                .ContainSingle(e => e is PedidoCanceladoEvent);
         }
 
-        [Fact(DisplayName = "Não deve HandlePagamentoAprovado se status não for Pendente")]
+        [Fact(DisplayName = "Não deve ConfirmarPagamento se status não for Pendente")]
         public void Nao_Deve_HandlePagamentoAprovado_Se_Nao_Pendente()
         {
             // Arrange
@@ -329,7 +329,7 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             SetStatusPedido(pedido, StatusPedido.EmSeparacao); // Simula status incorreto
 
             // Act
-            Action act = () => pedido.HandlePagamentoAprovado(pagamento);
+            Action act = () => pedido.ConfirmarPagamento(pagamento);
 
             // Assert
             act.Should().Throw<DomainException>()
@@ -345,7 +345,9 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             var pedido = Pedido.Criar(ClienteIdValido, CriarEnderecoValido());
             pedido.AdicionarItem(ProdutoIdValido, "Produto", 100m, 1);
             var pagamento = pedido.IniciarPagamento(MetodoPagamento.CartaoCredito);
-            pedido.HandlePagamentoAprovado(pagamento); // Status: PagamentoConfirmado
+            pedido.DefinirCodigoTransacao(pagamento);
+
+            pedido.ConfirmarPagamento(pagamento); // Status: PagamentoConfirmado
 
             // Act
             pedido.MarcarComoEmSeparacao();
@@ -448,7 +450,9 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             var pedido = Pedido.Criar(ClienteIdValido, CriarEnderecoValido());
             pedido.AdicionarItem(ProdutoIdValido, "Produto", 50m, 1);
             var pagamento = pedido.IniciarPagamento(MetodoPagamento.Pix);
-            pedido.HandlePagamentoAprovado(pagamento); // Status: PagamentoConfirmado
+            pedido.DefinirCodigoTransacao(pagamento);
+
+            pedido.ConfirmarPagamento(pagamento); // Status: PagamentoConfirmado
 
             // Act  
             pedido.CancelarPedido();

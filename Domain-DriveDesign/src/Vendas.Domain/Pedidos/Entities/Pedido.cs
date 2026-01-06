@@ -110,11 +110,18 @@ namespace Vendas.Domain.Pedidos.Entities
             return novoPagamento.Id;
         }
 
-        public void DefinirCodigoTransacao(Guid pagamentoId, string codigo)
+        public void DefinirCodigoTransacao(Guid pagamentoId, string? codigo = null)
         {
             var pagamento = ObterPagamento(pagamentoId);
 
-            pagamento.DefinirCodigoTransacao(codigo);
+            if (string.IsNullOrEmpty(codigo))
+            {
+                pagamento.GerarCodigoTransacaoLocal();
+            }
+            else
+            {
+                pagamento.DefinirCodigoTransacao(codigo);
+            }
 
             SetDataAtualizacao();
         }
@@ -154,7 +161,7 @@ namespace Vendas.Domain.Pedidos.Entities
             StatusPedido = StatusPedido.Cancelado;
             SetDataAtualizacao();
 
-            AddDomainEvent(new PagamentoConfirmadoEvent(
+            AddDomainEvent(new PagamentoRejeitadoEvent(
                PedidoId: Id,
                PagamentoId: pagamento.Id,
                CodigoTransacao: pagamento.CodigoTransacao!,

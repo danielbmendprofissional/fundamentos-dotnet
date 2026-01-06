@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vendas.Domain.Pedidos.Entities;
 using Vendas.Domain.Pedidos.Interfaces;
-using Vendas.Infrastructure.Persistence;
+using Vendas.Infrastructure.Persistence.Command;
 
-namespace Vendas.Infrastructure.Repositories
+namespace Vendas.Infrastructure.Repositories.Command
 {
     /*
         REPOSITÓRIO DE AGGREGATE ROOT (DDD)

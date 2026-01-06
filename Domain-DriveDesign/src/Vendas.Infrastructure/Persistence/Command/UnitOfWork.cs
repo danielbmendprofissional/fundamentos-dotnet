@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vendas.Application.Abstractions.Persistence;
 
-namespace Vendas.Infrastructure.Persistence
+namespace Vendas.Infrastructure.Persistence.Command
 {
     public sealed class UnitOfWork : IUnitOfWork
     {

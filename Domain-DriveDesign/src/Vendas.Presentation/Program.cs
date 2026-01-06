@@ -1,6 +1,6 @@
 using Vendas.Application.Extensions;
 using Vendas.Infrastructure.Extensions;
-using Vendas.Infrastructure.Persistence;
+using Vendas.Infrastructure.Persistence.Command;
 
 var builder = WebApplication.CreateBuilder(args);
 
