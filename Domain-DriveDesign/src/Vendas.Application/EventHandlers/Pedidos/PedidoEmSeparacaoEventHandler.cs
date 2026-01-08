@@ -25,6 +25,7 @@ namespace Vendas.Application.EventHandlers.Pedidos
             PedidoEmSeparacaoEvent notification,
             CancellationToken cancellationToken)
         {
+
             var integrationEvent =
                 new PedidoEmSeparacaoIntegrationEvent(
                     notification.PedidoId,

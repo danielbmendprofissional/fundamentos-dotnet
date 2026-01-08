@@ -39,7 +39,6 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
         {
             // Act
             var pedido = Pedido.Criar(ClienteIdValido, CriarEnderecoValido());
-
             // Assert
             pedido.Should().NotBeNull();
             pedido.ClienteId.Should().Be(ClienteIdValido);

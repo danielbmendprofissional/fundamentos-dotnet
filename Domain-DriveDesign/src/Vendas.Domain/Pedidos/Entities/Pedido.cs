@@ -120,6 +120,11 @@ namespace Vendas.Domain.Pedidos.Entities
             SetDataAtualizacao();
         }
 
+        public void AplicarDesconto(decimal porcentagem, Guid? itemPedidoId = null)
+        {
+            itemPedidoId ??  
+        }
+
         public void DefinirCodigoTransacao(Guid pagamentoId, string? codigo = null)
         {
             var pagamento = ObterPagamento(pagamentoId);
@@ -145,6 +150,8 @@ namespace Vendas.Domain.Pedidos.Entities
                 "O pedido não está no status esperado para confirmação de pagamento.");
 
             pagamento.ConfirmarPagamento();
+            MarcarComoEmSeparacao();
+
 
             StatusPedido = StatusPedido.PagamentoConfirmado;
             SetDataAtualizacao();
@@ -167,8 +174,6 @@ namespace Vendas.Domain.Pedidos.Entities
                 "O pedido não está no status esperado para confirmação de pagamento.");
 
             pagamento.RecusarPagamento();
-
-            StatusPedido = StatusPedido.Cancelado;
             SetDataAtualizacao();
 
             AddDomainEvent(new PagamentoRejeitadoEvent(
@@ -180,14 +185,13 @@ namespace Vendas.Domain.Pedidos.Entities
            ));
         }
 
-        public void MarcarComoEmSeparacao()
+        private void MarcarComoEmSeparacao()
         {
             Guard.Against<DomainException>(
                 StatusPedido != StatusPedido.PagamentoConfirmado,
                 "O pedido só pode ir para 'Em Separação' após o pagamento ser confirmado.");
 
             StatusPedido = StatusPedido.EmSeparacao;
-            SetDataAtualizacao();
 
             AddDomainEvent(new PedidoEmSeparacaoEvent(
             Id,
