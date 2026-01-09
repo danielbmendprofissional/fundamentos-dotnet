@@ -5,7 +5,7 @@ using Vendas.Domain.Pedidos.Interfaces;
 
 namespace Vendas.Domain.Pedidos.Entities
 {
-    internal sealed class ItemPedido : Entity, IItemPedido
+    public sealed class ItemPedido : Entity
     {/*
         NESSE CASO ESTAMOS REALIZANDO UM SNAPSHOT EM ALGUMAS PROPRIEDADES
         como por NomeProduto, ValorTotal, PrecoUnitario... Isso porque se
@@ -17,7 +17,7 @@ namespace Vendas.Domain.Pedidos.Entities
         public string NomeProduto { get; private set; } = string.Empty;
         public decimal PrecoUnitario { get; private set; }
         public int Quantidade { get; private set; }
-        public decimal DescontoAplicado { get; private set; }
+        public decimal PorcentagemDesconto { get; private set; }
         public decimal ValorTotal { get; private set; }
 
         internal ItemPedido(Guid produtoId, string nomeProduto, decimal precoUnitario, int quantidade)
@@ -31,7 +31,7 @@ namespace Vendas.Domain.Pedidos.Entities
             NomeProduto = nomeProduto;
             PrecoUnitario = precoUnitario;
             Quantidade = quantidade;
-            DescontoAplicado = 0;
+            PorcentagemDesconto = 0;
 
             CalcularValorTotal();
         }
@@ -42,7 +42,7 @@ namespace Vendas.Domain.Pedidos.Entities
             Guard.Against<DomainException>(desconto > PrecoUnitario * Quantidade,
                 "Desconto não pode exceder o valor total do item.");
 
-            DescontoAplicado = desconto;
+            PorcentagemDesconto = desconto;
             SetDataAtualizacao();
             CalcularValorTotal();
         }
@@ -71,18 +71,9 @@ namespace Vendas.Domain.Pedidos.Entities
             CalcularValorTotal();
         }
 
-        internal void AtualizarPrecoUnitario(decimal novoPreco)
-        {
-            Guard.Against<DomainException>(novoPreco <= 0, "O preço unitário deve ser maior que zero.");
-
-            PrecoUnitario = novoPreco;
-            SetDataAtualizacao();
-            CalcularValorTotal();
-        }
-
         private void CalcularValorTotal()
         {
-            ValorTotal = Math.Max(0, PrecoUnitario * Quantidade - DescontoAplicado);
+            ValorTotal = Math.Max(0, (PrecoUnitario * Quantidade) - ((PrecoUnitario * Quantidade) * (PorcentagemDesconto/100)));
         }
     }
 }

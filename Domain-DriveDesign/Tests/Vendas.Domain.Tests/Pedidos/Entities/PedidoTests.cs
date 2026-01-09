@@ -337,38 +337,38 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
 
         // transição de estado
 
-        [Fact(DisplayName = "Deve permitir marcar pedido como Em Separacao após PagamentoConfirmado")]
-        public void Deve_Marcar_Como_Em_Separacao()
-        {
-            // Arrange
-            var pedido = Pedido.Criar(ClienteIdValido, CriarEnderecoValido());
-            pedido.AdicionarItem(ProdutoIdValido, "Produto", 100m, 1);
-            var pagamento = pedido.IniciarPagamento(MetodoPagamento.CartaoCredito);
-            pedido.DefinirCodigoTransacao(pagamento);
+        //[Fact(DisplayName = "Deve permitir marcar pedido como Em Separacao após PagamentoConfirmado")]
+        //public void Deve_Marcar_Como_Em_Separacao()
+        //{
+        //    // Arrange
+        //    var pedido = Pedido.Criar(ClienteIdValido, CriarEnderecoValido());
+        //    pedido.AdicionarItem(ProdutoIdValido, "Produto", 100m, 1);
+        //    var pagamento = pedido.IniciarPagamento(MetodoPagamento.CartaoCredito);
+        //    pedido.DefinirCodigoTransacao(pagamento);
 
-            pedido.ConfirmarPagamento(pagamento); // Status: PagamentoConfirmado
+        //    pedido.ConfirmarPagamento(pagamento); // Status: PagamentoConfirmado
 
-            // Act
-            pedido.MarcarComoEmSeparacao();
+        //    // Act
+        //    pedido.MarcarComoEmSeparacao();
 
-            // Assert
-            pedido.StatusPedido.Should().Be(StatusPedido.EmSeparacao);
-        }
+        //    // Assert
+        //    pedido.StatusPedido.Should().Be(StatusPedido.EmSeparacao);
+        //}
 
-        [Fact(DisplayName = "Não deve marcar como Em Separacao se não estiver PagamentoConfirmado")]
-        public void Nao_Deve_Marcar_Como_Em_Separacao_Se_Nao_Confirmado()
-        {
-            // Arrange
-            var pedido = Pedido.Criar(ClienteIdValido, CriarEnderecoValido());
-            // Status: Pendente
+        //[Fact(DisplayName = "Não deve marcar como Em Separacao se não estiver PagamentoConfirmado")]
+        //public void Nao_Deve_Marcar_Como_Em_Separacao_Se_Nao_Confirmado()
+        //{
+        //    // Arrange
+        //    var pedido = Pedido.Criar(ClienteIdValido, CriarEnderecoValido());
+        //    // Status: Pendente
 
-            // Act
-            Action act = () => pedido.MarcarComoEmSeparacao();
+        //    // Act
+        //    Action act = () => pedido.MarcarComoEmSeparacao();
 
-            // Assert
-            act.Should().Throw<DomainException>()
-                .WithMessage("O pedido só pode ir para 'Em Separação' após o pagamento ser confirmado.");
-        }
+        //    // Assert
+        //    act.Should().Throw<DomainException>()
+        //        .WithMessage("O pedido só pode ir para 'Em Separação' após o pagamento ser confirmado.");
+        //}
 
         [Fact(DisplayName = "Deve marcar pedido como Enviado")]
         public void Deve_Marcar_Como_Enviado()

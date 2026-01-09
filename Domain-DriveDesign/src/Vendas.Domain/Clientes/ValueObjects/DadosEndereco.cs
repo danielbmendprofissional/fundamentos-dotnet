@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vendas.Domain.Common.Base;
 using Vendas.Domain.Common.Validations;
+using Vendas.Domain.Pedidos.ValueObjects;
 
 namespace Vendas.Domain.Clientes.ValueObjects
 {
-    public sealed record DadosEndereco
+    public sealed class DadosEndereco : ValueObject
     {
         public string Cep { get; }
         public string Logradouro { get; }
@@ -18,7 +20,7 @@ namespace Vendas.Domain.Clientes.ValueObjects
         public string Pais { get; }
         public string Complemento { get; }
 
-        public DadosEndereco(
+        private DadosEndereco(
             string cep,
             string logradouro,
             string numero,
@@ -26,7 +28,7 @@ namespace Vendas.Domain.Clientes.ValueObjects
             string cidade,
             string estado,
             string pais,
-            string complemento = "")
+            string complemento)
         {
             Guard.AgainstNullOrWhiteSpace(cep, nameof(cep));
             Guard.AgainstNullOrWhiteSpace(logradouro, nameof(logradouro));
@@ -44,6 +46,22 @@ namespace Vendas.Domain.Clientes.ValueObjects
             Estado = estado;
             Pais = pais;
             Complemento = complemento;
+        }
+        public static DadosEndereco Criar(string cep, string logradouro, string numero,
+                        string bairro, string estado, string cidade, string pais, string complemento = "")
+        {
+            return new DadosEndereco(cep, logradouro, complemento, bairro, estado, cidade, pais, complemento);
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Cep;
+            yield return Logradouro;
+            yield return Complemento;
+            yield return Bairro;
+            yield return Estado;
+            yield return Cidade;
+            yield return Pais;
         }
     }
 

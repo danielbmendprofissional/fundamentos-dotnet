@@ -13,7 +13,7 @@ namespace Vendas.Domain.Clientes.ValueObjects
     {
         public string Numero { get; }
 
-        public Telefone(string numero)
+        private Telefone(string numero)
         {
             Guard.AgainstNullOrWhiteSpace(numero, nameof(numero));
 
@@ -25,6 +25,9 @@ namespace Vendas.Domain.Clientes.ValueObjects
 
             Numero = digits;
         }
+
+        public static Telefone Create(string numero)
+            => new Telefone(numero);
 
         public override string ToString()
         {

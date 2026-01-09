@@ -1,11 +1,10 @@
-﻿using Vendas.Domain.Common.Base;
+﻿using System.Drawing;
+using Vendas.Domain.Common.Base;
 using Vendas.Domain.Common.Exceptions;
 using Vendas.Domain.Common.Validations;
 using Vendas.Domain.Pedidos.Enums;
 using Vendas.Domain.Pedidos.Events.Pagamento;
 using Vendas.Domain.Pedidos.Events.Pedido;
-using Vendas.Domain.Pedidos.Interfaces;
-using Vendas.Domain.Pedidos.Snapshot;
 using Vendas.Domain.Pedidos.ValueObjects;
 
 namespace Vendas.Domain.Pedidos.Entities
@@ -22,10 +21,10 @@ namespace Vendas.Domain.Pedidos.Entities
         public string NumeroPedido { get; private set; } = string.Empty;
 
         private readonly List<ItemPedido> _itens = new();
-        public IReadOnlyCollection<IItemPedido> Itens => _itens.Cast<IItemPedido>().ToList().AsReadOnly();
+        public IReadOnlyCollection<ItemPedido> Itens => _itens.ToList().AsReadOnly();
 
         private readonly List<Pagamento> _pagamentos = new();
-        public IReadOnlyCollection<IPagamento> Pagamentos => _pagamentos.Cast<IPagamento>().ToList().AsReadOnly();
+        public IReadOnlyCollection<Pagamento> Pagamentos => _pagamentos.ToList().AsReadOnly();
 
         private Pedido(Guid clienteId, EnderecoEntrega enderecoEntrega)
         {
@@ -67,8 +66,7 @@ namespace Vendas.Domain.Pedidos.Entities
                 StatusPedido != StatusPedido.Pendente,
                 "Itens só podem ser removidos em pedidos pendentes.");
 
-            var item = _itens.FirstOrDefault(i => i.Id == itemId);
-            Guard.AgainstNull(item, nameof(item));
+            var item = ObterItemPedido(itemId);
 
             _itens.Remove(item!);
 
@@ -108,6 +106,13 @@ namespace Vendas.Domain.Pedidos.Entities
             _pagamentos.Add(novoPagamento);
 
             SetDataAtualizacao();
+
+            AddDomainEvent(new PagamentoIniciadoEvent(
+               PagamentoId: novoPagamento.Id,
+               CodigoTransacao: novoPagamento.CodigoTransacao!,
+               Valor: novoPagamento.Valor
+            ));
+
             return novoPagamento.Id;
         }
 
@@ -122,7 +127,16 @@ namespace Vendas.Domain.Pedidos.Entities
 
         public void AplicarDesconto(decimal porcentagem, Guid? itemPedidoId = null)
         {
-            itemPedidoId ??  
+            Guard.AgainstNull(porcentagem, nameof(porcentagem));
+            if(itemPedidoId != null)
+            {
+                var item = ObterItemPedido(itemPedidoId.Value);
+                item.AplicarDesconto(porcentagem);
+            }
+            else
+            {
+                ValorTotal -= (ValorTotal * (porcentagem / 100));
+            }
         }
 
         public void DefinirCodigoTransacao(Guid pagamentoId, string? codigo = null)
@@ -157,8 +171,8 @@ namespace Vendas.Domain.Pedidos.Entities
             SetDataAtualizacao();
 
             AddDomainEvent(new PagamentoConfirmadoEvent(
-               PedidoId: Id,
                PagamentoId: pagamento.Id,
+               PedidoId: Id,
                CodigoTransacao: pagamento.CodigoTransacao!,
                Valor: pagamento.Valor,
                DataPagamento: pagamento.DataPagamento!.Value
@@ -193,13 +207,11 @@ namespace Vendas.Domain.Pedidos.Entities
 
             StatusPedido = StatusPedido.EmSeparacao;
 
-            AddDomainEvent(new PedidoEmSeparacaoEvent(
-            Id,
-                _itens.Select(i => new PedidoItemSnapshot(
-                    i.ProdutoId,
-                    i.Quantidade
-                )).ToList()
-            ));
+            var itensSnapshot = _itens
+                        .Select(i => new PedidoItemSnapshot(i.ProdutoId, i.Quantidade))
+                        .ToList();
+
+            AddDomainEvent(new PedidoEmSeparacaoEvent(Id, itensSnapshot));
         }
 
         public void MarcarComoEnviado()
@@ -273,6 +285,14 @@ namespace Vendas.Domain.Pedidos.Entities
             Guard.AgainstNull(pagamento, nameof(pagamento));
 
             return pagamento!;
+        }
+
+        private ItemPedido ObterItemPedido(Guid id)
+        {
+            var item = _itens.FirstOrDefault(i => i.Id == id);
+            Guard.AgainstNull(item, nameof(item));
+
+            return item!;
         }
     }
 

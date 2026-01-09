@@ -18,13 +18,16 @@ namespace Vendas.Domain.Clientes.ValueObjects
             @"^[\w\.-]+@[\w\.-]+\.\w{2,}$",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public Email(string endereco)
+        private Email(string endereco)
         {
             Guard.AgainstNullOrWhiteSpace(endereco, nameof(endereco));
             Guard.Against<DomainException>(!_regex.IsMatch(endereco), "Email inválido.");
 
             Endereco = endereco.Trim().ToLowerInvariant();
         }
+
+        public static Email Create(string endereco)
+            => new Email(endereco);
 
         public override string ToString() => Endereco;
 

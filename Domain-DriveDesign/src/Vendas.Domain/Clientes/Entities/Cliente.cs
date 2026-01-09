@@ -66,6 +66,8 @@ namespace Vendas.Domain.Clientes.Entities
             Guard.AgainstNull(email, nameof(email));
             Guard.AgainstNull(telefone, nameof(telefone));
             Guard.AgainstNull(enderecoPrincipal, nameof(enderecoPrincipal));
+            Guard.AgainstInvalidEnum<Sexo>(sexo, nameof(sexo));
+            Guard.AgainstInvalidEnum<EstadoCivil>(estadoCivil, nameof(estadoCivil));
 
             var endereco = new Endereco(
                 enderecoPrincipal.Cep,

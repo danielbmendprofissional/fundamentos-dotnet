@@ -22,6 +22,12 @@ namespace Vendas.Domain.Common.Validations
                 throw new DomainException($"{paramName} cannot be null or empty");
         }
 
+        public static void AgainstInvalidEnum<TEnum>(object value, string paramName) where TEnum : Enum
+        {
+            if (!Enum.IsDefined(typeof(TEnum), value))
+                throw new DomainException($"invalid param {paramName}");
+        }
+
         public static void Against<TException>(bool condition, string message) where TException : Exception
         {
             if (condition) throw (TException)Activator.CreateInstance(typeof(TException), message)!;

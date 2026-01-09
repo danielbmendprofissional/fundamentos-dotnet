@@ -19,6 +19,8 @@
 
   <ItemGroup>
     <Folder Include="AntiCorruptionLayer\" />
+    <Folder Include="Repositories\Command\" />
+    <Folder Include="Repositories\Queries\" />
   </ItemGroup>
 
 </Project>

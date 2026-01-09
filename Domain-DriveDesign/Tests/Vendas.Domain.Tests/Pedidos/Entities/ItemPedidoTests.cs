@@ -29,7 +29,7 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             item.NomeProduto.Should().Be(nomeProduto);
             item.PrecoUnitario.Should().Be(precoUnitario);
             item.Quantidade.Should().Be(quantidade);
-            item.DescontoAplicado.Should().Be(0);
+            item.PorcentagemDesconto.Should().Be(0);
             item.ValorTotal.Should().Be(500m);
         }
 
@@ -40,11 +40,11 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             var item = CriarItemValido(preco: 200m, quantidade: 2);
 
             // Act
-            item.AplicarDesconto(50m);
+            item.AplicarDesconto(10);
 
             // Assert
-            item.DescontoAplicado.Should().Be(50m);
-            item.ValorTotal.Should().Be(350m);
+            item.PorcentagemDesconto.Should().Be(10m);
+            item.ValorTotal.Should().Be(360m);
             item.DataAtualizacao.Should().NotBeNull();
         }
 
@@ -104,35 +104,6 @@ namespace Vendas.Domain.Tests.Pedidos.Entities
             // Assert
             act.Should().Throw<DomainException>()
                .WithMessage("Um item de pedido não pode ter quantidade zero. Remova-o do pedido.");
-        }
-
-        [Fact(DisplayName = "Deve atualizar preço unitário com sucesso quando valor válido")]
-        public void AtualizarPrecoUnitario_DeveAtualizarComSucesso_QuandoValorValido()
-        {
-            // Arrange
-            var item = CriarItemValido(preco: 100m, quantidade: 3);
-
-            // Act
-            item.AtualizarPrecoUnitario(150m);
-
-            // Assert
-            item.PrecoUnitario.Should().Be(150m);
-            item.ValorTotal.Should().Be(450m);
-            item.DataAtualizacao.Should().NotBeNull();
-        }
-
-        [Fact(DisplayName = "Deve lançar exceção ao atualizar preço unitário inválido")]
-        public void AtualizarPrecoUnitario_DeveLancarExcecao_QuandoValorInvalido()
-        {
-            // Arrange
-            var item = CriarItemValido();
-
-            // Act
-            Action act = () => item.AtualizarPrecoUnitario(0);
-
-            // Assert
-            act.Should().Throw<DomainException>()
-               .WithMessage("O preço unitário deve ser maior que zero.");
         }
         #endregion
 

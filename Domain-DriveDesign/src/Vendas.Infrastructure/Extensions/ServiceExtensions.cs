@@ -1,16 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Vendas.Application.Abstractions.IntegrationEvents;
-using Vendas.Application.Abstractions.Persistence;
-using Vendas.Application.Abstractions.Persistence.Queries;
+using Vendas.Application.Commom.Interfaces.IntegrationEvents;
+using Vendas.Application.Commom.Interfaces.Persistence;
+using Vendas.Application.Pedidos.Interfaces;
 using Vendas.Domain.Catalogo.Interfaces;
 using Vendas.Domain.Pedidos.Interfaces;
-using Vendas.Infrastructure.IntegrationEventHandlers;
-using Vendas.Infrastructure.Persistence.Command;
-using Vendas.Infrastructure.Persistence.Query;
-using Vendas.Infrastructure.Repositories.Command;
-using Vendas.Infrastructure.Repositories.Queries;
+using Vendas.Infrastructure.Catalogo.Repositories;
+using Vendas.Infrastructure.Common.IntegrationEventHandlers;
+using Vendas.Infrastructure.Common.Persistence;
+using Vendas.Infrastructure.Pedidos.Repositories;
 
 namespace Vendas.Infrastructure.Extensions
 {

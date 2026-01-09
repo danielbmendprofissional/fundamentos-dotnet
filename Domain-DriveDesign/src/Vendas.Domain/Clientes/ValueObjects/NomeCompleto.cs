@@ -15,7 +15,7 @@ namespace Vendas.Domain.Clientes.ValueObjects
         public string Sobrenome { get; }
         public string NomeCompletoFormatado { get; }
 
-        public NomeCompleto(string nomeCompleto)
+        private NomeCompleto(string nomeCompleto)
         {
             Guard.AgainstNullOrWhiteSpace(nomeCompleto, nameof(nomeCompleto));
 
@@ -30,6 +30,9 @@ namespace Vendas.Domain.Clientes.ValueObjects
 
             NomeCompletoFormatado = string.Join(" ", partes);
         }
+
+        public static NomeCompleto Create(string nomeCompleto)
+            => new NomeCompleto(nomeCompleto);
 
         public string NomeResumido => $"{Nome.Split(' ').First()} {Sobrenome}";
         public override string ToString() => NomeCompletoFormatado;

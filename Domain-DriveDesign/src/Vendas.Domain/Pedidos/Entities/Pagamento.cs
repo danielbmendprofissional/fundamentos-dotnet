@@ -7,7 +7,7 @@ using Vendas.Domain.Pedidos.Interfaces;
 
 namespace Vendas.Domain.Pedidos.Entities
 {
-    internal sealed class Pagamento : Entity, IPagamento
+    public sealed class Pagamento : Entity
     {
         public Guid PedidoId { get; private set; }
         //Prefiro utilização de INDICADOR, mas é apenas um projeto DDD educacional

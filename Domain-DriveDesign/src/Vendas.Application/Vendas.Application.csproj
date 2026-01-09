@@ -15,12 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\Clientes\" />
-    <Folder Include="Commands\Catalogo\" />
-    <Folder Include="EventHandlers\Clientes\" />
-    <Folder Include="EventHandlers\Catalogo\" />
-    <Folder Include="Queries\Clientes\" />
-    <Folder Include="Queries\Catalogo\" />
+    <Folder Include="Catalogo\Commands\" />
   </ItemGroup>
 
 </Project>

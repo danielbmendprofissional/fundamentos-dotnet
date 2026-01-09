@@ -13,7 +13,7 @@ namespace Vendas.Domain.Clientes.ValueObjects
     {
         public string Numero { get; }
 
-        public Cpf(string numero)
+        private Cpf(string numero)
         {
             Guard.AgainstNullOrWhiteSpace(numero, nameof(numero));
 
@@ -24,6 +24,9 @@ namespace Vendas.Domain.Clientes.ValueObjects
 
             Numero = digits;
         }
+
+        public static Cpf Create(string numero)
+            => new Cpf(numero);
 
         public override string ToString()
             => Convert.ToInt64(Numero).ToString(@"000\.000\.000\-00");
