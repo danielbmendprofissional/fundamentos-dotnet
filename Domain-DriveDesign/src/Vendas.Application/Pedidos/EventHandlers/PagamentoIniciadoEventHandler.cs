@@ -25,6 +25,8 @@ namespace Vendas.Application.Pedidos.EventHandlers
             PagamentoIniciadoEvent notification,
             CancellationToken cancellationToken)
         {
+            // NOTIFICA O CLIENTE CHAMANDO EnviarEmailIntegrationEvent
+
             var integrationEvent =
                 new PagamentoIniciadoIntegrationEvent(
                     notification.PagamentoId,

@@ -9,12 +9,12 @@ namespace Vendas.Domain.Clientes.Interfaces
 {
     public interface IClienteRepository
     {
-        Task<Cliente?> ObterPorIdAsync(Guid pedidoId,
+        Task<Cliente?> ObterPorIdAsync(Guid clienteId,
             CancellationToken cancellationToken = default);
 
-        Task AdicionarAsync(Cliente pedido,
+        Task AdicionarAsync(Cliente cliente,
             CancellationToken cancellationToken = default);
 
-        void Atualizar(Cliente pedido);
+        void Atualizar(Cliente cliente);
     }
 }

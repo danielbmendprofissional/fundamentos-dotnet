@@ -41,6 +41,9 @@ namespace Vendas.Infrastructure.Clientes.Persistence.Mappings
 
             builder.Property(e => e.Complemento)
                 .HasMaxLength(200);
+
+            builder.Property(e => e.ClienteId)
+            .IsRequired();
         }
     }
 }

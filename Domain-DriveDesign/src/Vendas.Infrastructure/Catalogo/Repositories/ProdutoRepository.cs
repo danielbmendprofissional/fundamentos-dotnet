@@ -23,6 +23,17 @@ namespace Vendas.Infrastructure.Catalogo.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
         }
 
+        public async Task<IEnumerable<Produto>> ObterPorIdsAsync(
+        IEnumerable<Guid> ids,
+        CancellationToken cancellationToken = default)
+        {
+            return await _context.Produtos
+                .Where(p => ids.Contains(p.Id))
+                // IMPORTANTE: Como é repositório de escrita para ajuste de estoque,
+                // NÃO use AsNoTracking(), pois o ChangeTracker precisa monitorar
+                // as entidades para o UnitOfWork persistir as mudanças.
+                .ToListAsync(cancellationToken);
+        }
         public async Task AdicionarAsync(
             Produto produto,
             CancellationToken cancellationToken = default)

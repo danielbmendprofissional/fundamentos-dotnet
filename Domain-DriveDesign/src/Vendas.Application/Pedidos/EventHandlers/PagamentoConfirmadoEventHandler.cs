@@ -21,6 +21,8 @@ namespace Vendas.Application.Pedidos.EventHandlers
             PagamentoConfirmadoEvent notification,
             CancellationToken cancellationToken)
         {
+            //CHAMAr EnviarEmailIntegrationEvent---- 
+
             // EXEMPLOS DO QUE FAZER AQUI:
 
             // 1. Enviar email

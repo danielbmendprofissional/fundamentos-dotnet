@@ -6,8 +6,9 @@ using Vendas.Domain.Common.Validations;
 
 namespace Vendas.Domain.Clientes.Entities
 {
-    internal sealed class Endereco : Entity, IEndereco
+    public sealed class Endereco : Entity
     {
+        public Guid ClienteId { get; set; }
         public string Cep { get; private set; }
         public string Logradouro { get; private set; }
         public string Numero { get; private set; }
@@ -15,7 +16,7 @@ namespace Vendas.Domain.Clientes.Entities
         public string Cidade { get; private set; }
         public string Estado { get; private set; }
         public string Pais { get; private set; }
-        public string Complemento { get; private set; }
+        public string? Complemento { get; private set; }
 
         internal Endereco(
         string cep,
@@ -25,7 +26,7 @@ namespace Vendas.Domain.Clientes.Entities
         string cidade,
         string estado,
         string pais,
-        string complemento = "")
+        string? complemento = "")
         {
             Validar(cep, logradouro, numero, bairro, cidade, estado, pais);
 
@@ -47,7 +48,7 @@ namespace Vendas.Domain.Clientes.Entities
         string cidade,
         string estado,
         string pais,
-        string complemento = "")
+        string? complemento = "")
         {
             Validar(cep, logradouro, numero, bairro, cidade, estado, pais);
 

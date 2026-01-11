@@ -1,45 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using Vendas.Application.Catalogo.Commands.ProdutoAjustarEstoque;
 using Vendas.Application.Catalogo.IntegrationEvents;
-using Vendas.Application.Commom.Interfaces.Persistence;
-using Vendas.Domain.Catalogo.Interfaces;
 
 namespace Vendas.Infrastructure.Catalogo.IntegrationEventHandlers
 {
     public sealed class PedidoEmSeparacaoIntegrationEventHandler
     {
-        private readonly IProdutoRepository _produtoRepository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMediator _mediator;
 
-        public PedidoEmSeparacaoIntegrationEventHandler(
-            IProdutoRepository produtoRepository,
-            IUnitOfWork unitOfWork)
+        public PedidoEmSeparacaoIntegrationEventHandler(IMediator mediator)
         {
-            _produtoRepository = produtoRepository;
-            _unitOfWork = unitOfWork;
+            _mediator = mediator;
         }
 
         public async Task Handle(
             PedidoEmSeparacaoIntegrationEvent evt,
             CancellationToken cancellationToken)
         {
-            foreach (var produto in evt.Produtos)
-            {
-                var entity =
-                    await _produtoRepository.ObterPorIdAsync(
-                        produto.Id,
-                        cancellationToken);
+            //NOTIFICA A EQUIPE DE ESTOQUE PARA SEPARAR --- TAMBÉM
 
-                if (entity is null)
-                    throw new Exception("Produto não encontrado.");
-
-                entity.AjustarEstoque(-produto.Quantidade, "Reserva para pedido");
-            }
-
-            await _unitOfWork.CommitAsync(cancellationToken);
+            var command = new ProdutoAjustarEstoqueCommand(evt.PedidoId, evt.Produtos);
+            await _mediator.Send(command, cancellationToken);
         }
     }
 

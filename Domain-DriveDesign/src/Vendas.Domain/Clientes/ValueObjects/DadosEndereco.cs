@@ -18,7 +18,7 @@ namespace Vendas.Domain.Clientes.ValueObjects
         public string Cidade { get; }
         public string Estado { get; }
         public string Pais { get; }
-        public string Complemento { get; }
+        public string? Complemento { get; }
 
         private DadosEndereco(
             string cep,
@@ -28,7 +28,7 @@ namespace Vendas.Domain.Clientes.ValueObjects
             string cidade,
             string estado,
             string pais,
-            string complemento)
+            string? complemento)
         {
             Guard.AgainstNullOrWhiteSpace(cep, nameof(cep));
             Guard.AgainstNullOrWhiteSpace(logradouro, nameof(logradouro));
@@ -48,16 +48,15 @@ namespace Vendas.Domain.Clientes.ValueObjects
             Complemento = complemento;
         }
         public static DadosEndereco Criar(string cep, string logradouro, string numero,
-                        string bairro, string estado, string cidade, string pais, string complemento = "")
+                        string bairro, string estado, string cidade, string pais, string? complemento = "")
         {
-            return new DadosEndereco(cep, logradouro, complemento, bairro, estado, cidade, pais, complemento);
+            return new DadosEndereco(cep, logradouro, numero, bairro, estado, cidade, pais, complemento);
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Cep;
             yield return Logradouro;
-            yield return Complemento;
             yield return Bairro;
             yield return Estado;
             yield return Cidade;

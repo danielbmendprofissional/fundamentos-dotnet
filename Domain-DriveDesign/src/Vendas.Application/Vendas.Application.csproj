@@ -14,8 +14,4 @@
     <ProjectReference Include="..\Vendas.Domain\Vendas.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Catalogo\Commands\" />
-  </ItemGroup>
-
 </Project>

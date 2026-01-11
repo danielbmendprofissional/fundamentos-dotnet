@@ -10,9 +10,9 @@ using Vendas.Infrastructure.Pedidos.Persistence.QueryModels;
 namespace Vendas.Infrastructure.Pedidos.Persistence.Mappings
 {
     internal sealed class PedidoDetalheMap
-        : IEntityTypeConfiguration<PedidoDetalheQueryModel>
+        : IEntityTypeConfiguration<PedidoDetalheModel>
     {
-        public void Configure(EntityTypeBuilder<PedidoDetalheQueryModel> builder)
+        public void Configure(EntityTypeBuilder<PedidoDetalheModel> builder)
         {
             builder.ToTable("Pedidos");
 

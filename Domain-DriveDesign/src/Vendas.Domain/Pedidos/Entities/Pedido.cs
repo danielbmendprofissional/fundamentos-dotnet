@@ -105,6 +105,7 @@ namespace Vendas.Domain.Pedidos.Entities
             var novoPagamento = new Pagamento(Id, metodoPagamento, ValorTotal);
             _pagamentos.Add(novoPagamento);
 
+            MarcarComoEmSeparacao();
             SetDataAtualizacao();
 
             AddDomainEvent(new PagamentoIniciadoEvent(
@@ -164,7 +165,6 @@ namespace Vendas.Domain.Pedidos.Entities
                 "O pedido não está no status esperado para confirmação de pagamento.");
 
             pagamento.ConfirmarPagamento();
-            MarcarComoEmSeparacao();
 
 
             StatusPedido = StatusPedido.PagamentoConfirmado;

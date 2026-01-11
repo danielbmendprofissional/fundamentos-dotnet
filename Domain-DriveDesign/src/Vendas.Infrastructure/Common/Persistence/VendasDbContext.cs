@@ -4,6 +4,9 @@ using Vendas.Domain.Catalogo.Entities;
 using Vendas.Domain.Clientes.Entities;
 using Vendas.Domain.Common.Base;
 using Vendas.Domain.Pedidos.Entities;
+using Vendas.Infrastructure.Catalogo.Persistence.Mappings;
+using Vendas.Infrastructure.Clientes.Persistence.Mappings;
+using Vendas.Infrastructure.Pedidos.Persistence.Mappings;
 
 namespace Vendas.Infrastructure.Common.Persistence
 {
@@ -26,8 +29,13 @@ namespace Vendas.Infrastructure.Common.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Aplica todos os mappings (PedidoMap, ItemPedidoMap, PagamentoMap, etc)
-            modelBuilder.ApplyConfigurationsFromAssembly(
-                typeof(VendasDbContext).Assembly);
+            modelBuilder.ApplyConfiguration(new CategoriaMap());
+            modelBuilder.ApplyConfiguration(new ProdutoMap());
+            modelBuilder.ApplyConfiguration(new ClienteMap());
+            modelBuilder.ApplyConfiguration(new EnderecoMap());
+            modelBuilder.ApplyConfiguration(new ItemPedidoMap());
+            modelBuilder.ApplyConfiguration(new PagamentoMap());
+            modelBuilder.ApplyConfiguration(new PedidoMap());
 
             base.OnModelCreating(modelBuilder);
         }

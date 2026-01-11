@@ -21,6 +21,8 @@ namespace Vendas.Domain.Catalogo.Interfaces
             Guid id,
             CancellationToken cancellationToken = default);
 
+        Task<IEnumerable<Produto>> ObterPorIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default);
+
         Task AdicionarAsync(
             Produto produto,
             CancellationToken cancellationToken = default);

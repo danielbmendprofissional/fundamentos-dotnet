@@ -7,7 +7,7 @@ using Vendas.Application.Pedidos.Interfaces;
 using Vendas.Domain.Catalogo.Interfaces;
 using Vendas.Domain.Pedidos.Interfaces;
 using Vendas.Infrastructure.Catalogo.Repositories;
-using Vendas.Infrastructure.Common.IntegrationEventHandlers;
+using Vendas.Infrastructure.Common.Base;
 using Vendas.Infrastructure.Common.Persistence;
 using Vendas.Infrastructure.Pedidos.Repositories;
 

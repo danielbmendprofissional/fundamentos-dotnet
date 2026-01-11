@@ -25,6 +25,8 @@ namespace Vendas.Application.Pedidos.EventHandlers
             PedidoEmSeparacaoEvent notification,
             CancellationToken cancellationToken)
         {
+            //NOTIFICA A EQUIPE PARA QUE SEPARAM chamando EnviarEmailIntegrationEvent
+
 
             var integrationEvent =
                 new PedidoEmSeparacaoIntegrationEvent(

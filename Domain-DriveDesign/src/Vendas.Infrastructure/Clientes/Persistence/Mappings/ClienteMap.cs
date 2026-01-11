@@ -78,12 +78,13 @@ namespace Vendas.Infrastructure.Clientes.Persistence.Mappings
                     .HasMaxLength(11);
             });
 
-            // Navegação privada (_enderecos)
-            builder.HasMany("_enderecos")
-                .WithOne()
-                .HasForeignKey("ClienteId")
+            builder.HasMany<Endereco>("_enderecos") // Aponta para o campo privado
+                .WithOne()                          // Endereco não tem propriedade 'Cliente'
+                .HasForeignKey(e => e.ClienteId)    // FK física na classe Endereco
+                .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 
+            //precisa avisar ao EF como ele deve ler/escrever nesse campo
             builder.Metadata
                 .FindNavigation("_enderecos")!
                 .SetPropertyAccessMode(PropertyAccessMode.Field);

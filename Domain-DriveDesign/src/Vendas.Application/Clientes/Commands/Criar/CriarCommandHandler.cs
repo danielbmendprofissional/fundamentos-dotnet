@@ -32,7 +32,7 @@ namespace Vendas.Application.Clientes.Commands.Criar
             request.EnderecoPrincipal.Estado,
             request.EnderecoPrincipal.Cidade,
             request.EnderecoPrincipal.Pais,
-            request.EnderecoPrincipal.Complemento ?? string.Empty
+            request.EnderecoPrincipal.Complemento
             );
 
             var cpf = Cpf.Create(request.Cpf);

@@ -25,7 +25,7 @@ namespace Vendas.Domain.Clientes.Entities
         public Guid EnderecoPrincipalId { get; private set; }
 
         private readonly List<Endereco> _enderecos = new();
-        public IReadOnlyCollection<IEndereco> Enderecos => _enderecos.Cast<IEndereco>().ToList().AsReadOnly();
+        public IReadOnlyCollection<Endereco> Enderecos => _enderecos.ToList().AsReadOnly();
 
         private Cliente(
         NomeCompleto nome,
@@ -141,7 +141,7 @@ namespace Vendas.Domain.Clientes.Entities
         string cidade,
         string estado,
         string pais,
-        string complemento = "")
+        string? complemento = "")
         {
             var endereco = _enderecos.FirstOrDefault(e => e.Id == enderecoId);
             Guard.AgainstNull(endereco, nameof(endereco));
@@ -163,11 +163,6 @@ namespace Vendas.Domain.Clientes.Entities
                 NovoEnderecoId: EnderecoPrincipalId));
 
             SetDataAtualizacao();
-        }
-
-        public IEndereco ObterEnderecoPrincipal()
-        {
-            return _enderecos.First(e => e.Id == EnderecoPrincipalId);
         }
 
         public void AtualizarPerfil(
