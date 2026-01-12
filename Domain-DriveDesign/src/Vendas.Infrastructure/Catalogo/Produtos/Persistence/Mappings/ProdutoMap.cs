@@ -60,22 +60,27 @@ namespace Vendas.Infrastructure.Catalogo.Produtos.Persistence.Mappings
                     .HasColumnType("decimal(18,2)");
             });
 
-            // Imagens (ValueObject Collection)
             builder.OwnsMany(p => p.Imagens, imagens =>
             {
                 imagens.ToTable("ProdutoImagens");
 
-                imagens.WithOwner()
-                    .HasForeignKey("ProdutoId");
+                // Deixando a FK explícita na tabela filha
+                imagens.WithOwner().HasForeignKey("ProdutoId");
 
+                // Definindo a PK da tabela para performance (Clustered Index)
                 imagens.HasKey("ProdutoId", "Ordem");
 
                 imagens.Property(i => i.Url)
+                    .HasColumnName("Url") // Nome explícito
                     .IsRequired()
                     .HasMaxLength(500);
 
                 imagens.Property(i => i.Ordem)
+                    .HasColumnName("Ordem")
                     .IsRequired();
+
+                var navigation = builder.Metadata.FindNavigation(nameof(Produto.Imagens));
+                navigation?.SetPropertyAccessMode(PropertyAccessMode.Field);
             });
         }
     }

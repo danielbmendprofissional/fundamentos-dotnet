@@ -4,7 +4,8 @@ using Vendas.Domain.Catalogo.Entities;
 using Vendas.Domain.Clientes.Entities;
 using Vendas.Domain.Common.Base;
 using Vendas.Domain.Pedidos.Entities;
-using Vendas.Infrastructure.Catalogo.Persistence.Mappings;
+using Vendas.Infrastructure.Catalogo.Categorias.Persistence.Mappings;
+using Vendas.Infrastructure.Catalogo.Produtos.Persistence.Mappings;
 using Vendas.Infrastructure.Clientes.Persistence.Mappings;
 using Vendas.Infrastructure.Pedidos.Persistence.Mappings;
 

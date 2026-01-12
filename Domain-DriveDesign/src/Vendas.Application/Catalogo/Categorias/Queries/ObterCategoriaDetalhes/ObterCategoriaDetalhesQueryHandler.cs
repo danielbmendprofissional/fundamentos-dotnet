@@ -27,7 +27,7 @@ namespace Vendas.Application.Catalogo.Categorias.Queries.ObterCategoriaDetalhes
             var retorno = await _repository.ObterDetalheAsync(request.Id, cancellationToken);
 
             if (retorno == null)
-                throw new ArgumentNullException("Pedido não encontrado.");
+                throw new ArgumentNullException("Categoria não encontrada.");
 
             return retorno;
         }
