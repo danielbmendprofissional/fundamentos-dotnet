@@ -4,7 +4,7 @@ using Vendas.Domain.Catalogo.Interfaces.Produtos;
 using Vendas.Domain.Pedidos.Entities;
 using Vendas.Infrastructure.Common.Persistence;
 
-namespace Vendas.Infrastructure.Catalogo.Repositories
+namespace Vendas.Infrastructure.Catalogo.Produtos.Repositories
 {
     internal sealed class ProdutoRepository : IProdutoRepository
     {

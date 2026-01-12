@@ -2,7 +2,7 @@
 using Vendas.Application.Catalogo.Produtos.Commands.ProdutoAjustarEstoque;
 using Vendas.Application.Catalogo.Produtos.IntegrationEvents;
 
-namespace Vendas.Infrastructure.Catalogo.IntegrationEventHandlers
+namespace Vendas.Infrastructure.Catalogo.Produtos.IntegrationEventHandlers
 {
     public sealed class PedidoEmSeparacaoIntegrationEventHandler
     {

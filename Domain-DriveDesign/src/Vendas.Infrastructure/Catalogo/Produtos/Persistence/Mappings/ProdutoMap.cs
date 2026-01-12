@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Vendas.Domain.Catalogo.Entities;
 using Vendas.Infrastructure.Common.Persistence.Mappings;
 
-namespace Vendas.Infrastructure.Catalogo.Persistence.Mappings
+namespace Vendas.Infrastructure.Catalogo.Produtos.Persistence.Mappings
 {
     internal sealed class ProdutoMap : EntityMap<Produto>
     {

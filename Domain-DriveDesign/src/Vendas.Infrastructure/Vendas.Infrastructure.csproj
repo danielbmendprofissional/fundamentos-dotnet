@@ -19,6 +19,8 @@
 
   <ItemGroup>
     <Folder Include="AntiCorruptionLayer\Pagamento\" />
+    <Folder Include="Catalogo\Categorias\IntegrationEventHandlers\" />
+    <Folder Include="Catalogo\Produtos\Persistence\QueryModels\" />
     <Folder Include="Repositories\Command\" />
     <Folder Include="Repositories\Queries\" />
   </ItemGroup>

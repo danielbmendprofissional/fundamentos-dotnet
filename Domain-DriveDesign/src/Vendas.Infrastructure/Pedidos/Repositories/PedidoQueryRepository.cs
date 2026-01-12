@@ -30,7 +30,7 @@ namespace Vendas.Infrastructure.Pedidos.Repositories
                 Guid clienteId,
                 CancellationToken cancellationToken)
         {
-            return await _context.PedidoResumos
+            return await _context.PedidoResumo
                 .AsNoTracking()
                 .Where(p => p.ClienteId == clienteId)
                 .OrderByDescending(p => p.DataCriacao)

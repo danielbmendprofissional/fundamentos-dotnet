@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Vendas.Domain.Catalogo.Entities;
 using Vendas.Infrastructure.Common.Persistence.Mappings;
 
-namespace Vendas.Infrastructure.Catalogo.Persistence.Mappings
+namespace Vendas.Infrastructure.Catalogo.Categorias.Persistence.Mappings
 {
     internal sealed class CategoriaMap : EntityMap<Categoria>
     {

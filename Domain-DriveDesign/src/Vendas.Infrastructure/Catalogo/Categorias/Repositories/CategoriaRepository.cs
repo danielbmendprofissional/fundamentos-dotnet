@@ -3,7 +3,7 @@ using Vendas.Domain.Catalogo.Entities;
 using Vendas.Domain.Catalogo.Interfaces.Categorias;
 using Vendas.Infrastructure.Common.Persistence;
 
-namespace Vendas.Infrastructure.Catalogo.Repositories
+namespace Vendas.Infrastructure.Catalogo.Categorias.Repositories
 {
     internal sealed class CategoriaRepository : ICategoriaRepository
     {
