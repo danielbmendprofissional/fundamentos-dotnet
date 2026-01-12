@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using Vendas.Application.Catalogo.Commands.ProdutoAjustarEstoque;
-using Vendas.Application.Catalogo.IntegrationEvents;
+using Vendas.Application.Catalogo.Produtos.Commands.ProdutoAjustarEstoque;
+using Vendas.Application.Catalogo.Produtos.IntegrationEvents;
 
 namespace Vendas.Infrastructure.Catalogo.IntegrationEventHandlers
 {

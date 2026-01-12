@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vendas.Domain.Catalogo.Entities;
-using Vendas.Domain.Catalogo.Interfaces;
+using Vendas.Domain.Catalogo.Interfaces.Categorias;
 using Vendas.Infrastructure.Common.Persistence;
 
 namespace Vendas.Infrastructure.Catalogo.Repositories

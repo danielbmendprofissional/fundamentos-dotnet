@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vendas.Domain.Catalogo.Entities;
-using Vendas.Domain.Catalogo.Interfaces;
+using Vendas.Domain.Catalogo.Interfaces.Produtos;
 using Vendas.Domain.Pedidos.Entities;
 using Vendas.Infrastructure.Common.Persistence;
 

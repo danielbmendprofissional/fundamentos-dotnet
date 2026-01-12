@@ -5,9 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vendas.Domain.Catalogo.Entities;
-using Vendas.Domain.Catalogo.Enums;
+using Vendas.Domain.Catalogo.Enums.Produtos;
 using Vendas.Domain.Catalogo.Events;
+using Vendas.Domain.Catalogo.Events.Produto;
+using Vendas.Domain.Catalogo.Events.Produtos;
 using Vendas.Domain.Catalogo.ValueObjects;
+using Vendas.Domain.Catalogo.ValueObjects.Produtos;
 using Vendas.Domain.Common.Exceptions;
 
 namespace Vendas.Domain.Tests.Catalogo.Entities
@@ -23,9 +26,9 @@ namespace Vendas.Domain.Tests.Catalogo.Entities
             string? descricao = null)
         {
             return Produto.Criar(
-                new NomeProduto(nome),
-                new CodigoProduto(codigo),
-                new PrecoProduto(preco),
+                NomeProduto.Create(nome),
+                CodigoProduto.Create(codigo),
+                PrecoProduto.Create(preco),
                 Guid.NewGuid(),
                 estoque,
                 descricao
@@ -55,7 +58,7 @@ namespace Vendas.Domain.Tests.Catalogo.Entities
         {
             var produto = CriarProduto();
 
-            produto.AlterarNome(new NomeProduto("Câmera Mirrorless"));
+            produto.AlterarNome(NomeProduto.Create("Câmera Mirrorless"));
 
             produto.Nome.Valor.Should().Be("Câmera Mirrorless");
         }
@@ -66,7 +69,7 @@ namespace Vendas.Domain.Tests.Catalogo.Entities
             var produto = CriarProduto();
             produto.ClearDomainEvents();
 
-            var novoPreco = new PrecoProduto(3000m);
+            var novoPreco = PrecoProduto.Create(3000m);
 
             produto.AlterarPreco(novoPreco);
 
@@ -177,7 +180,7 @@ namespace Vendas.Domain.Tests.Catalogo.Entities
             var produto = CriarProduto();
             produto.ClearDomainEvents();
 
-            var imagem = new ImagemProduto("http://img.com/1.jpg", 1);
+            var imagem = ImagemProduto.Create("http://img.com/1.jpg", 1);
 
             produto.AdicionarImagem(imagem);
 
@@ -192,10 +195,10 @@ namespace Vendas.Domain.Tests.Catalogo.Entities
         {
             var produto = CriarProduto();
 
-            produto.AdicionarImagem(new ImagemProduto("http://img.com/1.jpg", 1));
+            produto.AdicionarImagem(ImagemProduto.Create("http://img.com/1.jpg", 1));
 
             Action act = () =>
-                produto.AdicionarImagem(new ImagemProduto("http://img.com/2.jpg", 1));
+                produto.AdicionarImagem(ImagemProduto.Create("http://img.com/2.jpg", 1));
 
             act.Should().Throw<DomainException>()
                 .WithMessage("*Já existe uma imagem com esta ordem*");

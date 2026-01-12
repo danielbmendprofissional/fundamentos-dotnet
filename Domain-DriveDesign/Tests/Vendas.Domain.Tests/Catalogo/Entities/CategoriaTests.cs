@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vendas.Domain.Catalogo.Entities;
-using Vendas.Domain.Catalogo.Events;
+using Vendas.Domain.Catalogo.Events.Categorias;
 using Vendas.Domain.Common.Exceptions;
 
 namespace Vendas.Domain.Tests.Catalogo.Entities

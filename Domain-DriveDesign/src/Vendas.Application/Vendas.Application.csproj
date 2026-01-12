@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Vendas.Domain\Vendas.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Catalogo\Categorias\IntegrationEvents\" />
+  </ItemGroup>
+
 </Project>

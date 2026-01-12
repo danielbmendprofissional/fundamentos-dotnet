@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vendas.Application.Catalogo.Produtos.IntegrationEvents;
 using Vendas.Application.Commom.Interfaces.IntegrationEvents;
-using Vendas.Application.Catalogo.IntegrationEvents;
 using Vendas.Domain.Pedidos.Events.Pagamento;
 
 namespace Vendas.Application.Pedidos.EventHandlers
