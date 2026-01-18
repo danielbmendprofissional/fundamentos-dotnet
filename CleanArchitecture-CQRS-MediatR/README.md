@@ -81,3 +81,12 @@ Make sure you have the **.NET SDK** installed (recommended: **.NET 7+**).
 
 ## License
 This project is licensed under the **MIT License** — see the `LICENSE` file for more details.
+
+
+## Docker Image Build Commands
+
+# Gerando a imagem a partir do arquivo otimizado
+docker build -t minha-api:otimizada -f src/Presentation/CleanArchitecture.WebAPI/Dockerfile.otimizado .
+
+# Gerando a imagem a partir do arquivo de dev
+docker build -t minha-api:dev -f src/Presentation/CleanArchitecture.WebAPI/Dockerfile.dev .

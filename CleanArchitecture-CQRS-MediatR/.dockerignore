@@ -1,0 +1,25 @@
+# Pastas de compilação (Arquivos do Windows que não rodam no Linux)
+**/bin/
+**/obj/
+
+# Logs e arquivos temporários
+*.log
+.vs/
+.vscode/
+
+# Pastas de dependências de Front-end (se houver)
+**/node_modules/
+
+# Arquivos do Git
+.git/
+.gitignore
+
+# Configurações de ambiente locais (para não vazar senhas do seu PC)
+**/*.user
+**/*.suo
+**/appsettings.Development.json
+
+# Docker específicos
+docker-compose*
+Dockerfile*
+.dockerignore

@@ -7,9 +7,9 @@ using CleanArchitecture.Domain.Entities;
 
 namespace CleanArchitecture.Application.Mapper
 {
-    public sealed class UserMap : Profile
+    public sealed class UserProfiles : Profile
     {
-        public UserMap()
+        public UserProfiles()
         {
             CreateMap<CreateUserRequest, User>();
             CreateMap<User, CreateUserResponse>();

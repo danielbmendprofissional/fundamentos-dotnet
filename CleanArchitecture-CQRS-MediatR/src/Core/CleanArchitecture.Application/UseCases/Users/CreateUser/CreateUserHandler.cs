@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Interfaces.Repository;
 using CleanArchitecture.Domain.Interfaces.Repository.Base;
@@ -15,11 +16,13 @@ namespace CleanArchitecture.Application.UseCases.Users.CreateUser
     {
         private readonly IUnitOfWork _unityOfWork;
         private readonly IUserRepository _userRepository;
+        private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
 
-        public CreateUserHandler(IUnitOfWork unityOfWork, IUserRepository userRepository, IMapper mapper)
+        public CreateUserHandler(IUnitOfWork unityOfWork, IEmailService emailService, IUserRepository userRepository, IMapper mapper)
         {
             _unityOfWork = unityOfWork;
+            _emailService = emailService;
             _userRepository = userRepository;
             _mapper = mapper;
         }
@@ -31,6 +34,9 @@ namespace CleanArchitecture.Application.UseCases.Users.CreateUser
             _userRepository.Create(user);
 
             await _unityOfWork.Commit(cancellationToken);
+
+            await _emailService.EnviarEmail(
+                request.Email, "Created User", "congratulations, you are now part of the team!", cancellationToken);
 
             return _mapper.Map<CreateUserResponse>(user);
         }

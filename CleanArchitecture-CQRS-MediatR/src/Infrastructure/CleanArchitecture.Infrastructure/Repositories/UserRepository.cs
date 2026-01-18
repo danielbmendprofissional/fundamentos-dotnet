@@ -1,10 +1,10 @@
 ﻿using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Interfaces.Repository;
-using CleanArchitecture.Persistence.Context;
-using CleanArchitecture.Persistence.Repositories.Base;
+using CleanArchitecture.Infrastructure.Persistence.Context;
+using CleanArchitecture.Infrastructure.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 
-namespace CleanArchitecture.Persistence.Repositories
+namespace CleanArchitecture.Infrastructure.Repositories
 {
     /*
         Implementation of IUserRepository
@@ -15,7 +15,7 @@ namespace CleanArchitecture.Persistence.Repositories
 
         public async Task<User> GetByEmail(string email, CancellationToken cancellationToken)
         {
-            return await _context.Users.FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
+            return await _context.Users.FirstOrDefaultAsync(x => x.Email.Adress == email, cancellationToken);
         }
     }
 }

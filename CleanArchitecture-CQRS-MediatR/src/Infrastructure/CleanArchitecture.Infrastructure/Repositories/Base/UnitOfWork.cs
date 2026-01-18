@@ -1,7 +1,7 @@
 ﻿using CleanArchitecture.Domain.Interfaces.Repository.Base;
-using CleanArchitecture.Persistence.Context;
+using CleanArchitecture.Infrastructure.Persistence.Context;
 
-namespace CleanArchitecture.Persistence.Repositories.Base
+namespace CleanArchitecture.Infrastructure.Repositories.Base
 {
     /*
         Implementation of IUnitOfWork

@@ -1,6 +1,5 @@
 using CleanArchitecture.Application.Services;
-using CleanArchitecture.Persistence;
-using CleanArchitecture.Persistence.Context;
+using CleanArchitecture.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +12,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-CreateDatabase(app);
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -25,10 +22,3 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
-
-static void CreateDatabase(WebApplication app)
-{
-    var serviceScope = app.Services.CreateScope();
-    var dataContext = serviceScope.ServiceProvider.GetService<AppDbContext>();
-    dataContext?.Database.EnsureCreated();
-}

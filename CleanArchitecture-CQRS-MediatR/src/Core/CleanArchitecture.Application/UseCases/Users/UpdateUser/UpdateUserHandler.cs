@@ -25,8 +25,7 @@ public class UpdateUserHandler : IRequestHandler<UpdateUserRequest, UpdateUserRe
 
         if (user is null) return default!;
 
-        user.Name = command.Name;
-        user.Email = command.Email;
+        _mapper.Map(command, user);
 
         _userRepository.Update(user);
 

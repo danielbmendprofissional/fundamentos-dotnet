@@ -1,9 +1,9 @@
-﻿using CleanArchitecture.Domain.Entities.Base;
+﻿using CleanArchitecture.Domain.Common;
 using CleanArchitecture.Domain.Interfaces.Repository.Base;
-using CleanArchitecture.Persistence.Context;
+using CleanArchitecture.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace CleanArchitecture.Persistence.Repositories.Base
+namespace CleanArchitecture.Infrastructure.Repositories.Base
 {
     /*
         Implementation of IBaseRepository
@@ -19,18 +19,17 @@ namespace CleanArchitecture.Persistence.Repositories.Base
 
         public void Create(T entity)
         {
-            entity.DateCreated = DateTimeOffset.UtcNow;
             _context.Add(entity);
         }
 
         public void Update(T entity)
         {
-            entity.DateUpdated = DateTimeOffset.UtcNow;
+            entity.SetDateUpdated();
             _context.Update(entity);
         }
         public void Delete(T entity)
         {
-            entity.DateDeleted = DateTimeOffset.UtcNow;
+            entity.SetDateDeleted();
             _context.Remove(entity);
         }
 
