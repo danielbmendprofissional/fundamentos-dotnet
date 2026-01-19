@@ -1,0 +1,22 @@
+﻿==========================================================================
+RabbitMQ:
+
+- Servidor de mensageria que suporta protocolo AMQP, possibilita lidar
+com trafego de mensagens sendo compatível com diversas linguagens de pro-
+gramação.
+
+- Trabalha de forma assíncrona.
+
+- Utiliza o Design Pattern Publish/Subscribe:
+	O APP vai fazer um publish no rabbit MQ e todo mundo que estiver ouvindo a fila do Rabbit
+	será notificado.
+
+- Consumer se inscreve no rabbitMQ para escutar a fila de determinado serviço.
+- Não tem problema criar o consumer dentro da mesma pasta da API.
+
+- Você tem 1 exchange e dentro de cada exchange voce pode ter N filas la dentro.
+
+- masstransiet usa o tipo FANOUT e por padrão ele manda a relação 1 pra 1 de filas e exchange
+
+- existe outros exchange mais interessante para poder por exemplo ter mais de 1 fila no exchange (pesquisar)
+	FANOUT, TOPIC, HEADER e DIRECT

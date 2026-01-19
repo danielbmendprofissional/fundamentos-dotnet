@@ -1,0 +1,15 @@
+﻿==========================================================================
+Processamento Síncrono:
+
+- É quando a solicitação feita é processada e em seguida devolvida para o
+solicitante, onde esse fica no aguardo pelo processamento e pela resposta.
+
+- Em alguns casos é ruim para o sistema pois gera esperas longas pelo pro-
+cessamento.
+
+- Em outros casos é necessário o aguardo.
+
+Processamento Assíncrono:
+
+- É quando a solicitação feita é processada em segundo plano e o solicitante
+não fica aguardando pelo processamento.
