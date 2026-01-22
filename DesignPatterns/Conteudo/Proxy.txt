@@ -1,0 +1,6 @@
+﻿======================================= DESIGN PATTERNS =======================================
+================== PROXY
+
+É um padrão de projeto estrutural que permite que você forneça um substituto ou um espaço reser-
+vado para outro objeto. Um proxy controla o acesso ao objeto original, permitindo que você faça
+algo ou antes ou depois do pedido chega ao objeto original.
