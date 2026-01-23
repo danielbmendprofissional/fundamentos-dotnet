@@ -15,7 +15,8 @@ precisa garantir que esse recurso seja instanciado apenas uma vez.
 Deve-se proteger a instância dessa classe com encapsulamento para que nenhuma outra parte do código
 consiga criar uma nova instância/sobrescrever seu valor.
 
-Situações comuns para o uso do Singleton:
+APLICABILIDADE:
+
 - Gerenciamento de conexões com banco de dados.
 - Gerenciamento de configuração da aplicação.
 - Gerenciamento de logs.

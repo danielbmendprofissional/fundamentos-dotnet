@@ -1,0 +1,36 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= CRIACIONAL 
+================== FACTORY
+
+SOLID TRABALHADO: OCP
+
+INTENÇÃO OFICIAL:
+
+Definir uma interface para criar um objeto, mas deixar as subclasses decidirem que clsse ins-
+tanciar. O Factory permite adiar a instanciação para as subclasses.
+
+É obtido através de herança, podendo ser criado ou sebrescrito por subclasses.
+
+Dá flexibilidade ao código permitindo criação de novas factories sem a necessidade de altear código
+exitente (OCP).
+
+Pode utilizar parâmetro para determinar o tipo dos objetos a serem criados, ou enviar os parâmetros
+ao objeto a ser criado.
+
+APLICABILIDADE:
+	- Usar quando não souber quais tipos de objeto o código vai precisar.
+	- Usar para permitir a extensão para criar novos objetos (OCP).
+	- Usar para dar um hook às subclasses para que elas decidam a lógia de criação.
+	- Usar para eliminar duplicação de código na criação de objetos.4
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- Ajuda a aplicar o Open/Closed, código aberto a extensão.
+	- Ajuda no Single Responsibility, separa código que cria do que usa o objeto.
+	- Ajuda no descaoplamento.
+
+Malefícios:
+	- Se usado sem necessidade, gera uma explosão de subclasses. Será necessário uma classe Creator
+	para cada product da factory.

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DesignPatterns.Singleton
+namespace DesignPatterns.Singleton.Solution
 {
     //Needs to be thread safe
     public class UploadService
