@@ -53,4 +53,6 @@ var diretor = serviceProvider.GetRequiredService<IProdutoComplexoDiretor>();
 var productBuilder = serviceProvider.GetRequiredService<ProdutoComplexoBuilder>();
 
 diretor.ConstruirServidorDellPadrao();
-var produto = productBuilder.Build();
+var produtoSoluction = productBuilder.Build();
+
+Console.WriteLine($"Criado: {produtoSoluction.Nome}");

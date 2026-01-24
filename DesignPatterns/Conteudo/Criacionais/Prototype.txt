@@ -1,0 +1,26 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= CRIACIONAL 
+================== PROTOTYPE
+
+SOLID TRABALHADO: ...
+
+INTENÇÃO OFICIAL:
+
+Sua intenção oficial é criar novos objetos através da clonagem de um protótipo existente,
+criar literalmente uma cópia do objeto de forma eficiente, evitando o custo de criação do objeto novamente.
+
+APLICABILIDADE:
+	- Testes.
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- Para testes é otimo
+	- Para sistemas que realmente precisam disso também (cópia durante execução), a maioria não.
+
+Malefícios:
+	- Sua entidade precisa suportar clonagem, o que pode ser complexo dependendo do objeto.
+	- Desnecessário na maioria dos casos.
+
+================== IMPORTANTE

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DesignPatterns.Prototype": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
