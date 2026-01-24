@@ -1,0 +1,58 @@
+﻿======================================= DESIGN PATTERNS =======================================
+
+======================================= CRIACIONAL 
+================== ABSTRACT FACTORY
+
+SOLID TRABALHADO: SRP e OCP 
+
+INTENÇÃO OFICIAL:
+
+Fornecer uma interface para criação de famílias de objetos relacionados ou dependentes sem
+especificar sua classes concretas..
+
+É uma fábrica, assim como o Factory Method e geralmente é composto por múltiplos Factory Methods.
+Visa agrupar famílias de produtos compatíveis criando uma fábrica concreta por grupo de objetos
+compatíveis.
+
+Separa o código que cria do código que usa os objetos (SRP).
+
+
+APLICABILIDADE:
+	- Usar quando um sistema é independente de como seus produtos são criados, compostos ou re-
+	presentados.
+	- Usar quando o sistema deve ser configurado com uma ou mais famílias de produtos.
+	- Usar quando uma família de produtos relacionados é projetada para ser usada junta, e você-
+	quer garantir isso.
+	- Usar quando você quer fornecer uma biblioteca de produtos, mas quer revelar apenas suas
+	interfaces, não suas implementações concretas.
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- Produtos sempre são compatíveis entre si.
+	- Aplica o Open/Closed Principle, código aberto a extensão.
+	- Aplica o Single Responsibility Principle, separa código que cria do que usa o objeto.
+
+Malefícios:
+	- Maior complexidade devido à criação de múltiplas interfaces e classes concretas.
+
+================== IMPORTANTE
+Uma factory é um recurso que entrega 1 PRODUTO, sendo esse produto variado conforme a necessidade.
+	(PRODUTO = PagamentoBR [Pix, Cartão, Boleto])))
+
+Se no meu cenário preciso também entregar outro PRODUTO, continua sendo factory, mas duas factories
+diferentes no mesmo projeto. Sem relação familiar.
+	(PRODUTO = PagamentoUsa [Paypal, CreditCard]).
+
+No Abstract Factory, o foco é entregar FAMÍLIAS de produtos relacionados, então se eu preciso entregar 
+um CONJUNTO de PRODUTOS relacionados, aí sim é o caso de usar Abstract Factory.
+	(
+		PRODUTO1 {
+			PAGAMENTO [PagamentoBR ou PagamentoUSA]
+		}, 
+		PRODUTO2 {
+			DOCUMENTO [DocumentoBR ou DocumentoUSA]]
+		}
+	).
+
+
