@@ -1,0 +1,49 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= CRIACIONAL 
+================== BUILDER
+
+SOLID TRABALHADO: SRP e OCP 
+
+INTENÇÃO OFICIAL:
+
+Separar a construção de um objeto completo da sua representação de modo que o mesmo processo de
+construção possa criar diferentes representações.
+
+Sugere a separação do código que cria e o código que usa o objeto.
+
+Trata da criação de objetos complexos de verdade, construtor muito complexo, composição de vários
+objetos, etc.
+
+Visa a criação de um objeto por etapas.
+
+Pode vir para substituir um construtor com muitos parâmetros e também para substituir o AutoMapper
+em alguns casos.
+
+APLICABILIDADE:
+	- Objetos que vem de APIs externas.
+	- Objetos complexos de infra que precisam ser criados em etapas.
+	- Entidade de domínio ricas que precisam ser criadas em TESTES UNITÁRIOS.
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- Separa criação de utilização.
+	- O cliente não precisa criar objetos diretamente.
+	- O mesmo código pode construir objetos diferentes.
+	- Ajuda na aplicação do Single Responsibility e Open/Closed Principle.
+
+Malefícios:
+	- Código mais complexo.
+
+================== IMPORTANTE
+Normalmente o cenário para criar um builder é quando você tem aquela entidade que você precisar 
+dar varios NEW em outros objetos para depois conseguir passar tudo no construtor dela.
+
+Exemplo: Uma entidade Pedido que precisa de Cliente, Endereço, Itens, Pagamento, etc.
+Isso no domínio já é tudo separado no aggragate, com domínio rico, porém para realizar testes já
+fica mais complicado, então o builder entra para facilitar a criação desses objetos complexos
+em cenários de teste.
+
+Não é toda complexidade que precisa de um builder, como nesse cenário o builder só se aplicaria para
+testes e também para conversas entre APIs externas.
