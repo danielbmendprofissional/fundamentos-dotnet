@@ -3,21 +3,35 @@
 ======================================= STRUCTURAL 
 ================== FACADE
 
-SOLID TRABALHADO: ...
+SOLID TRABALHADO: SRP, OCP e DIP
 
-INTENÇÃO OFICIAL:
+INTENÇÃO OFICIAL: 
 
+Fornecer uma interface unificada para um conjunto de interfaces em um subsistema. O Facade define
+uma interface de nível mais alto que torna o subsistema mais fácil de usar.
 
+Ele está aberto a extensões, separa as responsabilidades e desacopla o código do cliente do código do subsistema.
 
 APLICABILIDADE:
-	- 
+	- Para simplificar uma classe ou um conjunto de classes complexas, Você tem varias interfaces
+	dentro de uma service por exemplo para realizar poucas operações, mas em cada operação voce usa
+	varias interfaces diferentes... O Facade pode simplificar isso, centralizando essas operações em uma
+	de fachada.
+	- Desacoplar um subsistema complexo do código do cliente, para que mudanças no subsistema não afetem.
 
 ================== CONSEQUÊNCIAS
 
 Benefícios:
-	- 
+	- Redução de acoplamento e complexidade do código do cliente.
+	- Facilita o uso de subsistemas complexos.
+	- Aplica o SRP ao separar a interface do subsistema da lógica do cliente.
+	- Isolamento de erros/mudanças.
 
 Malefícios:
-	- 
+	- God Object, se mal aplicado vira uma classe gigante que sabe e faz tudo.
+	- Camada adicional.
 
 ================== IMPORTANTE
+
+PODEMOS IMPLEMENTAR N FACADES PARA 1 SERVICE SÓ, pois facade é a fachada para um serviço que utiliza varios para
+entregar... Podemos ter na service 10 interfaces, mas usamos 4 para um grupo correlato de serviços e 6 para outro.

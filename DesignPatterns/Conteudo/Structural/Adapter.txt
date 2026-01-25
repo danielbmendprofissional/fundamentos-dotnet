@@ -3,7 +3,7 @@
 ======================================= STRUCTURAL 
 ================== ADAPTER
 
-SOLID TRABALHADO: ...
+SOLID TRABALHADO: SRP e OCP
 
 INTENÇÃO OFICIAL:
 
