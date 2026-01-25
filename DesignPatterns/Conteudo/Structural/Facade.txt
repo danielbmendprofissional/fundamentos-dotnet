@@ -1,0 +1,23 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= STRUCTURAL 
+================== FACADE
+
+SOLID TRABALHADO: ...
+
+INTENÇÃO OFICIAL:
+
+
+
+APLICABILIDADE:
+	- 
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- 
+
+Malefícios:
+	- 
+
+================== IMPORTANTE

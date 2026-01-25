@@ -1,0 +1,23 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= STRUCTURAL 
+================== FLYWEIGHT 
+
+SOLID TRABALHADO: ...
+
+INTENÇÃO OFICIAL:
+
+
+
+APLICABILIDADE:
+	- 
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- 
+
+Malefícios:
+	- 
+
+================== IMPORTANTE
