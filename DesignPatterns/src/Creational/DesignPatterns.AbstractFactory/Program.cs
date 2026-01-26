@@ -36,7 +36,7 @@ var host = builder.Build();
 
 var checkout = host.Services.GetRequiredKeyedService<IInternacionalCheckout>(Pais.Brasil);
 
-var pag = checkout.CriarPagamento("pix");
+var pag = checkout.CriarPagamento(TipoPagamento.Pix);
 var doc = checkout.CriarDocumento();
 
 pag.Processar(150.00m);
@@ -49,10 +49,10 @@ doc.Gerar(150.00m);
 // ========================================================
 //Dictionary
 
-Dictionary.IInternacionalCheckout checkout = new Dictionary.BrasilCheckout();
+Dictionary.IInternacionalCheckout checkout2 = new Dictionary.BrasilCheckout();
 
-var pix = checkout.CriarPagamento("pix");
-var documento = checkout.CriarDocumento();
+var pix = checkout2.CriarPagamento("pix");
+var documento = checkout2.CriarDocumento();
 
 pix.Processar(100);
 documento.Gerar(100);
