@@ -8,6 +8,7 @@ using DesignPatterns.Proxy.Virtual.Good;
 using Microsoft.Extensions.Caching.Memory;
 using DesignPatterns.Proxy.Cache.Good;
 using Microsoft.Extensions.DependencyInjection;
+using DesignPatterns.Proxy.Remote;
 
 // ====================================== VIRTUAL ======================================
 Console.WriteLine("Iniciando Dashboard...");
@@ -73,3 +74,14 @@ Thread.Sleep(11000);
 
 Console.WriteLine("\n--- TERCEIRA CHAMADA (Vai demorar de novo - Cache expirou) ---");
 Console.WriteLine($"Resultado: {proxy.ObterPrecoDolar()}");
+
+
+// ====================================== REMOTE ======================================
+var remoteServices = new ServiceCollection();
+remoteServices.AddWeatherAcl();
+
+var remoteProvider = remoteServices.BuildServiceProvider();
+var weatherService = remoteProvider.GetRequiredService<IWeatherService>();
+
+var weather = weatherService.GetTemperatureCelsius("London");
+Console.WriteLine($"\nTemperatura em London: {weather} °C");

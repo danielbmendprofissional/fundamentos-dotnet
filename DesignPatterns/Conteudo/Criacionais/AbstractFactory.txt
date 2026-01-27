@@ -1,51 +1,51 @@
-Ôªø======================================= DESIGN PATTERNS =======================================
+======================================= DESIGN PATTERNS =======================================
 
 ======================================= CRIACIONAL 
 ================== ABSTRACT FACTORY
 
 SOLID TRABALHADO: SRP e OCP 
 
-INTEN√á√ÉO OFICIAL:
+INTEN«√O OFICIAL:
 
-Fornecer uma interface para cria√ß√£o de fam√≠lias de objetos relacionados ou dependentes sem
+Fornecer uma interface para criaÁ„o de famÌlias de objetos relacionados ou dependentes sem
 especificar sua classes concretas..
 
-√â uma f√°brica, assim como o Factory Method e geralmente √© composto por m√∫ltiplos Factory Methods.
-Visa agrupar fam√≠lias de produtos compat√≠veis criando uma f√°brica concreta por grupo de objetos
-compat√≠veis.
+… uma f·brica, assim como o Factory Method e geralmente È composto por m˙ltiplos Factory Methods.
+Visa agrupar famÌlias de produtos compatÌveis criando uma f·brica concreta por grupo de objetos
+compatÌveis.
 
-Separa o c√≥digo que cria do c√≥digo que usa os objetos (SRP).
+Separa o cÛdigo que cria do cÛdigo que usa os objetos (SRP).
 
 
 APLICABILIDADE:
-	- Usar quando um sistema √© independente de como seus produtos s√£o criados, compostos ou re-
+	- Usar quando um sistema È independente de como seus produtos s„o criados, compostos ou re-
 	presentados.
-	- Usar quando o sistema deve ser configurado com uma ou mais fam√≠lias de produtos.
-	- Usar quando uma fam√≠lia de produtos relacionados √© projetada para ser usada junta, e voc√™-
+	- Usar quando o sistema deve ser configurado com uma ou mais famÌlias de produtos.
+	- Usar quando uma famÌlia de produtos relacionados È projetada para ser usada junta, e vocÍ-
 	quer garantir isso.
-	- Usar quando voc√™ quer fornecer uma biblioteca de produtos, mas quer revelar apenas suas
-	interfaces, n√£o suas implementa√ß√µes concretas.
+	- Usar quando vocÍ quer fornecer uma biblioteca de produtos, mas quer revelar apenas suas
+	interfaces, n„o suas implementaÁıes concretas.
 
-================== CONSEQU√äNCIAS
+================== CONSEQU NCIAS
 
-Benef√≠cios:
-	- Produtos sempre s√£o compat√≠veis entre si.
-	- Aplica o Open/Closed Principle, c√≥digo aberto a extens√£o.
-	- Aplica o Single Responsibility Principle, separa c√≥digo que cria do que usa o objeto.
+BenefÌcios:
+	- Produtos sempre s„o compatÌveis entre si.
+	- Aplica o Open/Closed Principle, cÛdigo aberto a extens„o.
+	- Aplica o Single Responsibility Principle, separa cÛdigo que cria do que usa o objeto.
 
-Malef√≠cios:
-	- Maior complexidade devido √† cria√ß√£o de m√∫ltiplas interfaces e classes concretas.
+MalefÌcios:
+	- Maior complexidade devido ‡ criaÁ„o de m˙ltiplas interfaces e classes concretas.
 
 ================== IMPORTANTE
-Uma factory √© um recurso que entrega 1 PRODUTO, sendo esse produto variado conforme a necessidade.
-	(PRODUTO = PagamentoBR [Pix, Cart√£o, Boleto])))
+Uma factory È um recurso que entrega 1 PRODUTO, sendo esse produto variado conforme a necessidade.
+	(PRODUTO = PagamentoBR [Pix, Cart„o, Boleto])))
 
-Se no meu cen√°rio preciso tamb√©m entregar outro PRODUTO, continua sendo factory, mas duas factories
-diferentes no mesmo projeto. Sem rela√ß√£o familiar.
+Se no meu cen·rio preciso tambÈm entregar outro PRODUTO, continua sendo factory, mas duas factories
+diferentes no mesmo projeto. Sem relaÁ„o familiar.
 	(PRODUTO = PagamentoUsa [Paypal, CreditCard]).
 
-No Abstract Factory, o foco √© entregar FAM√çLIAS de produtos relacionados, ent√£o se eu preciso entregar 
-um CONJUNTO de PRODUTOS relacionados, a√≠ sim √© o caso de usar Abstract Factory.
+No Abstract Factory, o foco È entregar FAMÕLIAS de produtos relacionados, ent„o se eu preciso entregar 
+um CONJUNTO de PRODUTOS relacionados, aÌ sim È o caso de usar Abstract Factory.
 	(
 		PRODUTO1 {
 			PAGAMENTO [PagamentoBR ou PagamentoUSA]

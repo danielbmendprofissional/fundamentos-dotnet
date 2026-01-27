@@ -12,17 +12,29 @@ Ele age como um intermediário, permitindo que você adicione funcionalidade adici
 como controle de acesso, cache ou registro, sem modificar o objeto original.
 
 Tem várias variações, incluindo:
+	***************************************************************************************
+							Controla a Criação (preguiça).
+
 	- Proxy Virtual: controla o acesso a um objeto caro, criando-o apenas quando necessário.
 	Muitas vezes usado para carregamento tardio (lazy loading)/cache.
+	***************************************************************************************
+							Controla a Distância (integração).
 
 	- Proxy Remoto: representa um objeto localizado em um endereço diferente (por exemplo, 
 	em outro servidor ou no mesmo servidor, mas subsistema fora do meu código).
 
+	***************************************************************************************
+							Controla a Permissão (segurança).
+
 	- Proxy de Proteção: controla o acesso a um objeto com base nas permissões do 
 	usuário.
+	***************************************************************************************
+							
 
 	- Proxy Inteligente: adiciona funcionalidade extra ao objeto original, para saber quando
 	e como executar certas ações.
+	***************************************************************************************
+							Controla a Repetição (performance).	
 
 	- Proxy de Cache: armazena em cache os resultados de operações caras para melhorar 
 	o desempenho.
