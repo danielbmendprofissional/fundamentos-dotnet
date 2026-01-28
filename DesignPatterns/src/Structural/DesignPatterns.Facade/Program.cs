@@ -4,7 +4,7 @@ using DesignPatterns.Facade.Solution.Facade;
 using DesignPatterns.Facade.Solution.Service;
 using Microsoft.Extensions.DependencyInjection;
 
-using pain = DesignPatterns.Facade.Pain; ;
+using pain = DesignPatterns.Facade.Pain;
 
 // Controller needs to know too much... This is a bad thing
 // much trash
@@ -27,14 +27,14 @@ serviceRuim.FinalizarVenda("Playstation 5", 4500.00m);
 
 var services2 = new ServiceCollection();
 
-// 1. O Console só diz: "Quero o módulo de venda"
-services.AddVendaModule();
-var provider2 = services.BuildServiceProvider();
+// 1. The Console only says: "I want the sales module"
+services2.AddVendaModule();
+var provider2 = services2.BuildServiceProvider();
 
-// --- EXECUÇÃO ---
+// --- EXECUTION ---
 
-// 2. O Console pede apenas a Fachada
-var venda = provider.GetRequiredService<IOrdemCompraService>();
+// 2. The Console asks only for the Facade
+var venda = provider2.GetRequiredService<IOrdemCompraService>();
 
-// 3. Uma única chamada resolve tudo
+// 3. A single call resolves everything
 venda.ExecutarCompraFluxoSimples("Notebook Gamer", 8000.00m);

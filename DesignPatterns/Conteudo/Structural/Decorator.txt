@@ -1,23 +1,49 @@
 ======================================= DESIGN PATTERNS =======================================
 
-======================================= STRUCTURAL 
-================== ADAPTER
+======================================= STRUCTURAL
+================== DECORATOR
 
-SOLID TRABALHADO: ...
+SOLID PRINCIPLE:
+	- OCP (Open-Closed Principle)
 
-INTENÇÃO OFICIAL:
+OFFICIAL INTENT: 
+	- The primary intent is to attach additional responsibilities to an object dynamically. It 
+	provides a flexible alternative to subclassing for extending functionality by creating a 
+	WRAPPER around the original object.
 
+APPLICABILITY:
+	- When you need to add or remove responsibilities from individual objects at runtime without
+	affecting other objects.
 
+	- When extending a class via inheritance is impractical or impossible (e.g., "Class Explosion"
+	where you'd need dozens of subclasses for every combination of features).
 
-APLICABILIDADE:
-	- 
+	- When you want to add behavior like Logging, Caching, Encryption, or Validation to a service 
+	without bloating the core logic.
 
-================== CONSEQUÊNCIAS
+================== CONSEQUENCES
 
-Benefícios:
-	- 
+BENEFITS:
+	- Greater flexibility than static inheritance: Behaviors are added at runtime rather than being 
+	hard-coded into the class hierarchy.
 
-Malefícios:
-	- 
+	- Single Responsibility Principle (SRP): You can divide a monolithic class that has many behaviors
+	into several smaller classes (decorators) that each focus on one task.
 
-================== IMPORTANTE
+	- Infinite stacking: You can wrap a decorator with another decorator (the "onion" effect) to combine 
+	multiple features.
+
+DRAWBACKS:
+	- Small objects clutter: The system can end up with many tiny objects that look similar, making 
+	debugging or "stepping into" the code tedious.
+
+	- Initialization complexity: Setting up the "stack" (the layers of the onion) can be complex if you 
+	aren't using a tool like Scrutor or a proper DI container.
+
+Order dependency: The sequence in which you wrap objects matters significantly (e.g., Cache before Encryption vs. Encryption before Cache).
+
+================== IMPORTANT
+
+The Decorator must implement the same interface as the object it is wrapping. This ensures that the client
+code never knows it is talking to a "fake" or "wrapped" object; it just sees the interface it expects. 
+Unlike a Proxy (which controls access), the Decorator focuses on adding new behavior.

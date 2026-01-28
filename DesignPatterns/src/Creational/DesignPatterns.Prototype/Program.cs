@@ -8,3 +8,5 @@ var pedido = new PedidoPrototype
 };
 
 var copia = pedido.Clone() as PedidoPrototype;
+
+Console.WriteLine($"Pedido Original: {pedido}");

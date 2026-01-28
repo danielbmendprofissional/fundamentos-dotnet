@@ -11,46 +11,46 @@ using Microsoft.Extensions.DependencyInjection;
 using DesignPatterns.Proxy.Remote;
 
 // ====================================== VIRTUAL ======================================
-Console.WriteLine("Iniciando Dashboard...");
+Console.WriteLine("Starting Dashboard...");
 
-// Objeto criado, mas a memória está limpa e o sistema está rápido.
+// Object created, but memory is clean and the system is fast.
 IRelatorio relatorio = new RelatorioProxy();
 
-Console.WriteLine("Deseja ver o relatório agora? (S/N)");
-if (Console.ReadKey().Key == ConsoleKey.S)
+Console.WriteLine("Do you want to see the report now? (Y/N)");
+if (Console.ReadKey().Key == ConsoleKey.Y)
 {
-    relatorio.Exibir(); // A lentidão só acontece aqui.
+    relatorio.Exibir(); // The slowness only happens here.
 }
 
-// ====================================== PROTEÇÃO ======================================
+// ====================================== PROTECTION ======================================
 
-// At Production code, we always use Interfaces to refer to the services, so the Client is juts
+// At Production code, we always use Interfaces to refer to the services, so the Client is just
 // consuming IProntuarioService, he never knows if it's a Proxy or the Real Service.
 
 // --- SETUP ---
 var repo = new ProntuarioRepository();
-// A Service Real precisa do repo
+// Real Service needs the repo
 var serviceReal = new ProntuarioServiceReal(repo);
 
-// --- CENÁRIO 1: Dr. João (ID 1) tenta deletar o SEU prontuário (55) ---
-Console.WriteLine("CENÁRIO 1: Dr. João acessando seu próprio dado.");
+// --- SCENARIO 1: Dr. João (ID 1) tries to delete HIS OWN record (55) ---
+Console.WriteLine("SCENARIO 1: Dr. João accessing his own data.");
 var proxyJoao = new ProntuarioProxy(serviceReal, repo, 1);
 proxyJoao.DeletarProntuario(55);
 
 Console.WriteLine("\n--------------------------------------------\n");
 
-// --- CENÁRIO 2: Dr. João (ID 1) tenta deletar o prontuário do Dr. Rodrigo (99) ---
-Console.WriteLine("CENÁRIO 2: Dr. João tentando acessar dado de outro médico.");
+// --- SCENARIO 2: Dr. João (ID 1) tries to delete Dr. Rodrigo's record (99) ---
+Console.WriteLine("SCENARIO 2: Dr. João trying to access another doctor's data.");
 var proxyInvasor = new ProntuarioProxy(serviceReal, repo, 1);
 proxyInvasor.DeletarProntuario(99);
 
 // ======================================== CACHE ========================================
 
-// 1. Configurando o Container de DI (O "Cérebro" da aplicação)
+// 1. Configuring the DI Container (The application's "Brain")
 var services = new ServiceCollection();
-services.AddMemoryCache(); // Importante: Ativa o IMemoryCache da Microsoft
+services.AddMemoryCache(); // Important: Activates Microsoft's IMemoryCache
 
-// 2. Registro do Proxy (Como fizemos na ServiceExtensions)
+// 2. Proxy Registration (As we did in ServiceExtensions)
 services.AddScoped<CotacaoServiceReal>();
 services.AddScoped<ICotacaoService>(provider => {
     var real = provider.GetRequiredService<CotacaoServiceReal>();
@@ -61,19 +61,19 @@ services.AddScoped<ICotacaoService>(provider => {
 var serviceProvider = services.BuildServiceProvider();
 var proxy = serviceProvider.GetRequiredService<ICotacaoService>();
 
-// --- TESTE DE FOGO ---
+// --- ACID TEST ---
 
-Console.WriteLine("--- PRIMEIRA CHAMADA (Vai demorar) ---");
-Console.WriteLine($"Resultado: {proxy.ObterPrecoDolar()}");
+Console.WriteLine("--- FIRST CALL (Will be slow) ---");
+Console.WriteLine($"Result: {proxy.ObterPrecoDolar()}");
 
-Console.WriteLine("\n--- SEGUNDA CHAMADA (Instantânea - Cache ativo) ---");
-Console.WriteLine($"Resultado: {proxy.ObterPrecoDolar()}");
+Console.WriteLine("\n--- SECOND CALL (Instant - Cache active) ---");
+Console.WriteLine($"Result: {proxy.ObterPrecoDolar()}");
 
-Console.WriteLine("\n--- AGUARDANDO 11 SEGUNDOS PARA EXPIRAR... ---");
+Console.WriteLine("\n--- WAITING 11 SECONDS FOR EXPIRATION... ---");
 Thread.Sleep(11000);
 
-Console.WriteLine("\n--- TERCEIRA CHAMADA (Vai demorar de novo - Cache expirou) ---");
-Console.WriteLine($"Resultado: {proxy.ObterPrecoDolar()}");
+Console.WriteLine("\n--- THIRD CALL (Will be slow again - Cache expired) ---");
+Console.WriteLine($"Result: {proxy.ObterPrecoDolar()}");
 
 
 // ====================================== REMOTE ======================================
@@ -84,4 +84,4 @@ var remoteProvider = remoteServices.BuildServiceProvider();
 var weatherService = remoteProvider.GetRequiredService<IWeatherService>();
 
 var weather = weatherService.GetTemperatureCelsius("London");
-Console.WriteLine($"\nTemperatura em London: {weather} °C");
+Console.WriteLine($"\nTemperature in London: {weather} °C");
