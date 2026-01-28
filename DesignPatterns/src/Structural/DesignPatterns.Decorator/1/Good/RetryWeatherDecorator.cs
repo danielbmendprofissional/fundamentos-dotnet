@@ -10,8 +10,6 @@ namespace DesignPatterns.Decorator.Good
     //On that example of Decorator pattern we are adding retry logic to an existing Weather Service
     //without modifying the original, but wrapping it inside a Decorator class...
     //So now the client continue to use the same Interface, but receives a new object.
-    //Is like a power ranger transforming into a Megazord, maybe...
-    //The power ranger is still there, but now with more power!
     public class RetryWeatherDecorator : IWeatherService
     {
         private readonly IWeatherService _inner;
