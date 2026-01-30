@@ -1,0 +1,39 @@
+=================================================================================
+
+Primeiro precisamos identificar os eixos desse cenário todo, e assim se identifica:
+
+DESCOBRIR OS EIXOS:
+	1 pergunta: "Quais são as variações de funcionalidade ou comportamento que eu 
+				quero oferecer ao usuário?"
+
+		- Controle Básico, Controle com Mute, Controle com Teclado, Controle por Voz, 
+		Controle SmartTv.
+		
+		- Normalmente é aquilo que o cliente interage, podendo haver varias verões.
+
+		O primeiro eixo encontrado, abstração é Controle Remoto.
+
+	2 pergunta: "Eu consigo imaginar uma nova versão desse objeto sem precisar de uma nova
+				tecnologia, e vice-versa?"
+
+		- SIM? Então está ai. Ele pode ser da Samsung, da LG, da Toshiba...
+
+		o segundo eixo encontrado, implementação é Marca.
+
+		Exemplo: Você tem um relatório, ele pode ser relatórioResumido, relatórioDetalhado... 
+		ele pode ser relatórioPDF, relatorioDOCX... (2 eixos -> 
+															1. relatório em seus varíados estilos
+															2. formato )
+
+
+DESCOBRIR FUNÇÃO DOS EIXOS:
+	1 pergunta: "Qual parte do meu cenário é o 'O Quê' (o objeto em si) e qual parte 
+	é o 'Como' (a plataforma ou meio)?"
+
+		- O "O Quê" (Abstração): É o conceito de alto nível. (O controle, o relatório,
+		a mensagem, a forma geométrica). É o objeto que está na sua mão. "Eu farei um 
+		relatório detalhado!".
+
+		- O "Como" (Implementação): É o detalhe técnico ou o driver. (A marca da TV, o
+		formato do arquivo, o protocolo de rede, a API gráfica). ele só tem uma ordem técnica 
+		e executa. "Farei esse relatório X no formato PDF".

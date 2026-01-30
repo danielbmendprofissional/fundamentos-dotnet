@@ -3,21 +3,50 @@
 ======================================= STRUCTURAL 
 ================== ADAPTER
 
-SOLID TRABALHADO: ...
+SOLID TRABALHADO: OCP e SRP
 
 INTENÇÃO OFICIAL:
+	- Desacoplar uma abstração da sua implementação, de modo que as duas possam varias e evoluir
+	independentemente. Sendo a abstração um código de alto nível e a implementação um código de
+	alto nível.
 
+	- Abstração nesse contexto é quem geralmente delega ações para outro objeto.
 
+	- Implementação nesse contexto é o código que realmente faz o trabalho.
 
 APLICABILIDADE:
-	- 
-
+	- Quando você souber que sua estrutura terá abstrações (alto nível) e implemmentações dessas
+	abstrações (baixo nível) que possam variar de maneira independente.
+	
+	- Quando você souber que o Adapter poderia ser aplicado na estrutura antes de desenvolver (já
+	conhecendo previamente).
+	
+	- Quando você quiser dividir uma classe que possa ter diversas variantes (Como em produtos e suas
+	variações de cores: CanetaAzul, CanetaVermelha, CamisaAzul, CamisaVermelha).
+	
+	- Quando você quer trocar as implementações em tempo de execução.
+	 
 ================== CONSEQUÊNCIAS
 
 Benefícios:
-	- 
+	- Desacopla o código da abstração do código da implementação (SRP).
+
+	- Implementa o OCP ao permitir novas abstrações e/ou implementações para código existente.
+
+	- Tem as mesmas vantagens do Adapter.
 
 Malefícios:
-	- 
+	- Aumenta a complexidade da aplicação quando implementado em locais incorretos.
 
 ================== IMPORTANTE
+EIXO 1 -> Abstração
+EIXO 2 -> Implementação
+
+A questão é encontrar os 2 eixos no seu contexto
+
+SEGUE O EXEMPLO:
+
+Tenho no meu eixo1 o CONTROLE, posso ter Controle normal, Controle SmartTV, Controle Gamer...
+Tenho no meu eixo2 a marca, posso ter Samsumg, Apple, Lg, Toshiba,....
+
+Cada eixo pode ir aumentando sem avisar e existir sem depender um do outro.

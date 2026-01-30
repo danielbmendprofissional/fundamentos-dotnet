@@ -1,0 +1,14 @@
+=================================================================================
+
+Você tem uma classe chamada, Remote Control que é a sua "base",  toda class do tipo
+controle remoto deve herdar dela.
+
+No ínicio você faz somente para dois tipos (LG e Samsung), ok é pouco e mesmo se
+aparecem mais é somente uma hierarquia de primeiro nível...
+
+Agora imagine só que a partir de amanhã você terá dentro de cada marca um novo tipo
+de controle opcional, com o botão de mute, assim precisa criar duas novas classes.
+
+SamsungRemoteWithMute + LgRemoteWithMute, ficando essas duas + LgRemote e SamsungRemote
+
+Imagine só isso com 10 marcas, 10 estilos diferentes de controles remotos (100 classes!)
