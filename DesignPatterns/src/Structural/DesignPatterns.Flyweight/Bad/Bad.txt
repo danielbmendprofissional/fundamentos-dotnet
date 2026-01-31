@@ -1,0 +1,7 @@
+=================================================================================
+
+Você tem um objeto Item que possui dentro dele algumas propriedades pesadas, até
+ai tudo bem, acontece...
+
+Porém imagina um cenário em que você precisa criar/executar esse objeto mil vezes?
+Sua RAM vai para o saco.

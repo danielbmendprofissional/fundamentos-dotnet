@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DesignPatterns.Flyweight": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

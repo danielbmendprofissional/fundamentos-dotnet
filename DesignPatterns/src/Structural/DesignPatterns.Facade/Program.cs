@@ -1,4 +1,4 @@
-﻿// =============================================== PAIN ===============================================
+﻿// =============================================== BAD ===============================================
 using DesignPatterns.Facade.Solution;
 using DesignPatterns.Facade.Solution.Facade;
 using DesignPatterns.Facade.Solution.Service;
@@ -23,7 +23,7 @@ var serviceRuim = provider.GetRequiredService<pain.OrdemCompraService>();
 serviceRuim.FinalizarVenda("Playstation 5", 4500.00m);
 
 
-// ============================================== SOLUTION ===============================================
+// =============================================== GOOD ===============================================
 
 var services2 = new ServiceCollection();
 
