@@ -1,0 +1,25 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= BEHAVIORAL
+================== TEMPLATE METHOD
+
+SOLID TRABALHADO:
+
+INTENÇÃO OFICIAL:
+	- 
+
+SOBRE:
+	- 
+
+APLICABILIDADE:
+	- 
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- 
+
+Malefícios:
+	- 
+
+================== IMPORTANTE

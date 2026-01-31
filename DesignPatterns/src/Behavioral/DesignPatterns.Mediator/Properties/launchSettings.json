@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DesignPatterns.Mediator": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

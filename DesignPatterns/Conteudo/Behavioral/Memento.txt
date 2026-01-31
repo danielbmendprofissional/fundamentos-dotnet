@@ -1,0 +1,25 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= BEHAVIORAL
+================== MEMENTO
+
+SOLID TRABALHADO:
+
+INTENÇÃO OFICIAL:
+	- 
+
+SOBRE:
+	- 
+
+APLICABILIDADE:
+	- 
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- 
+
+Malefícios:
+	- 
+
+================== IMPORTANTE

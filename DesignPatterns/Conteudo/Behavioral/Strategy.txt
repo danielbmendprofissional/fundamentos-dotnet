@@ -1,0 +1,25 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= BEHAVIORAL
+================== STRATEGY
+
+SOLID TRABALHADO:
+
+INTENÇÃO OFICIAL:
+	- 
+
+SOBRE:
+	- 
+
+APLICABILIDADE:
+	- 
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- 
+
+Malefícios:
+	- 
+
+================== IMPORTANTE
