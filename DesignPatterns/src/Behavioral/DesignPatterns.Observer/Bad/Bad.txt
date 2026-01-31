@@ -1,1 +1,9 @@
 =================================================================================
+Imagine uma classe Estoque e dentro dela você tem as operações relacionadas a ele,
+adicionar novo produto, atualizar estoque, etc... 
+
+Sempre que a operação de atualizar por exemplo for executada, outros serviços pre-
+cisam ficar sabendo, Marketing e Compras por exemplo.
+
+Atualmente quem faz todo esse controle é o estoque, ele mesmo quem chama os servi-
+ços, imagine se são 30 serviços, o Estoque precisando conhecer e chamar isso tudo?
