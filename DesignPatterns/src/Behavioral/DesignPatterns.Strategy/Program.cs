@@ -1,5 +1,4 @@
-﻿using DesignPatterns.Strategy.Bad;
-using DesignPatterns.Strategy.Good;
+﻿using DesignPatterns.Strategy.Good;
 using Microsoft.Extensions.DependencyInjection;
 using Bad = DesignPatterns.Strategy.Bad;
 using Gof = DesignPatterns.Strategy.Good.GOF;
@@ -25,7 +24,7 @@ var serviceProvider = new ServiceCollection()
     .BuildServiceProvider();
 
 // EXEMPLO OPCIONAL: Imagine que este dado venha de uma escolha do usuário na tela.
-TipoFrete tipoEscolhidoPeloUsuario = TipoFrete.Expresso;
+Bad.TipoFrete tipoEscolhidoPeloUsuario = Bad.TipoFrete.Expresso;
 
 // OBRIGATORIEDADE: Usamos 'GetRequiredKeyedService' para pedir a implementação 
 // que foi amarrada àquela chave específica no registro.

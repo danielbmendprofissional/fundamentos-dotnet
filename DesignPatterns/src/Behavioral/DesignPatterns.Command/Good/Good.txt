@@ -1,1 +1,6 @@
 =================================================================================
+Agora aplicamos o principio de SRP, o client não precisa saber mais um monte de
+coisa, executar um monte de coisa, ele só conhece a mensagem e manda ela, o resto
+é com outra pessoa.
+
+Agora a chamada de método é um objeto que pode ser persistido, logado ou enfileirado.

@@ -1,1 +1,11 @@
 =================================================================================
+Nesse Pattern especifico usei esse VendaProcessor para "ficar parecido com uma API",
+existem outros exemplos coesos para console application, porém mostrando como se 
+fosse uma controller de um service monolitico fica muito mais facil identificar o
+problema.
+
+Veja só, é uma Controller que, a lógica de negócio, a orquestração e a execução
+estão todas "socadas" no mesmo lugar.
+
+O método faz tudo: valida, baixa estoque, gera nota, envia e-mail. Se algo falhar
+no meio, você não tem como "desfazer" de forma padronizada.
