@@ -1,1 +1,12 @@
 =================================================================================
+Nesse cenário aqui temos um pedido que precisa calcular o tipo frete, mas isso
+serve para qualquer exemplo, acredito que esse padrão "resolve" um dos problemas
+mais comuns no mundo inicial da programação, o exagero de ifs e switch.
+
+O primeiro problema no cenário é o acúmulo de responsabilidade, pedido precisa saber
+e fazer muitas coisas, ferindo o SRP.
+
+O segundo problema mesmo que pareça não é os IFs, nem sempre IF é algo ruim, depende
+do contexto, nesse aqui é ruim, pois fere o príncipio de OCP, a classe está utilizando
+para cada possibilidade uma condicional, imagina se chegarem mais 10? precisará alterar
+a classe já existente adicionando mais 10 condicionais.
