@@ -1,1 +1,24 @@
 =================================================================================
+Nesse exemplo, transformamos a estrutura de dados em um objeto que sabe se 
+"auto-navegar". Ao abstrairmos a forma como percorremos os itens, entregamos ao cliente
+uma interface unificada, independentemente da complexidade interna da coleção.
+
+As soluções trazidas por este padrão são:
+	- Encapsulamento Total: A implementação interna (Array, List ou Árvore) fica protegida,
+	o cliente só conhece a interface do Iterator e não as entranhas da coleção.
+
+	- Abstração da Indexação: O cliente para de se preocupar com tamanhos fixos, contadores (i++) 
+	ou índices, passando apenas a solicitar o "próximo" dado.
+
+	- Respeito ao SRP e OCP: A responsabilidade de iterar é movida para uma classe especializada. 
+	Se a estrutura de dados mudar amanhã, o código do cliente permanece intacto, pois a interface de 
+	consumo é a mesma.
+
+	- Simplificação de Estruturas Complexas: Em cenários de árvore ou grafos, toda a lógica de recursão
+	ou busca em profundidade é encapsulada. O cliente enxerga uma lista linear e simples de consumir.
+
+	- Segurança na Travessia: A coleção garante que a navegação seja segura, gerenciando internamente os 
+	limites e estados, evitando IndexOutOfRangeException ou StackOverflowException no lado do cliente.
+
+	- Padronização da Iteração: Centraliza a forma como os dados são lidos, garantindo que todo o sistema 
+	percorra as coleções de maneira consistente e previsível.
