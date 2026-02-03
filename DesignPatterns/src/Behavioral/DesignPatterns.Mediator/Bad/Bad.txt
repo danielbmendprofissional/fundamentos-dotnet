@@ -1,1 +1,13 @@
 =================================================================================
+Nesse cenário de exemplo o fato de ser ruim se da por alguns motivos:
+
+- Acoplamento desnecessário, CarrinhoBad precisa conhecer os outros dois e ainda
+precisa gerencia-los de certa forma para obter o seu resultado, ferindo o SRP.
+
+- Caso algum dos dois mudar alguma coisa internamente que precise mudar o código
+já existente do carrinho, fere o princípio de OCP.
+
+- Imagina o tamanho dessa classe, o tamanho desse construtor, o tanto de referência
+quando começarem a aparecer outras coisas? Frete, E-mail, CRM.
+
+- Reuso dificil, estão engessados juntos.
