@@ -1,1 +1,13 @@
 =================================================================================
+Imagine um processo de aprovação de desconto ou um sistema de triagem de supote.
+No cenário ruim, uma única classe tem todos os ifs do mundo para decidir quem re-
+solve o problema.
+
+- Violação do SRP: Uma única classe conhece as regras de negócio de todos os car-
+gos da empresa.
+
+- Rigidez de fluxo: Você não consegue mudar a ordem da "corrente" ou pular etapas
+sem reescrever a lógica interna.
+
+- Violação do OCP + Dificuldade de Extensão: Adicionar um novo fluxo exige abrir o código testado e 
+inserir um novo else.
