@@ -1,1 +1,5 @@
 =================================================================================
+Imagine um Editor de Fotos ou um Configurador de Perfil. O objeto tem várias pro-
+priedades privadas que dependem umas das outras. No cenário ruim, para implementar 
+um "Desfazer", o desenvolvedor transforma o objeto em um saco de dados (DTO) e 
+deixa a lógica de histórico espalhada pela UI ou por serviços.

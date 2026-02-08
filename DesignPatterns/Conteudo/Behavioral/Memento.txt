@@ -3,23 +3,39 @@
 ======================================= BEHAVIORAL
 ================== MEMENTO
 
-SOLID TRABALHADO:
+SOLID TRABALHADO: SRP
 
 INTENÇÃO OFICIAL:
-	- 
+	- Sem violar o encapsulamento, captura e externaliza um estado interno de um objeto, de modo
+	que o mesmo possa posteriormente ser restaurado para este estado.
 
 SOBRE:
-	- 
+	- Praticamente todas as aplicações o implementam com a função "undo". 
+	
+	- Desacopla a responsabilidade da classe originadora de tomar conta dos seus backups.
+
+	- Garante o encapsulamento e consistência nos backups.
 
 APLICABILIDADE:
-	- 
+	- Você quer ter a possibilidade de salvar e restaurar o estado atual de um objeto sem violar 
+	o encapsulamento.
+
+	- Você deseja implementar a função de "desfazer" no seu sistema.
+
+	- Você deseja fazer backups de estado de determinadas classes do seu sistema.
 
 ================== CONSEQUÊNCIAS
 
 Benefícios:
-	- 
+	- Desacopla a responsabilidade de tomar conta do backup da classe original.
+
+	- É fácil salvar e restaurar um backup de uma classe.
 
 Malefícios:
-	- 
+	- Quanto mais backups, maior o consumo de memória da sua aplicação
+
+	- As classes zeladoras precisam acompanhar as mudanças nas classes originadoras.
+
+	- Pode ser desafiador garantir o encapsulamento.
 
 ================== IMPORTANTE

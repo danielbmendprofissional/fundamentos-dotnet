@@ -1,1 +1,8 @@
 =================================================================================
+No cenário ideal, o objeto de negócio (Originator) assume a responsabilidade de 
+capturar sua própria essência em um snapshot imutável (Memento). A lógica de como
+o estado é estruturado ou restaurado permanece trancada dentro da entidade, enquanto
+o serviço de histórico (Caretaker) atua apenas como um guarda-volumes agnóstico. 
+Isso garante que o objeto nunca precise expor seus campos privados para o mundo 
+externo, permitindo a funcionalidade de 'Desfazer' sem transformar a regra de 
+negócio em um simples saco de dados.
