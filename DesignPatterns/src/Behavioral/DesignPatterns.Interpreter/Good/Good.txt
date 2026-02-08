@@ -1,1 +1,6 @@
 =================================================================================
+A solução profissional utiliza a infraestrutura de Expression Trees do .NET para
+converter declarações em árvores sintáticas altamente otimizadas. Isso permite que
+a lógica de interpretação seja separada da estrutura da gramática, possibilitando
+que regras dinâmicas sejam compiladas em delegados executáveis, garantindo perfor-
+mance e tipagem forte.

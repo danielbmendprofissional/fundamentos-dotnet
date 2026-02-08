@@ -1,1 +1,5 @@
 =================================================================================
+Para validar uma regra dinâmica, o desenvolvedor utiliza manipulação exaustiva de 
+strings e condicionais encadeadas. O código torna-se uma 'caixa preta' onde qualquer
+alteração na sintaxe da regra exige a reescrita de lógicas complexas de parsing,
+misturando a análise da frase com a execução da regra."
