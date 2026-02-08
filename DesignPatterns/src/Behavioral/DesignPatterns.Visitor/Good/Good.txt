@@ -1,1 +1,9 @@
 =================================================================================
+Com esse padrão o visitor move as operações para fora. A classe Livro só terá um
+método novo: Accept(IVisitor v).
+
+O imposto vai para ImpostoVisitor, PDF vai para ExportacaoPDFVisitor e Excel vai
+para ExportacaoExcelVisitor.
+
+Assim, as classes de domínio voltam a ser puras (POCOs), contendo apenas dados e 
+regras de negócio essencias.

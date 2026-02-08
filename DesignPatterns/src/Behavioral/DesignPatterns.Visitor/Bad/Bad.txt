@@ -1,1 +1,16 @@
 =================================================================================
+Imagine um sistema de E-commerce. Você tem Livro, Eletronico e Alimento. O requi-
+sito inicial era apenas vender. Depois pediram para calcular imposto. Depois pe-
+diram para exportar para PDF. Depois pediram para verificar estoque em um serviço 
+externo.
+
+- Entidades "Suplementadas": Sua classe Livro agora depende de bibliotecas de PDF
+ou regras fiscais. Se você quiser usar a classe Livro em um aplicativo Mobile 
+simples, terá que levar junto toda a bagagem de geração de PDF.
+
+- Dificuldade de Testes: Para testar se o cálculo de imposto está certo, você pre-
+cisa instanciar o objeto completo de domínio.
+
+- Explosão de Métodos: Se amanhã pedirem exportação para Excel, você adiciona 
+GerarExcel() em todas as classes. Se pedirem integração com ERP, adiciona 
+EnviarParaERP(). A classe de domínio vira um "God Object".
