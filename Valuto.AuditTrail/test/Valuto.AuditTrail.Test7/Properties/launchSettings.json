@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Valuto.AuditTrail.Test7": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

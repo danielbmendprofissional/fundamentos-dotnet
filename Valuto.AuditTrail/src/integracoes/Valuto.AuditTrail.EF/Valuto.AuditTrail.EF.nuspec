@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Valuto.AuditTrail.EF</id>
+    <version>1.0.0</version>
+    <authors>Daniel Mendonça</authors>
+    <owners>Valuto-MG</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Biblioteca de Trilha de Auditoria para EF6 com Rabbit.</description>
+    <copyright>Copyright © 2026</copyright>
+    <readme>README.md</readme> <dependencies>
+      <dependency id="EntityFramework" version="6.5.1" />
+    </dependencies>
+  </metadata>
+  
+  <files>
+    <file src="README.md" target="\" />
+    
+    <file src="bin\Release\Valuto.AuditTrail.EF.dll" target="lib\net472" />
+    <file src="bin\Release\Valuto.AuditTrail.Abstractions.dll" target="lib\net472" />
+    <file src="bin\Release\Valuto.AuditTrail.Logic.dll" target="lib\net472" />
+  </files>
+</package>
