@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis.System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
 using Valuto.AuditTrail.Abstractions.Model.Enums.Valuto.AuditTrail.Abstractions.Model.Enums;
@@ -15,37 +16,44 @@ namespace Valuto.AuditTrail.Abstractions.Contracts
         /// <summary>
         /// Obtém o nome da propriedade a partir de um objeto de metadados do EF (Property ou Navigation).
         /// </summary>
-        string GetPropertyName(object metadata);
+        [return: MaybeNull]
+        string? GetPropertyName(object metadata);
 
         /// <summary>
         /// Localiza e retorna a metadata da PrimaryKey de forma tipada.
         /// </summary>
-        object FindPrimaryKey(object typeMetadata);
+        [return: MaybeNull]
+        object? FindPrimaryKey(object typeMetadata);
 
         /// <summary>
         /// Retorna as propriedades (colunas) contidas em um metadado (Key ou ForeignKey).
         /// </summary>
-        IEnumerable GetPropertiesFromMetadata(object metadataContainer);
+        [return: MaybeNull]
+        IEnumerable? GetPropertiesFromMetadata(object metadataContainer);
 
         /// <summary>
         /// Localiza e retorna as ForeignKeys de um tipo de entidade.
         /// </summary>
-        IEnumerable GetForeignKeys(object typeMetadata);
+        [return: MaybeNull]
+        IEnumerable? GetForeignKeys(object typeMetadata);
 
         /// <summary>
         /// Obtém o nome da navegação (Principal ou Dependente) de uma ForeignKey.
         /// </summary>
-        string GetNavigationNameFromForeignKey(object fk);
+        [return: MaybeNull]
+        string? GetNavigationNameFromForeignKey(object fk);
 
         /// <summary>
         /// Obtém o nome da primeira propriedade (coluna) que compõe uma ForeignKey.
         /// </summary>
-        string GetFirstFkPropertyName(object fk);
+        [return: MaybeNull]
+        string? GetFirstFkPropertyName(object fk);
 
         /// <summary>
         /// Busca o atributo <see cref="ValutoAuditableAttribute"/> no tipo, tratando Proxies.
         /// </summary>
-        ValutoAuditableAttribute GetAuditableAttribute(Type type);
+        [return: MaybeNull]
+        ValutoAuditableAttribute? GetAuditableAttribute(Type type);
 
         /// <summary>
         /// Obtém o nome simples da entidade.
@@ -60,7 +68,8 @@ namespace Valuto.AuditTrail.Abstractions.Contracts
         /// <summary>
         /// Limpa e normaliza o nome da entidade a partir de metadados brutos.
         /// </summary>
-        string GetCleanEntityName(object metadata);
+        [return: MaybeNull]
+        string? GetCleanEntityName(object metadata);
 
         /// <summary>
         /// Recupera metadados de navegações do tipo coleção (1:N, N:N).
@@ -82,7 +91,8 @@ namespace Valuto.AuditTrail.Abstractions.Contracts
         /// </summary>
         /// <param name="navEntry">O objeto de entrada (NavigationEntry ou DbMemberEntry).</param>
         /// <returns>O valor da instância (geralmente uma IEnumerable ou objeto POCO).</returns>
-        object GetCurrentValue(object navEntry);
+        [return: MaybeNull]
+        object? GetCurrentValue(object navEntry);
 
         /// <summary>
         /// Verifica se uma navegação foi modificada de forma agnóstica.

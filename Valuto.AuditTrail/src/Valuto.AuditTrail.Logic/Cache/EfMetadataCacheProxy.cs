@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis.System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Valuto.AuditTrail.Abstractions;
+using Valuto.AuditTrail.Abstractions.Commom;
 using Valuto.AuditTrail.Abstractions.Contracts;
 using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
 using Valuto.AuditTrail.Abstractions.Model.Enums.Valuto.AuditTrail.Abstractions.Model.Enums;
@@ -56,35 +58,35 @@ namespace Valuto.AuditTrail.Logic.Cache
             _inner = inner;
         }
 
-        public string GetPropertyName(object metadata) =>
-            metadata == null ? null : _propertyNameCache.GetOrAdd(metadata, m => _inner.GetPropertyName(m));
+        public string? GetPropertyName(object metadata) =>
+            metadata == null ? null : _propertyNameCache.GetOrAdd(metadata, m => _inner.GetPropertyName(m)!);
 
-        public object FindPrimaryKey(object typeMetadata) =>
-            typeMetadata == null ? null : _primaryKeyMetadataCache.GetOrAdd(typeMetadata, t => _inner.FindPrimaryKey(t));
+        public object? FindPrimaryKey(object typeMetadata) =>
+            typeMetadata == null ? null : _primaryKeyMetadataCache.GetOrAdd(typeMetadata, t => _inner.FindPrimaryKey(t)!);
 
-        public IEnumerable GetPropertiesFromMetadata(object metadataContainer) =>
-            metadataContainer == null ? null : _metadataPropertiesCache.GetOrAdd(metadataContainer, m => _inner.GetPropertiesFromMetadata(m));
+        public IEnumerable? GetPropertiesFromMetadata(object metadataContainer) =>
+            metadataContainer == null ? null : _metadataPropertiesCache.GetOrAdd(metadataContainer, m => _inner.GetPropertiesFromMetadata(m)!);
 
-        public IEnumerable GetForeignKeys(object typeMetadata) =>
-            typeMetadata == null ? null : _foreignKeysCache.GetOrAdd(typeMetadata, t => _inner.GetForeignKeys(t));
+        public IEnumerable? GetForeignKeys(object typeMetadata) =>
+            typeMetadata == null ? null : _foreignKeysCache.GetOrAdd(typeMetadata, t => _inner.GetForeignKeys(t)!);
 
-        public string GetNavigationNameFromForeignKey(object fk) =>
-            fk == null ? null : _navNameFromFkCache.GetOrAdd(fk, f => _inner.GetNavigationNameFromForeignKey(f));
+        public string? GetNavigationNameFromForeignKey(object fk) =>
+            fk == null ? null : _navNameFromFkCache.GetOrAdd(fk, f => _inner.GetNavigationNameFromForeignKey(f)!);
 
-        public string GetFirstFkPropertyName(object fk) =>
-            fk == null ? null : _firstFkPropNameCache.GetOrAdd(fk, f => _inner.GetFirstFkPropertyName(f));
+        public string? GetFirstFkPropertyName(object fk) =>
+            fk == null ? null : _firstFkPropNameCache.GetOrAdd(fk, f => _inner.GetFirstFkPropertyName(f)!);
 
-        public ValutoAuditableAttribute GetAuditableAttribute(Type type) =>
-            type == null ? null : _attributeCache.GetOrAdd(type, t => _inner.GetAuditableAttribute(t));
+        public ValutoAuditableAttribute? GetAuditableAttribute(Type type) =>
+            type == null ? null : _attributeCache.GetOrAdd(type, t => _inner.GetAuditableAttribute(t)!);
 
         public string GetEntityName(Type type) =>
-            type == null ? null : _entityNameCache.GetOrAdd(type, t => _inner.GetEntityName(t));
+            type == null ? AuditConstants.Default : _entityNameCache.GetOrAdd(type, t => _inner.GetEntityName(t));
 
         public string GetNamespace(Type type) =>
-            type == null ? null : _namespaceCache.GetOrAdd(type, t => _inner.GetNamespace(t));
+            type == null ? AuditConstants.Default : _namespaceCache.GetOrAdd(type, t => _inner.GetNamespace(t));
 
-        public string GetCleanEntityName(object metadata) =>
-            metadata == null ? null : _cleanEntityNameCache.GetOrAdd(metadata, m => _inner.GetCleanEntityName(m));
+        public string? GetCleanEntityName(object metadata) =>
+            metadata == null ? null : _cleanEntityNameCache.GetOrAdd(metadata, m => _inner.GetCleanEntityName(m)!);
 
         public IEnumerable<object> GetCollectionsMetadata(object typeMetadata) =>
             typeMetadata == null ? Enumerable.Empty<object>() : _collectionsMetadataCache.GetOrAdd(typeMetadata, t => _inner.GetCollectionsMetadata(t));
@@ -95,7 +97,7 @@ namespace Valuto.AuditTrail.Logic.Cache
         public AuditEntryState GetEntityState(IAuditTracker tracker, object entity) =>
             _inner.GetEntityState(tracker, entity);
 
-        public object GetCurrentValue(object navEntry) => _inner.GetCurrentValue(navEntry);
+        public object? GetCurrentValue(object navEntry) => _inner.GetCurrentValue(navEntry);
 
         public bool IsNavigationModified(object navEntry) => _inner.IsNavigationModified(navEntry);
     }

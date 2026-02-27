@@ -19,8 +19,8 @@ namespace Valuto.AuditTrail.Logic.Paralel
         private readonly int _batchSize;
         private readonly ConcurrentBag<Task> _activeTasks = new ConcurrentBag<Task>();
 
-        private CancellationTokenSource _cts;
-        private Task _executingTask;
+        private CancellationTokenSource? _cts = null;
+        private Task? _executingTask = null;
 
         public AuditDispatcherService(
             IAuditBuffer<T> buffer,
@@ -79,7 +79,7 @@ namespace Valuto.AuditTrail.Logic.Paralel
 
             try
             {
-                await Task.WhenAll(_executingTask, Task.WhenAll(_activeTasks)).ConfigureAwait(false);
+                await Task.WhenAll(_executingTask!, Task.WhenAll(_activeTasks)).ConfigureAwait(false);
             }
             catch { }
         }
@@ -90,7 +90,7 @@ namespace Valuto.AuditTrail.Logic.Paralel
             _maxParallelism?.Dispose();
         }
 
-        private async Task<List<T>> BuildBatchAsync(T firstItem)
+        private Task<List<T>> BuildBatchAsync(T firstItem)
         {
             var batch = new List<T> { firstItem };
             while (batch.Count < _batchSize && _buffer.TryRead(out var extraItem))
@@ -98,7 +98,7 @@ namespace Valuto.AuditTrail.Logic.Paralel
                 batch.Add(extraItem);
             }
 
-            return batch;
+            return Task.FromResult(batch);
         }
 
         private void CleanCompletedTasks()

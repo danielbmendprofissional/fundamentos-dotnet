@@ -7,6 +7,8 @@
     <Nullable>enable</Nullable>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
+	<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+	<Nullable>disable</Nullable>	  
   </PropertyGroup>
 
 	<ItemGroup>

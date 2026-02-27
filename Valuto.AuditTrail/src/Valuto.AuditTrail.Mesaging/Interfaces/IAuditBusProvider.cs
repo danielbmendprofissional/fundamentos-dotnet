@@ -2,7 +2,7 @@
 
 namespace Valuto.AuditTrail.Mesaging.Interfaces
 {
-    internal interface IAuditBusProvider
+    public interface IAuditBusProvider
     {
         IBusControl GetBus();
     }

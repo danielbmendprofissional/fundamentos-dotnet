@@ -17,19 +17,19 @@ namespace Valuto.AuditTrail.EFCore.Adapters
 {
     internal class EfMetadataAdapter : IEfMetadataAdapter
     {
-        public string GetPropertyName(object metadata) =>
+        public string? GetPropertyName(object metadata) =>
 #if NETCOREAPP3_1
             metadata is IPropertyBase prop ? prop.Name : metadata?.ToString();
 #else
             metadata is IReadOnlyPropertyBase prop ? prop.Name : metadata?.ToString();
 #endif
-        public object FindPrimaryKey(object typeMetadata) =>
+        public object? FindPrimaryKey(object typeMetadata) =>
 #if NETCOREAPP3_1
             typeMetadata is IEntityType entity ? entity.FindPrimaryKey() : null;
 #else
             typeMetadata is IReadOnlyEntityType entity ? entity.FindPrimaryKey() : null;
 #endif
-        public IEnumerable GetPropertiesFromMetadata(object metadataContainer)
+        public IEnumerable? GetPropertiesFromMetadata(object metadataContainer)
         {
 #if NETCOREAPP3_1
             if (metadataContainer is IKey key) return key.Properties;
@@ -45,14 +45,14 @@ namespace Valuto.AuditTrail.EFCore.Adapters
 
         }
 
-        public IEnumerable GetForeignKeys(object typeMetadata) =>
+        public IEnumerable? GetForeignKeys(object typeMetadata) =>
 #if NETCOREAPP3_1
             typeMetadata is IEntityType entity ? entity.GetForeignKeys() : null;
 #else
             typeMetadata is IReadOnlyEntityType entity ? entity.GetForeignKeys() : null;
 #endif
 
-        public string GetNavigationNameFromForeignKey(object fk) =>
+        public string? GetNavigationNameFromForeignKey(object fk) =>
 #if NETCOREAPP3_1
             fk is IForeignKey foreignKey
                 ? (foreignKey.DependentToPrincipal?.Name ?? foreignKey.PrincipalToDependent?.Name)
@@ -63,25 +63,25 @@ namespace Valuto.AuditTrail.EFCore.Adapters
                 : null;
 #endif
 
-        public string GetFirstFkPropertyName(object fk) =>
+        public string? GetFirstFkPropertyName(object fk) =>
 #if NETCOREAPP3_1
             fk is IForeignKey foreignKey ? foreignKey.Properties.FirstOrDefault()?.Name : null;
 #else
             fk is IReadOnlyForeignKey foreignKey ? foreignKey.Properties.FirstOrDefault()?.Name : null;
 #endif
 
-        public ValutoAuditableAttribute GetAuditableAttribute(Type type) =>
-            GetActualType(type).GetCustomAttribute<ValutoAuditableAttribute>(true);
+        public ValutoAuditableAttribute? GetAuditableAttribute(Type type) =>
+            GetActualType(type)?.GetCustomAttribute<ValutoAuditableAttribute>(true);
 
-        public string GetEntityName(Type type) => GetActualType(type).Name;
+        public string GetEntityName(Type type) => GetActualType(type)?.Name ?? AuditConstants.Default;
 
-        public string GetNamespace(Type type) => GetActualType(type).Namespace ?? AuditConstants.Default;
+        public string GetNamespace(Type type) => GetActualType(type)?.Namespace ?? AuditConstants.Default;
 
-        public string GetCleanEntityName(object metadata) =>
+        public string? GetCleanEntityName(object metadata) =>
 #if NETCOREAPP3_1
-            metadata is IEntityType entity ? entity.ClrType.Name : metadata?.ToString().Split('.').Last();
+            metadata is IEntityType entity ? entity.ClrType.Name : metadata?.ToString()?.Split('.').Last();
 #else
-            metadata is IReadOnlyEntityType entity ? entity.ClrType.Name : metadata?.ToString().Split('.').Last();
+            metadata is IReadOnlyEntityType entity ? entity.ClrType.Name : metadata?.ToString()?.Split('.').Last();
 #endif
 
         public IEnumerable<object> GetCollectionsMetadata(object typeMetadata) =>
@@ -102,11 +102,11 @@ namespace Valuto.AuditTrail.EFCore.Adapters
         public AuditEntryState GetEntityState(IAuditTracker tracker, object entity) =>
             tracker.Entries().FirstOrDefault(e => e.Entity == entity)?.State ?? AuditEntryState.Unchanged;
 
-        private Type GetActualType(Type type) =>
-            (type.FullName.StartsWith(AuditConstants.Proxies) || type.FullName.StartsWith(AuditConstants.EFProxies))
+        private Type? GetActualType(Type type) =>
+            (type.FullName != null && (type.FullName.StartsWith(AuditConstants.Proxies) || type.FullName.StartsWith(AuditConstants.EFProxies)))
                 ? type.BaseType : type;
 
-        public object GetCurrentValue(object navEntry)
+        public object? GetCurrentValue(object navEntry)
         {
             if (navEntry is Microsoft.EntityFrameworkCore.ChangeTracking.NavigationEntry entry)
                 return entry.CurrentValue;

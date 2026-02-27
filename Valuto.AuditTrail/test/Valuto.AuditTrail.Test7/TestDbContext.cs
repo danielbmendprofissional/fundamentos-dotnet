@@ -38,6 +38,7 @@ namespace Valuto.AuditTrail.Test7
         protected override async Task OnBeforeSaveChangesAsync()
         {
             Console.WriteLine("passando pelo saveChanges do user");
+            await Task.CompletedTask;
         }
 
     }

@@ -8,9 +8,9 @@ using Valuto.AuditTrail.Mesaging.Options;
 
 namespace Valuto.AuditTrail.Mesaging
 {
-    internal static class ServiceExtensions
+    public static class ServiceExtensions
     {
-        internal static IServiceCollection AddAuditMessaging(this IServiceCollection services)
+        public static IServiceCollection AddAuditMessaging(this IServiceCollection services)
         {
             var options = new AuditOptions();
             services.AddSingleton(options);

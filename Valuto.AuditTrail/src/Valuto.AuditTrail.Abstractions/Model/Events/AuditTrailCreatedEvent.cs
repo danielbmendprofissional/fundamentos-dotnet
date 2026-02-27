@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis.System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using Valuto.AuditTrail.Abstractions.Model.Enums;
 
@@ -46,37 +47,43 @@ namespace Valuto.AuditTrail.Abstractions.Model.Events
         /// Valor da chave primária do registro auditado.
         /// </summary>
         [DataMember(Name = "PrimaryKey")]
-        public string PrimaryKey { get; set; }
+        [AllowNull]
+        public string? PrimaryKey { get; set; }
 
         /// <summary>
         /// Nome da entidade raiz em cenários de grafos de objetos.
         /// </summary>
         [DataMember(Name = "Root")]
-        public string Root { get; set; }
+        [AllowNull]
+        public string? Root { get; set; }
 
         /// <summary>
         /// Identificador da entidade raiz.
         /// </summary>
         [DataMember(Name = "RootId")]
-        public string RootId { get; set; }
+        [AllowNull]
+        public string? RootId { get; set; }
 
         /// <summary>
         /// Dicionário contendo os valores originais antes da alteração.
         /// </summary>
         [DataMember(Name = "OldValues")]
-        public Dictionary<string, object> OldValues { get; set; }
+        [AllowNull]
+        public Dictionary<string, object>? OldValues { get; set; }
 
         /// <summary>
         /// Dicionário contendo os novos valores após a alteração.
         /// </summary>
         [DataMember(Name = "NewValues")]
-        public Dictionary<string, object> NewValues { get; set; }
+        [AllowNull]
+        public Dictionary<string, object>? NewValues { get; set; }
 
         /// <summary>
         /// Lista das propriedades que foram efetivamente alteradas.
         /// </summary>
         [DataMember(Name = "ChangedColumns")]
-        public List<string> ChangedColumns { get; set; }
+        [AllowNull]
+        public List<string>? ChangedColumns { get; set; }
 
         /// <summary>
         /// Tipo da operação de auditoria (Create, Update, Delete).

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis.System.Diagnostics.CodeAnalysis;
 using Valuto.AuditTrail.Abstractions.Commom;
 
 namespace Valuto.AuditTrail.Abstractions.Model.Events
@@ -12,22 +13,26 @@ namespace Valuto.AuditTrail.Abstractions.Model.Events
         /// <summary>
         /// Descrição detalhada da mensagem de log ou do erro ocorrido.
         /// </summary>
-        public string Mensagem { get; set; }
+        [AllowNull]
+        public string? Mensagem { get; set; }
 
         /// <summary>
         /// Rastro da pilha de execução (Stack Trace) em caso de exceções, facilitando o debug.
         /// </summary>
-        public string StackTrace { get; set; }
+        [AllowNull]
+        public string? StackTrace { get; set; }
 
         /// <summary>
         /// Nome do sistema ou aplicação que gerou o log.
         /// </summary>
-        public string SistemaName { get; set; }
+        [AllowNull]
+        public string? SistemaName { get; set; }
 
         /// <summary>
         /// Contexto de negócio relacionado ao evento (ex: Nome da Tabela ou Classe).
         /// </summary>
-        public string Contexto { get; set; }
+        [AllowNull]
+        public string? Contexto { get; set; }
 
         /// <summary>
         /// Data e hora da ocorrência em formato UTC.
@@ -46,6 +51,10 @@ namespace Valuto.AuditTrail.Abstractions.Model.Events
         {
             DateUtc = DateTime.UtcNow;
             VersaoNugget = "1.0.0";
+            Mensagem = string.Empty;
+            StackTrace = string.Empty;
+            SistemaName = string.Empty;
+            Contexto = string.Empty;
         }
 
         /// <summary>

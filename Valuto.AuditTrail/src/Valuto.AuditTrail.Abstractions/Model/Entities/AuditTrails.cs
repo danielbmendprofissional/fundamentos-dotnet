@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis.System.Diagnostics.CodeAnalysis;
 using Valuto.AuditTrail.Abstractions.Commom;
 using Valuto.AuditTrail.Abstractions.Model.Enums;
 
@@ -42,34 +43,42 @@ namespace Valuto.AuditTrail.Abstractions.Model.Entities
         /// <summary>
         /// Valor da chave primária da entidade auditada (geralmente em formato string ou JSON).
         /// </summary>
-        public string PrimaryKey { get; private set; }
+        [AllowNull]
+        public string? PrimaryKey { get; private set; }
         /// <summary>
         /// Nome da entidade raiz (Aggregate Root) caso faça parte de um grafo complexo.
         /// </summary>
-        public string Root { get; private set; }
+        [AllowNull]
+        public string? Root { get; private set; }
         /// <summary>
         /// Identificador da entidade raiz.
         /// </summary>
-        public string RootId { get; private set; }
-
-
-        private Dictionary<string, object> _oldValues = new Dictionary<string, object>();
+        [AllowNull]
+        public string? RootId { get; private set; }
+        
         /// <summary>
         /// Coleção de valores antes da alteração.
         /// </summary>
-        public IReadOnlyDictionary<string, object> OldValues => _oldValues;
-
-        private Dictionary<string, object> _newValues = new Dictionary<string, object>();
+        [AllowNull]
+        public IReadOnlyDictionary<string, object>? OldValues => _oldValues;
+        [AllowNull]
+        private Dictionary<string, object>? _oldValues = new Dictionary<string, object>();
+        
         /// <summary>
         /// Coleção de valores após a alteração.
         /// </summary>
-        public IReadOnlyDictionary<string, object> NewValues => _newValues;
+        [AllowNull]
+        public IReadOnlyDictionary<string, object>? NewValues => _newValues;
+        [AllowNull]
+        private Dictionary<string, object>? _newValues = new Dictionary<string, object>();
 
-        private List<string> _changedColumns = new List<string>();
         /// <summary>
         /// Lista das colunas que sofreram modificação nesta transação.
         /// </summary>
-        public IReadOnlyCollection<string> ChangedColumns => _changedColumns.AsReadOnly();
+        [AllowNull]
+        public IReadOnlyCollection<string>? ChangedColumns => _changedColumns?.AsReadOnly();
+        [AllowNull]
+        private List<string>? _changedColumns = new List<string>();
 
         private AuditTrails(string usuario, string sistemaName, string entityName, Guid? id = null)
         {

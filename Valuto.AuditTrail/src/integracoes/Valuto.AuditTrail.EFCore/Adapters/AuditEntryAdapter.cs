@@ -27,7 +27,7 @@ namespace Valuto.AuditTrail.EFCore.Adapters
 
         public object TypeMetadata => _entry.Metadata;
 
-        public IAuditProperty Property(string propertyName)
+        public IAuditProperty? Property(string propertyName)
         {
             var property = _entry.Property(propertyName);
             return property != null ? new AuditPropertyAdapter(property) : null;

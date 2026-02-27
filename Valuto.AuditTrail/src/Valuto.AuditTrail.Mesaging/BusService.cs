@@ -11,7 +11,7 @@ using GreenPipes;
 
 namespace Valuto.AuditTrail.Mesaging
 {
-    internal class BusService<T> : IBusService<T> where T : class
+    public class BusService<T> : IBusService<T> where T : class
     {
         private readonly IBusControl _bus;
 

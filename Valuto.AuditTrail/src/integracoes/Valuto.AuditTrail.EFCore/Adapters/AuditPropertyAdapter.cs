@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
 
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
 
 namespace Valuto.AuditTrail.EFCore.Adapters
 {
@@ -21,9 +20,9 @@ namespace Valuto.AuditTrail.EFCore.Adapters
 
         public string Name => _property.Metadata.Name;
 
-        public object CurrentValue => _property.CurrentValue;
+        public object? CurrentValue => _property.CurrentValue;
 
-        public object OriginalValue => _property.OriginalValue;
+        public object? OriginalValue => _property.OriginalValue;
 
         public bool IsModified => _property.IsModified;
 

@@ -1,4 +1,6 @@
-﻿namespace Valuto.AuditTrail.Abstractions.Contracts.Auditoria
+﻿using System.Diagnostics.CodeAnalysis.System.Diagnostics.CodeAnalysis;
+
+namespace Valuto.AuditTrail.Abstractions.Contracts.Auditoria
 {
     /// <summary>
     /// Define o contrato para o acesso aos valores e metadados de uma propriedade de entidade.
@@ -13,12 +15,14 @@
         /// <summary>
         /// Obtém o valor atual da propriedade presente na memória do rastreador.
         /// </summary>
-        object CurrentValue { get; }
+        [AllowNull]
+        object? CurrentValue { get; }
 
         /// <summary>
         /// Obtém o valor original da propriedade antes de qualquer modificação na transação atual.
         /// </summary>
-        object OriginalValue { get; }
+        [AllowNull]
+        object? OriginalValue { get; }
 
         /// <summary>
         /// Indica se a propriedade foi marcada como modificada pelo rastreador de alterações.

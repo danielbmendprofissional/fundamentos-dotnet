@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis.System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Valuto.AuditTrail.Abstractions.Configuration;
@@ -26,9 +28,12 @@ namespace Valuto.AuditTrail.Logic.Paralel
 
         public void Complete() => _queue.CompleteAdding();
 
-        public bool TryRead(out T item) => _queue.TryTake(out item);
+        public bool TryRead([MaybeNullWhen(false)] out T item)
+        {
+            return _queue.TryTake(out item!);
+        }
 
-        public async IAsyncEnumerable<T> ReadAllAsync(CancellationToken ct)
+        public async IAsyncEnumerable<T> ReadAllAsync([EnumeratorCancellation] CancellationToken ct)
         {
             while (!_queue.IsCompleted)
             {

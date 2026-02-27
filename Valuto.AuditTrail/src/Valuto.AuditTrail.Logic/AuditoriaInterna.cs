@@ -398,7 +398,10 @@ namespace Valuto.AuditTrail.Logic
             foreach (var prop in properties)
             {
                 string propName = _metadataAdapter.GetPropertyName(prop);
-                object val = entry.Property(propName).CurrentValue;
+                var property = entry.Property(propName);
+                if (property == null) continue;
+
+                object val = property.CurrentValue;
                 string valStr = val?.ToString();
 
                 if (string.IsNullOrEmpty(valStr)) continue;
