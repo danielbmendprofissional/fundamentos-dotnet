@@ -53,7 +53,7 @@ namespace Valuto.AuditTrail.Mesaging
                 });
 
 #if NETSTANDARD2_0 || NET47 || NETCOREAPP3_1
-                cfg.UseRetry(r => r.Immediate(5));
+                cfg.UseRetry(r => r.Interval(5, TimeSpan.FromSeconds(3)));
 #endif
 
 #if NET6_0 || NET7_0
@@ -64,12 +64,12 @@ namespace Valuto.AuditTrail.Mesaging
                     r.Exponential(5,
                                   TimeSpan.FromSeconds(1),
                                   TimeSpan.FromSeconds(30),
-                                  TimeSpan.FromSeconds(1));
+                                  TimeSpan.FromSeconds(2));
                 });
 #endif
 
 #if NET8_0
-                cfg.UseMessageRetry(r => r.Immediate(5));
+                cfg.UseMessageRetry(r => r.Interval(5, TimeSpan.FromSeconds(2)));
 #endif
 
             });
@@ -85,6 +85,6 @@ namespace Valuto.AuditTrail.Mesaging
             return _busControl;
         }
 
-        public void Dispose() => _busControl?.Stop();
+        public void Dispose() => _busControl?.Stop(TimeSpan.FromSeconds(5));
     }
 }

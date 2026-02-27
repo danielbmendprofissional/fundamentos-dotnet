@@ -1,7 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
 
-namespace Valuto.AuditTrail.EFCore3.Adapters
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
+
+namespace Valuto.AuditTrail.EFCore.Adapters
 {
     internal class AuditPropertyAdapter : IAuditProperty
     {
@@ -11,6 +18,7 @@ namespace Valuto.AuditTrail.EFCore3.Adapters
         {
             _property = property;
         }
+
         public string Name => _property.Metadata.Name;
 
         public object CurrentValue => _property.CurrentValue;

@@ -1,14 +1,16 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
+using System.Linq;
 using Valuto.AuditTrail.Abstractions.Configuration;
 using Valuto.AuditTrail.Abstractions.Contracts;
 using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
 using Valuto.AuditTrail.Abstractions.Model.Events;
-using Valuto.AuditTrail.EFCore6.Adapters;
+using Valuto.AuditTrail.EFCore.Adapters;
 using Valuto.AuditTrail.Logic;
 using Valuto.AuditTrail.Logic.Cache;
 
-namespace Valuto.AuditTrail.EFCore6
+namespace Valuto.AuditTrail.EFCore
 {
     ///<summary>
     /// Providencia métodos de extensão para configuração da auditoria do Valuto.

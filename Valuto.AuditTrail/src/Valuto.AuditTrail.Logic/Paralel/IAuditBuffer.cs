@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Valuto.AuditTrail.Abstractions.Model.Events;
 
-namespace Valuto.AuditTrail.Abstractions.Contracts
+namespace Valuto.AuditTrail.Logic.Paralel
 {
     /// <summary>
     /// Interface responsável pelo gerenciamento de memória e desacoplamento entre a produção de logs e o despacho.

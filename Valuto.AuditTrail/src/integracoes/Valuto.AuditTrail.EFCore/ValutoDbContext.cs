@@ -3,13 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Valuto.AuditTrail.Abstractions.Commom;
 using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
 using Valuto.AuditTrail.Abstractions.Model.Helpers;
-using Valuto.AuditTrail.EFCore7.Adapters;
+using Valuto.AuditTrail.Abstractions.Model.Snapshots;
+using Valuto.AuditTrail.EFCore.Adapters;
 
-namespace Valuto.AuditTrail.EFCore7
+namespace Valuto.AuditTrail.EFCore
 {
     /// <summary>
     /// Classe base para o contexto do banco de dados que integra automaticamente o sistema de auditoria.
@@ -62,21 +64,26 @@ namespace Valuto.AuditTrail.EFCore7
             if (_isSaving) throw new InvalidOperationException(AuditConstants.RecursionError);
 
             _isSaving = true;
-            var ctx = new AuditProcessingContextHelper();
             var tracker = new AuditTracker(this.ChangeTracker);
 
             try
             {
                 OnBeforeSaveChanges();
-                
-                SafeAction(()
-                    => AuditoriaInterna?.IniciarAuditoria(ctx, tracker));
 
+                var snapshots = AuditoriaInterna.GerarSnapshot(tracker);
                 var result = base.SaveChanges(acceptAllChangesOnSuccess);
 
-                SafeAction(() => {
-                    _ = AuditoriaInterna?.FinalizarAuditoriaAsync(ctx, CancellationToken.None);
-                });
+                if (snapshots.Count > 0)
+                {
+                    MaterializarSnapshots(snapshots);
+
+                    _ = Task.Run(() =>
+                    {
+                        SafeAction(() =>
+                            AuditoriaInterna.ProcessarAuditoriaAsync(snapshots));
+
+                    }, CancellationToken.None);
+                }
 
                 return result;
             }
@@ -87,33 +94,52 @@ namespace Valuto.AuditTrail.EFCore7
         /// Iniciar, Persistir e Finalizar auditoria seja respeitado.
         /// </summary>
         /// <param name="acceptAllChangesOnSuccess">Padrão do EF Core</param>
-        /// <param name="ct">Padrão do EF Core</param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">Caso o client chame o base.saveChanges de maneira equivocada</exception>
-        public sealed override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken ct = default)
+        public sealed override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             if (_isSaving) throw new InvalidOperationException(AuditConstants.RecursionError);
 
             _isSaving = true;
-            var ctx = new AuditProcessingContextHelper();
             var tracker = new AuditTracker(this.ChangeTracker);
 
             try
             {
                 await OnBeforeSaveChangesAsync();
 
-                SafeAction(()
-                    => AuditoriaInterna?.IniciarAuditoria(ctx, tracker));
+                var snapshots = AuditoriaInterna.GerarSnapshot(tracker);
+                var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
 
-                var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, ct);
+                if (snapshots.Count > 0)
+                {
+                    MaterializarSnapshots(snapshots);
 
-                await SafeActionAsync(async () => await AuditoriaInterna?.FinalizarAuditoriaAsync(ctx, ct));
+                    _ = Task.Run(async () =>
+                    {
+                        await SafeActionAsync(async () =>
+                        {
+                            await AuditoriaInterna.ProcessarAuditoriaAsync(snapshots, cancellationToken);
+                        });
+                    });
+                }
 
                 return result;
             }
             finally { _isSaving = false; }
         }
 
+        private void MaterializarSnapshots(List<IAuditEntry> snapshots)
+        {
+            snapshots.SelectMany(s => s.Properties)
+                     .Cast<AuditPropertySnapshot>()
+                     .Where(p => p.IsTemporary)
+                     .ToList()
+                     .ForEach(p => {
+                         var id = p.CurrentValue;
+                         p.IsTemporary = false;
+                         p.CurrentValue = id;
+                     });
+        }
         private void SafeAction(Action action)
         {
             try
@@ -131,4 +157,5 @@ namespace Valuto.AuditTrail.EFCore7
             catch { }
         }
     }
+
 }

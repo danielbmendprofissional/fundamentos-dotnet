@@ -47,7 +47,7 @@ namespace Valuto.AuditTrail.EF
             services.Replace(ServiceDescriptor.Describe(
                 typeof(TContext),
                 sp => {
-                    var contexto = ActivatorUtilities.CreateInstance<TContext>(sp);
+                    var contexto = (TContext)descriptor.ImplementationFactory(sp);
                     contexto.AuditoriaInterna = sp.GetRequiredService<IAuditoriaInterna>();
 
                     return contexto;

@@ -23,7 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\integracoes\Valuto.AuditTrail.EFCore8\Valuto.AuditTrail.EFCore8.csproj" />
+	  <ProjectReference Include="..\..\src\integracoes\Valuto.AuditTrail.EFCore\Valuto.AuditTrail.EFCore.csproj" />
 	  <ProjectReference Include="..\..\src\Valuto.AuditTrail.Abstractions\Valuto.AuditTrail.Abstractions.csproj" />
 	</ItemGroup>
 

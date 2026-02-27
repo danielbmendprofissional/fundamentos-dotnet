@@ -10,7 +10,7 @@ namespace Valuto.AuditTrail.Mesaging
 {
     internal static class ServiceExtensions
     {
-        public static IServiceCollection AddAuditMessaging(this IServiceCollection services)
+        internal static IServiceCollection AddAuditMessaging(this IServiceCollection services)
         {
             var options = new AuditOptions();
             services.AddSingleton(options);

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Valuto.AuditTrail.Abstractions.Commom;
 using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
 using Valuto.AuditTrail.Abstractions.Model.Helpers;
+using Valuto.AuditTrail.Abstractions.Model.Snapshots;
 
 namespace Valuto.AuditTrail.EF
 {
@@ -47,21 +48,26 @@ namespace Valuto.AuditTrail.EF
             if (_isSaving) throw new InvalidOperationException(AuditConstants.RecursionError);
 
             _isSaving = true;
-            var ctx = new AuditProcessingContextHelper();
             var tracker = new AuditTracker(this);
 
             try
             {
                 OnBeforeSaveChanges();
 
-                SafeAction(() 
-                    => AuditoriaInterna.IniciarAuditoria(ctx, tracker));
-
+                var snapshots = AuditoriaInterna.GerarSnapshot(tracker);
                 var result = base.SaveChanges();
 
-                SafeAction(() => {
-                    _ = AuditoriaInterna?.FinalizarAuditoriaAsync(ctx, CancellationToken.None);
-                });
+                if (snapshots.Count > 0)
+                {
+                    MaterializarSnapshots(snapshots);
+
+                    _ = Task.Run(() =>
+                    {
+                        SafeAction(() =>
+                            AuditoriaInterna.ProcessarAuditoriaAsync(snapshots));
+
+                    }, CancellationToken.None);
+                }
 
                 return result;
             }
@@ -82,25 +88,45 @@ namespace Valuto.AuditTrail.EF
             if (_isSaving) throw new InvalidOperationException(AuditConstants.RecursionError);
 
             _isSaving = true;
-            var ctx = new AuditProcessingContextHelper();
             var tracker = new AuditTracker(this);
 
             try
             {
                 await OnBeforeSaveChangesAsync();
 
-                SafeAction(()
-                    => AuditoriaInterna.IniciarAuditoria(ctx, tracker));
-
+                var snapshots = AuditoriaInterna.GerarSnapshot(tracker);
                 var result = await base.SaveChangesAsync(cancellationToken);
 
-                await SafeActionAsync(async () => await AuditoriaInterna.FinalizarAuditoriaAsync(ctx, cancellationToken));
+                if (snapshots.Count > 0)
+                {
+                    MaterializarSnapshots(snapshots);
+
+                    _ = Task.Run(async () =>
+                    {
+                        await SafeActionAsync(async () =>
+                        {
+                            await AuditoriaInterna.ProcessarAuditoriaAsync(snapshots, cancellationToken);
+                        });
+                    });
+                }
 
                 return result;
             }
             finally { _isSaving = false; }
         }
 
+        private void MaterializarSnapshots(List<IAuditEntry> snapshots)
+        {
+            snapshots.SelectMany(s => s.Properties)
+                     .Cast<AuditPropertySnapshot>()
+                     .Where(p => p.IsTemporary)
+                     .ToList()
+                     .ForEach(p => {
+                         var id = p.CurrentValue;
+                         p.IsTemporary = false;
+                         p.CurrentValue = id;
+                     });
+        }
 
         private void SafeAction(Action action) 
         { 

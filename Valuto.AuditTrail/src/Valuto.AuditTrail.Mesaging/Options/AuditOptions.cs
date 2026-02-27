@@ -2,12 +2,12 @@
 {
     internal class AuditOptions
     {
-        public string Host { get; set; } = "";
-        public string Username { get; set; } = "";
-        public string Password { get; set; } = "";
-        public string Queue { get; set; } = "fila-audit-trail-hml";
-        public string Exchange { get; set; } = "audit-hml-exchange";
-        public string LogQueue { get; set; } = "fila-audit-log";
+        public string Host { get; set; } = "amqp://localhost:5672";
+        public string Username { get; set; } = "guest";
+        public string Password { get; set; } = "guest";
+        public string Queue { get; set; } = "audit-trail-queue";
+        public string Exchange { get; set; } = "audit-trail-exchange";
+        public string LogQueue { get; set; } = "audit-log-queue";
         public string LogExchange { get; set; } = "audit-log-exchange";
     }
 }

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Valuto.AuditTrail.Test7;
-using Valuto.AuditTrail.EFCore7;
+using Valuto.AuditTrail.EFCore;
 using Microsoft.Extensions.Logging;
 
 var builder = Host.CreateDefaultBuilder(args)

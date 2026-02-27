@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using Valuto.AuditTrail.Abstractions;
-using Valuto.AuditTrail.EFCore7;
+using Valuto.AuditTrail.EFCore;
 
 namespace Valuto.AuditTrail.Test7
 {

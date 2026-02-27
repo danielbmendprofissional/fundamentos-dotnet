@@ -14,6 +14,7 @@ using Valuto.AuditTrail.Abstractions.Model.Enums;
 using Valuto.AuditTrail.Abstractions.Model.Enums.Valuto.AuditTrail.Abstractions.Model.Enums;
 using Valuto.AuditTrail.Abstractions.Model.Events;
 using Valuto.AuditTrail.Abstractions.Model.Helpers;
+using Valuto.AuditTrail.Abstractions.Model.Snapshots;
 using Valuto.AuditTrail.Logic.Paralel;
 
 namespace Valuto.AuditTrail.Logic
@@ -24,7 +25,6 @@ namespace Valuto.AuditTrail.Logic
         private readonly IEfMetadataAdapter _metadataAdapter;
         private readonly IAuditBuffer<AuditTrailCreatedEvent> _auditBuffer;
         private readonly IAuditBuffer<AuditLogEvent> _logBuffer;
-        internal IAuditTracker _tracker;
 
         public AuditoriaInterna(
             IUserProvider userProvider,
@@ -38,17 +38,89 @@ namespace Valuto.AuditTrail.Logic
             _logBuffer = logBuffer;
         }
 
-        public void IniciarAuditoria(AuditProcessingContextHelper ctx, IAuditTracker tracker)
+        public List<IAuditEntry> GerarSnapshot(IAuditTracker tracker)
         {
+            return tracker.Entries()
+                .Where(ValidarEstadoAuditoria)
+                .Select(e =>
+                {
+                    var snapshot = new AuditEntrySnapshot
+                    {
+                        Entity = e.Entity,
+                        State = e.State,
+                        TypeMetadata = e.TypeMetadata,
+                        Properties = e.Properties.Select(p =>
+                        {
+                            var propSnapshot = new AuditPropertySnapshot
+                            {
+                                Name = p.Name,
+                                OriginalValue = p.OriginalValue,
+                                IsModified = p.IsModified,
+                                IsTemporary = p.IsTemporary,
+                                Metadata = p.Metadata
+                            };
+
+                            if (p.IsTemporary)
+                            {
+                                var entidadeViva = e.Entity;
+                                var nomeProp = p.Name;
+                                propSnapshot.SetLazyLoader(() =>
+                                    entidadeViva.GetType().GetProperty(nomeProp)?.GetValue(entidadeViva, null));
+                            }
+                            else
+                            {
+                                propSnapshot.CurrentValue = p.CurrentValue;
+                            }
+
+                            return propSnapshot;
+                        }).Cast<IAuditProperty>().ToList()
+                    };
+
+                    var collections = _metadataAdapter.GetCollectionsMetadata(e.TypeMetadata);
+                    if (collections != null)
+                    {
+                        foreach (var metadata in collections)
+                        {
+                            string navName = _metadataAdapter.GetPropertyName(metadata);
+                            var navEntry = e.Navigation(navName);
+
+                            if (navEntry != null)
+                            {
+                                snapshot.NavEntries[navName] = navEntry;
+                            }
+                        }
+                    }
+
+                    var references = _metadataAdapter.GetReferencesMetadata(e.TypeMetadata);
+                    if (references != null)
+                    {
+                        foreach (var navMetadata in references)
+                        {
+                            string navName = _metadataAdapter.GetPropertyName(navMetadata);
+                            var navEntry = e.Navigation(navName);
+
+                            if (navEntry != null)
+                            {
+                                snapshot.NavEntries[navName] = navEntry;
+                            }
+                        }
+                    }
+
+                    return (IAuditEntry)snapshot;
+                }).ToList();
+        }
+
+        public async Task ProcessarAuditoriaAsync(List<IAuditEntry> snapshots, CancellationToken cancellationToken = default)
+        {
+            var ctx = new AuditProcessingContextHelper();
             try
             {
-                _tracker = tracker;
-                ctx.Step = AuditConstants.PreSaveInicializando;
-                ProcessarMapeamentoAudit(ctx);
+                IniciarAuditoria(ctx, snapshots);
+                await FinalizarAuditoriaAsync(ctx, cancellationToken);
             }
             catch (Exception ex)
             {
-                EnviarLog(ex, ctx).GetAwaiter().GetResult();
+                await EnviarLog(ex, ctx);
             }
         }
 
@@ -70,47 +142,6 @@ namespace Valuto.AuditTrail.Logic
             }
         }
 
-        private void ProcessarMapeamentoAudit(AuditProcessingContextHelper ctx)
-        {
-            ctx.Step = AuditConstants.PreSaveCapturando;
-            var entries = CapturarDadosDoTracker();
-            var usuario = _userProvider?.GetCurrentUser() ?? AuditConstants.NaoInformado;
-
-
-            foreach (var entry in entries)
-            {
-                ctx.EntriesMap[entry.Entity] = entry;
-                ctx.Track(entry, AuditConstants.PreSaveCriando);
-
-                var trail = CriarTrailEntity(entry, usuario, ctx);
-                ctx.Helpers.Add(new AuditHelper(entry, trail));
-            }
-        }
-
-        private void ProcessarMetadadosPosSave(AuditProcessingContextHelper ctx)
-        {
-            ctx.Step = AuditConstants.PosSaveMetadados;
-            if (ctx.Helpers == null || ctx.EntriesMap == null) return;
-
-            foreach (var audit in ctx.Helpers)
-            {
-                ctx.CurrentEntry = audit.Entry;
-                var trail = audit.Trail;
-                var entry = audit.Entry;
-
-                DefinirChavePrimaria(entry, trail, ctx);
-                DefinirRoots(entry, trail, ctx);
-                DefinirIdColecoes(trail, ctx);
-
-                trail.DefinirTransactionId(ctx.TransactionId);
-            }
-        }
-
-        private IEnumerable<IAuditEntry> CapturarDadosDoTracker()
-        {
-            return _tracker.Entries().Where(ValidarEstadoAuditoria);
-        }
-
         private bool ValidarEstadoAuditoria(IAuditEntry entry)
         {
             if (entry.State == AuditEntryState.Unchanged)
@@ -130,6 +161,21 @@ namespace Valuto.AuditTrail.Logic
                 case AuditEntryState.Deleted: return (estadosPermitidos & AuditoriaEstado.Delete) != 0;
                 case AuditEntryState.Modified: return (estadosPermitidos & AuditoriaEstado.Update) != 0;
                 default: return false;
+            }
+        }
+
+        private void IniciarAuditoria(AuditProcessingContextHelper ctx, List<IAuditEntry> entries)
+        {
+            ctx.Step = AuditConstants.PreSaveCapturando;
+            var usuario = _userProvider?.GetCurrentUser() ?? AuditConstants.NaoInformado;
+
+            foreach (var entry in entries)
+            {
+                ctx.EntriesMap[entry.Entity] = entry;
+                ctx.Track(entry, AuditConstants.PreSaveCriando);
+
+                var trail = CriarTrailEntity(entry, usuario, ctx);
+                ctx.Helpers.Add(new AuditHelper(entry, trail));
             }
         }
 
@@ -175,7 +221,6 @@ namespace Valuto.AuditTrail.Logic
             }
         }
 
-
         private void ProcessarValoresPropriedade(AuditEntryState state, AuditTrails trailEntry, IAuditProperty property, string propertyName)
         {
             switch (state)
@@ -214,9 +259,25 @@ namespace Valuto.AuditTrail.Logic
                 if (!(_metadataAdapter.GetCurrentValue(navEntry) is IEnumerable values))
                     continue;
 
-                var changes = ObterMudancasColecao(values);
+                var changes = ObterMudancasColecao(values, entry.State);
 
                 ProcessarInclusaoColecao(trailEntry, navigationName, changes);
+            }
+        }
+
+        private IEnumerable<NavigationHelper> ObterMudancasColecao(IEnumerable values, AuditEntryState state)
+        {
+            if (values == null) yield break;
+
+            foreach (var item in values)
+            {
+                if (item == null) continue;
+
+                yield return new NavigationHelper
+                {
+                    Status = state.ToString(),
+                    Instance = item
+                };
             }
         }
 
@@ -228,27 +289,6 @@ namespace Valuto.AuditTrail.Logic
             {
                 trail.AdicionarNewValues(name, materializedChanges);
                 trail.AdicionarChangedColumns(name);
-            }
-        }
-
-        private IEnumerable<NavigationHelper> ObterMudancasColecao(IEnumerable values)
-        {
-            if (values == null) yield break;
-
-            foreach (var item in values)
-            {
-                if (item == null) continue;
-
-                var state = _metadataAdapter.GetEntityState(_tracker, item);
-
-                if (state == AuditEntryState.Unchanged)
-                    continue;
-
-                yield return new NavigationHelper
-                {
-                    Status = state.ToString(),
-                    Instance = item
-                };
             }
         }
 
@@ -269,6 +309,25 @@ namespace Valuto.AuditTrail.Logic
                     continue;
 
                 trailEntry.AdicionarChangedColumns(referenceName);
+            }
+        }
+
+        private void ProcessarMetadadosPosSave(AuditProcessingContextHelper ctx)
+        {
+            ctx.Step = AuditConstants.PosSaveMetadados;
+            if (ctx.Helpers == null || ctx.EntriesMap == null) return;
+
+            foreach (var audit in ctx.Helpers)
+            {
+                ctx.CurrentEntry = audit.Entry;
+                var trail = audit.Trail;
+                var entry = audit.Entry;
+
+                DefinirChavePrimaria(entry, trail, ctx);
+                DefinirRoots(entry, trail, ctx);
+                DefinirIdColecoes(trail, ctx);
+
+                trail.DefinirTransactionId(ctx.TransactionId);
             }
         }
 

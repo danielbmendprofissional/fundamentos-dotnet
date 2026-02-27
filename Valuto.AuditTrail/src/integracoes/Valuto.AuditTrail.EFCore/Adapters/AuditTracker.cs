@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
 
-namespace Valuto.AuditTrail.EFCore6.Adapters
+namespace Valuto.AuditTrail.EFCore.Adapters
 {
     internal class AuditTracker : IAuditTracker
     {
@@ -19,9 +19,9 @@ namespace Valuto.AuditTrail.EFCore6.Adapters
         }
 
         /// <summary>
-        /// Obtém as entradas do ChangeTracker do EF Core 6 e as adapta para o contrato da Abstractions.
+        /// Obtém as entradas do ChangeTracker do EF Core 8 e as adapta para o contrato da Abstractions.
         /// </summary>
-        /// <returns>Coleção de entradas prontas para processamento de auditoria.</returns>
+        /// <returns>Coleção de entradas prontas para o processamento de auditoria.</returns>
         public IEnumerable<IAuditEntry> Entries()
         {
             return _changeTracker.Entries()

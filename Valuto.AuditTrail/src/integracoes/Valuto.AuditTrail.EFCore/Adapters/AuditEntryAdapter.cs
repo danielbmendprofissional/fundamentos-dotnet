@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
 using Valuto.AuditTrail.Abstractions.Model.Enums.Valuto.AuditTrail.Abstractions.Model.Enums;
 
-namespace Valuto.AuditTrail.EFCore6.Adapters
+namespace Valuto.AuditTrail.EFCore.Adapters
 {
     internal class AuditEntryAdapter : IAuditEntry
     {
@@ -18,7 +18,6 @@ namespace Valuto.AuditTrail.EFCore6.Adapters
         {
             _entry = entry ?? throw new ArgumentNullException(nameof(entry));
         }
-
         public object Entity => _entry.Entity;
 
         public AuditEntryState State => MapState(_entry.State);
@@ -38,6 +37,7 @@ namespace Valuto.AuditTrail.EFCore6.Adapters
         {
             return _entry.Navigation(navigationName);
         }
+
         private AuditEntryState MapState(EntityState state)
         {
             return state switch
