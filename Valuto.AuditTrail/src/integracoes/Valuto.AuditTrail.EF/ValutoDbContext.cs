@@ -9,6 +9,10 @@ using Valuto.AuditTrail.Abstractions.Commom;
 using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
 using Valuto.AuditTrail.Abstractions.Model.Helpers;
 using Valuto.AuditTrail.Abstractions.Model.Snapshots;
+using Valuto.AuditTrail.Abstractions.Commom;
+using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
+using Valuto.AuditTrail.Abstractions.Model.Snapshots;
+using Valuto.AuditTrail.EF;
 
 namespace Valuto.AuditTrail.EF
 {
@@ -117,30 +121,30 @@ namespace Valuto.AuditTrail.EF
 
         private void MaterializarSnapshots(List<IAuditEntry> snapshots)
         {
-            snapshots.SelectMany(s => s.Properties)
-                     .Cast<AuditPropertySnapshot>()
-                     .Where(p => p.IsTemporary)
-                     .ToList()
-                     .ForEach(p => {
-                         var id = p.CurrentValue;
-                         p.IsTemporary = false;
-                         p.CurrentValue = id;
-                     });
+            foreach (var prop in snapshots.SelectMany(s => s.Properties)
+                                          .OfType<AuditPropertySnapshot>()
+                                          .Where(p => p.IsTemporary))
+            {
+                var valorFinal = prop.CurrentValue;
+                prop.IsTemporary = false;
+                prop.CurrentValue = valorFinal;
+            }
         }
 
-        private void SafeAction(Action action) 
-        { 
-            try 
-            { 
-                action(); 
-            } 
-            catch { } 
+
+        private void SafeAction(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch { }
         }
         private async Task SafeActionAsync(Func<Task> action)
         {
             try
             {
-               await action();
+                await action();
             }
             catch { }
         }

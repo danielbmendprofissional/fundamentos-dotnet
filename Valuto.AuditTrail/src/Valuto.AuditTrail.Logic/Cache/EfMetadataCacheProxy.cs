@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis.System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Valuto.AuditTrail.Abstractions;

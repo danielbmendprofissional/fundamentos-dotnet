@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Valuto.AuditTrail.EF")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Biblioteca de Trilha de Auditoria para Entity Framework Core com Rabbit.")]
+[assembly: AssemblyCompany("Daniel Mendonça")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Valuto.AuditTrail.EF")]
 [assembly: AssemblyCopyright("Copyright ©  2026")]
 [assembly: AssemblyTrademark("")]

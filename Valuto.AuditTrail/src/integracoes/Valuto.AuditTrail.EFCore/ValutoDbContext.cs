@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Valuto.AuditTrail.Abstractions.Commom;
 using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
-using Valuto.AuditTrail.Abstractions.Model.Helpers;
+using Valuto.AuditTrail.Abstractions.Model.Snapshots;
+using Valuto.AuditTrail.EFCore.Adapters;
+using Valuto.AuditTrail.Abstractions.Commom;
+using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
 using Valuto.AuditTrail.Abstractions.Model.Snapshots;
 using Valuto.AuditTrail.EFCore.Adapters;
 
@@ -25,33 +27,39 @@ namespace Valuto.AuditTrail.EFCore
         /// Serviço de auditoria que será iniciado no DI
         /// </summary>
         public IAuditoriaInterna AuditoriaInterna { get; set; }
+
         /// <summary>
         /// Inicializa uma nova instância do contexto de auditoria.
         /// </summary>
         /// <param name="options">As opções de configuração do DbContext.</param>
         protected ValutoDbContext(DbContextOptions<TContext> options) : base(options) { }
+
         /// <summary>
         /// Método estendido disparado imediatamente antes do processamento da auditoria e persistência síncrona.
         /// Para o client colocar suas configurações especificas de saveChanges
         /// </summary>
         protected virtual void OnBeforeSaveChanges() { }
+
         /// <summary>
         /// Método estendido disparado imediatamente antes do processamento da auditoria e persistência assíncrona.
         /// Para o client colocar suas configurações especificas de saveChanges
         /// </summary>
         protected virtual Task OnBeforeSaveChangesAsync() => Task.CompletedTask;
+
         /// <summary>
         /// Sobrescrita selada para garantir que o fluxo de 
         /// Iniciar, Persistir e Finalizar auditoria seja respeitado.
         /// </summary>
         public sealed override int SaveChanges()
             => SaveChanges(acceptAllChangesOnSuccess: true);
+
         /// <summary>
         /// Sobrescrita selada para garantir que o fluxo de 
         /// Iniciar, Persistir e Finalizar auditoria seja respeitado.
         /// </summary>
         public sealed override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
             => SaveChangesAsync(acceptAllChangesOnSuccess: true, cancellationToken);
+
         /// <summary>
         /// Sobrescrita selada para garantir que o fluxo de 
         /// Iniciar, Persistir e Finalizar auditoria seja respeitado.
@@ -140,6 +148,7 @@ namespace Valuto.AuditTrail.EFCore
                          p.CurrentValue = id;
                      });
         }
+
         private void SafeAction(Action action)
         {
             try
@@ -148,6 +157,8 @@ namespace Valuto.AuditTrail.EFCore
             }
             catch { }
         }
+
+
         private async Task SafeActionAsync(Func<Task> action)
         {
             try

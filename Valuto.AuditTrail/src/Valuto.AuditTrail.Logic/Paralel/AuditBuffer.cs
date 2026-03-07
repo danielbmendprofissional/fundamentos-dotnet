@@ -2,16 +2,14 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis.System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Valuto.AuditTrail.Abstractions.Configuration;
-using Valuto.AuditTrail.Abstractions.Contracts;
 
 namespace Valuto.AuditTrail.Logic.Paralel
 {
-    public sealed class AuditBuffer<T> : IAuditBuffer<T> where T : class
+    internal sealed class AuditBuffer<T> : IAuditBuffer<T> where T : class
     {
         private readonly BlockingCollection<T> _queue;
 
@@ -28,7 +26,7 @@ namespace Valuto.AuditTrail.Logic.Paralel
 
         public void Complete() => _queue.CompleteAdding();
 
-        public bool TryRead([MaybeNullWhen(false)] out T item)
+        public bool TryRead([System.Diagnostics.CodeAnalysis.System.Diagnostics.CodeAnalysis.MaybeNullWhen(false)] out T item)
         {
             return _queue.TryTake(out item!);
         }

@@ -1,16 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	  <TargetFrameworks>netstandard2.0;net47;netcoreapp3.1;net6.0;net7.0;net8.0</TargetFrameworks>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;net47;netcoreapp3.1;net6.0;net7.0;net8.0</TargetFrameworks>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<Optimize>true</Optimize>
+		<DebugSymbols>false</DebugSymbols>
+		<DebugType>none</DebugType>
+		<EmbedAllSources>false</EmbedAllSources>
+	</PropertyGroup>
 
 	<ItemGroup>
-		<InternalsVisibleTo Include="Valuto.AuditTrail.Logic" />
+		<ProjectReference Include="..\Valuto.AuditTrail.Abstractions\Valuto.AuditTrail.Abstractions.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-    <ProjectReference Include="..\Valuto.AuditTrail.Abstractions\Valuto.AuditTrail.Abstractions.csproj" />
-  </ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
 		<PackageReference Include="Microsoft.Extensions.Options" Version="2.1.0" />
@@ -47,5 +50,5 @@
 		<PackageReference Include="MassTransit" Version="8.2.5" />
 		<PackageReference Include="MassTransit.RabbitMQ" Version="8.2.5" />
 	</ItemGroup>
-	
+
 </Project>

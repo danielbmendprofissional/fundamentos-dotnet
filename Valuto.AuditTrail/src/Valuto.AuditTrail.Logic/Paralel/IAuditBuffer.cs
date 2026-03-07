@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Valuto.AuditTrail.Abstractions.Model.Events;
 
 namespace Valuto.AuditTrail.Logic.Paralel
 {
@@ -10,7 +9,7 @@ namespace Valuto.AuditTrail.Logic.Paralel
     /// OBRIGATORIEDADE: Esta interface deve ser registrada como Singleton para garantir a integridade do Channel.
     /// </summary>
     /// <typeparam name="T">O tipo da entidade de auditoria.</typeparam>
-    public interface IAuditBuffer<T> where T : class
+    internal interface IAuditBuffer<T> where T : class
     {
         /// <summary>
         /// Adiciona um item ao buffer de forma assíncrona. 

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis.System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Valuto.AuditTrail.Abstractions.Contracts.Auditoria
 {

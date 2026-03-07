@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Valuto.AuditTrail.Abstractions.Model.Enums;
 using Valuto.AuditTrail.Abstractions.Model.Events;
 using Valuto.AuditTrail.EF;
 
@@ -32,6 +33,8 @@ namespace Valuto.AuditTrail.TestEF
                     services.AddScoped<TestDbContext>(sp => new TestDbContext(sQLiteConn));
                     services.AddAuditTrail<TestDbContext>(options =>
                     {
+                        options.ConfigureEnviroment(Enviroments.Homologacao);
+
                         options.ConfigureBuffer(b =>
                         {
                             b.MaxBufferSize = 50000;

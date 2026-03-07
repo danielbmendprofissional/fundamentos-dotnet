@@ -2,21 +2,31 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System.ComponentModel;
 using Valuto.AuditTrail.Abstractions.Configuration;
 using Valuto.AuditTrail.Abstractions.Contracts;
 using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
+using Valuto.AuditTrail.Abstractions.Model.Enums;
 using Valuto.AuditTrail.Logic.Cache;
+using Valuto.AuditTrail.Logic.Paralel;
+using Valuto.AuditTrail.Logic.Providers;
+using Valuto.AuditTrail.Mesaging;
+using Valuto.AuditTrail.Abstractions.Contracts;
+using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
+using Valuto.AuditTrail.Abstractions.Model.Enums;
+using Valuto.AuditTrail.Logic;
 using Valuto.AuditTrail.Logic.Paralel;
 using Valuto.AuditTrail.Logic.Providers;
 using Valuto.AuditTrail.Mesaging;
 
 namespace Valuto.AuditTrail.Logic
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class ServiceExtensions
     {
-        public static IServiceCollection AddAuditLogic(this IServiceCollection services)
+        public static IServiceCollection AddAuditLogic(this IServiceCollection services, Enviroments enviroment)
         {
-            services.AddAuditMessaging();
+            services.AddAuditMessaging(enviroment);
 
             services.AddScoped<IAuditoriaInterna, AuditoriaInterna>();
 

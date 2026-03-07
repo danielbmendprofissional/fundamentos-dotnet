@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using Valuto.AuditTrail.Abstractions.Model.Enums;
 using Valuto.AuditTrail.EFCore;
 
 namespace Valuto.AuditTrail.Test3
@@ -29,16 +30,7 @@ namespace Valuto.AuditTrail.Test3
 
                  services.AddAuditTrail<TestDbContext>(options =>
                  {
-                     options.ConfigureBuffer(b =>
-                     {
-                         b.MaxBufferSize = 50000;
-                         b.MaxParallelism = 20;
-                     });
-
-                     options.ConfigurePublisher(p =>
-                     {
-                         p.RetryOnFailure = true;
-                     });
+                     options.ConfigureEnviroment(Enviroments.Homologacao);
                  });
              });
 

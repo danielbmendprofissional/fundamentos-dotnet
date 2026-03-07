@@ -5,10 +5,17 @@ using System.Linq;
 using Valuto.AuditTrail.Abstractions.Configuration;
 using Valuto.AuditTrail.Abstractions.Contracts;
 using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
+using Valuto.AuditTrail.Abstractions.Model.Enums;
 using Valuto.AuditTrail.Abstractions.Model.Events;
 using Valuto.AuditTrail.EF.Adapters;
 using Valuto.AuditTrail.Logic;
 using Valuto.AuditTrail.Logic.Cache;
+using Valuto.AuditTrail.Abstractions.Configuration;
+using Valuto.AuditTrail.Abstractions.Contracts;
+using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
+using Valuto.AuditTrail.Abstractions.Model.Events;
+using Valuto.AuditTrail.EF;
+using Valuto.AuditTrail.EF.Adapters;
 
 namespace Valuto.AuditTrail.EF
 {
@@ -21,17 +28,25 @@ namespace Valuto.AuditTrail.EF
         /// Adiciona os serviços necessários para o funcionamento da trilha de auditoria.
         /// </summary>
         /// <param name="services">A coleção de serviços do container de DI.</param>
-        /// /// <param name="configure">Configurações opcionais do nugget.</param>
+        /// <param name="enviroment">Ambiente do nugget.</param>
+        /// <param name="configure">Configurações opcionais do nugget.</param>
         /// <returns>A coleção de serviços para encadeamento de chamadas.</returns>
         public static IServiceCollection AddAuditTrail<TContext>(this IServiceCollection services,
-        Action<AuditConfigurationOptions> configure)
+            Action<AuditConfigurationOptions> configure = null)
             where TContext : ValutoDbContext<TContext>
         {
-            services.AddAuditLogic();
 
             var options = new AuditConfigurationOptions();
-            configure(options);
+            configure?.Invoke(options);
+
+            if (options.SelectedEnviroment == 0)
+            {
+                throw new InvalidOperationException("É obrigatório configurar o ambiente via options.ConfigureEnviroment(Enviroments.Producao/Homologacao).");
+            }
+
             services.AddSingleton(options);
+
+            services.AddAuditLogic(options.SelectedEnviroment);
 
             services.RegisterAuditEngine<AuditTrailCreatedEvent>();
 
@@ -41,14 +56,30 @@ namespace Valuto.AuditTrail.EF
             services.AddTransient<IAuditProperty, AuditPropertyAdapter>();
             services.AddScoped<IAuditTracker, AuditTracker>();
 
-            var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(TContext));
-            if (descriptor == null) throw new InvalidOperationException($"DbContext {typeof(TContext).Name} não registrado.");
+            var descriptor = services.FirstOrDefault(d =>
+                    d.ServiceType == typeof(TContext) ||
+                    (d.ImplementationType == typeof(TContext)) ||
+                    (d.ImplementationFactory != null && d.ServiceType.IsAssignableFrom(typeof(TContext))))
+                ?? throw new InvalidOperationException($"DbContext {typeof(TContext).Name} não está acessível no DI. ");
 
             services.Replace(ServiceDescriptor.Describe(
-                typeof(TContext),
+                descriptor.ServiceType,
                 sp => {
-                    var contexto = (TContext)descriptor.ImplementationFactory(sp);
-                    contexto.AuditoriaInterna = sp.GetRequiredService<IAuditoriaInterna>();
+                    TContext contexto;
+                    if (descriptor.ImplementationFactory != null)
+                    {
+                        contexto = (TContext)descriptor.ImplementationFactory(sp);
+                    }
+                    else if (descriptor.ImplementationType != null)
+                    {
+                        contexto = (TContext)ActivatorUtilities.GetServiceOrCreateInstance(sp, descriptor.ImplementationType);
+                    }
+                    else
+                    {
+                        contexto = sp.GetRequiredService<TContext>();
+                    }
+                    var auditoria = sp.GetRequiredService<IAuditoriaInterna>();
+                    contexto.AuditoriaInterna = auditoria;
 
                     return contexto;
                 },

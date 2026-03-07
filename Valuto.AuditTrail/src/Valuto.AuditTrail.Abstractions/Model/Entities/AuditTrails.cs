@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis.System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using Valuto.AuditTrail.Abstractions.Commom;
 using Valuto.AuditTrail.Abstractions.Model.Enums;
 
@@ -140,7 +140,10 @@ namespace Valuto.AuditTrail.Abstractions.Model.Entities
         public void AdicionarOldValues(string key, object value)
         {
             Guard.AgainstNullOrWhiteSpace(key, nameof(key));
-            _oldValues[key] = value;
+            if (_oldValues != null)
+            {
+                _oldValues[key] = value;
+            }
         }
 
         /// <summary>
@@ -149,7 +152,10 @@ namespace Valuto.AuditTrail.Abstractions.Model.Entities
         public void AdicionarNewValues(string key, object value)
         {
             Guard.AgainstNullOrWhiteSpace(key, nameof(key));
-            _newValues[key] = value;
+            if (_newValues != null)
+            {
+                _newValues[key] = value;
+            }
         }
 
         /// <summary>
@@ -157,7 +163,7 @@ namespace Valuto.AuditTrail.Abstractions.Model.Entities
         /// </summary>
         public void AdicionarChangedColumns(string valor)
         {
-            if (!_changedColumns.Contains(valor))
+            if (_changedColumns != null && !_changedColumns.Contains(valor))
             {
                 _changedColumns.Add(valor);
             }

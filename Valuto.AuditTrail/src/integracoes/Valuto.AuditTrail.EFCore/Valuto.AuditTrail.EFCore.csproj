@@ -70,13 +70,11 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Valuto.AuditTrail.Abstractions\Valuto.AuditTrail.Abstractions.csproj">
 			<PrivateAssets>none</PrivateAssets>
+			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+			<IncludeAssets>all</IncludeAssets>
 		</ProjectReference>
 
 		<ProjectReference Include="..\..\Valuto.AuditTrail.Logic\Valuto.AuditTrail.Logic.csproj">
-			<PrivateAssets>all</PrivateAssets>
-		</ProjectReference>
-
-		<ProjectReference Include="..\..\Valuto.AuditTrail.Mesaging\Valuto.AuditTrail.Mesaging.csproj">
 			<PrivateAssets>all</PrivateAssets>
 		</ProjectReference>
 	</ItemGroup>
@@ -88,7 +86,6 @@
 	<Target Name="IncludeInternalLibsInPackage">
 		<ItemGroup>
 			<BuildOutputInPackage Include="$(OutputPath)Valuto.AuditTrail.Logic.dll" />
-			<BuildOutputInPackage Include="$(OutputPath)Valuto.AuditTrail.Mesaging.dll" />
 		</ItemGroup>
 	</Target>
 	

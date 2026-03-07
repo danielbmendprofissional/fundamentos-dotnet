@@ -8,16 +8,31 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Biblioteca de Trilha de Auditoria para EF6 com Rabbit.</description>
     <copyright>Copyright © 2026</copyright>
-    <readme>README.md</readme> <dependencies>
-      <dependency id="EntityFramework" version="6.5.1" />
+    <readme>README.md</readme> 
+    
+    <dependencies>
+      <group targetFramework=".NETFramework4.7">
+        <dependency id="Valuto.AuditTrail.Abstractions" version="1.0.0" />
+        <dependency id="EntityFramework" version="6.5.1" />
+        <dependency id="MassTransit.RabbitMQ" version="5.5.6" />
+        <dependency id="MassTransit" version="5.5.6" />
+        <dependency id="Microsoft.Extensions.Hosting.Abstractions" version="3.0.3" />
+        <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="3.1.0" />
+        <dependency id="Microsoft.Bcl.AsyncInterfaces" version="1.0.0" />
+        <dependency id="Microsoft.Extensions.Options" version="3.1.0" />
+      </group>
     </dependencies>
+
   </metadata>
   
   <files>
     <file src="README.md" target="\" />
+    <file src="Valuto.AuditTrail.EF.targets" target="build" />
+
+    <file src="bin\Release\Valuto.AuditTrail.EF.dll" target="lib\net47" />
+    <file src="bin\Release\Valuto.AuditTrail.EF.xml" target="lib\net47" />
     
-    <file src="bin\Release\Valuto.AuditTrail.EF.dll" target="lib\net472" />
-    <file src="bin\Release\Valuto.AuditTrail.Abstractions.dll" target="lib\net472" />
-    <file src="bin\Release\Valuto.AuditTrail.Logic.dll" target="lib\net472" />
+    <file src="bin\Release\Valuto.AuditTrail.Logic.dll" target="build\private" />
+    <file src="bin\Release\Valuto.AuditTrail.Mesaging.dll" target="build\private" />
   </files>
 </package>

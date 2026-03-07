@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Valuto.AuditTrail.Test8;
+using Valuto.AuditTrail.Abstractions.Model.Enums;
 using Valuto.AuditTrail.EFCore;
+using Valuto.AuditTrail.Test8;
 
 
 var builder = Host.CreateDefaultBuilder(args)
@@ -17,16 +18,7 @@ var builder = Host.CreateDefaultBuilder(args)
 
         services.AddAuditTrail<TestDbContext>(options =>
         {
-            options.ConfigureBuffer(b =>
-            {
-                b.MaxBufferSize = 50000;
-                b.MaxParallelism = 20;
-            });
-
-            options.ConfigurePublisher(p =>
-            {
-                p.RetryOnFailure = true;
-            });
+            options.ConfigureEnviroment(Enviroments.Homologacao);
         });
     });
     using var host = builder.Build();

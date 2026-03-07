@@ -9,6 +9,12 @@ using Valuto.AuditTrail.Abstractions.Model.Events;
 using Valuto.AuditTrail.EFCore.Adapters;
 using Valuto.AuditTrail.Logic;
 using Valuto.AuditTrail.Logic.Cache;
+using Valuto.AuditTrail.Abstractions.Configuration;
+using Valuto.AuditTrail.Abstractions.Contracts;
+using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
+using Valuto.AuditTrail.Abstractions.Model.Events;
+using Valuto.AuditTrail.EFCore.Adapters;
+using Valuto.AuditTrail.Logic;
 
 namespace Valuto.AuditTrail.EFCore
 {
@@ -24,14 +30,20 @@ namespace Valuto.AuditTrail.EFCore
         /// /// <param name="configure">Configurações opcionais do nugget.</param>
         /// <returns>A coleção de serviços para encadeamento de chamadas.</returns>
         public static IServiceCollection AddAuditTrail<TContext>(this IServiceCollection services,
-        Action<AuditConfigurationOptions> configure)
+        Action<AuditConfigurationOptions>? configure = null)
             where TContext : ValutoDbContext<TContext>
         {
-            services.AddAuditLogic();
-
             var options = new AuditConfigurationOptions();
-            configure(options);
+            configure?.Invoke(options);
+
+            if (options.SelectedEnviroment == 0)
+            {
+                throw new InvalidOperationException("É obrigatório configurar o ambiente via options.ConfigureEnviroment(Enviroments.Producao/Homologacao).");
+            }
+
             services.AddSingleton(options);
+
+            services.AddAuditLogic(options.SelectedEnviroment);
 
             services.RegisterAuditEngine<AuditTrailCreatedEvent>();
 

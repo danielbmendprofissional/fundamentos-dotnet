@@ -1,0 +1,14 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)private\Valuto.AuditTrail.Logic.dll">
+      <Link>Valuto.AuditTrail.Logic.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)private\Valuto.AuditTrail.Mesaging.dll">
+      <Link>Valuto.AuditTrail.Mesaging.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </None>
+  </ItemGroup>
+</Project>

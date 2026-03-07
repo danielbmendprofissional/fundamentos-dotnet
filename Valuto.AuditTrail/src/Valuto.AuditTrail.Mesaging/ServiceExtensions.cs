@@ -1,19 +1,26 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Valuto.AuditTrail.Abstractions.Contracts;
+using System.ComponentModel;
+using Valuto.AuditTrail.Abstractions.Model.Enums;
 using Valuto.AuditTrail.Mesaging.Interfaces;
 using Valuto.AuditTrail.Mesaging.Options;
 
 namespace Valuto.AuditTrail.Mesaging
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class ServiceExtensions
     {
-        public static IServiceCollection AddAuditMessaging(this IServiceCollection services)
+        public static IServiceCollection AddAuditMessaging(this IServiceCollection services, Enviroments enviroment)
         {
-            var options = new AuditOptions();
-            services.AddSingleton(options);
+            if (enviroment == Enviroments.Producao)
+            {
+                services.AddSingleton<IAuditOptions, AuditOptionsPrd>();
+            }
+            else
+            {
+                services.AddSingleton<IAuditOptions, AuditOptionsHml>();
+            }
+
+            services.AddSingleton<IAuditBusProvider, AuditBusProvider>();
 
             services.AddSingleton<IAuditBusProvider, AuditBusProvider>();
 

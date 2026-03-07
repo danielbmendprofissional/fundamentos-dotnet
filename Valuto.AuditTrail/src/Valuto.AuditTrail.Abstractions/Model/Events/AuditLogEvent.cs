@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis.System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using Valuto.AuditTrail.Abstractions.Commom;
 
 namespace Valuto.AuditTrail.Abstractions.Model.Events

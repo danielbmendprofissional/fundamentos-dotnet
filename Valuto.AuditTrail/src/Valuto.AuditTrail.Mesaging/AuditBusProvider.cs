@@ -4,6 +4,10 @@ using System;
 using Valuto.AuditTrail.Abstractions.Model.Events;
 using Valuto.AuditTrail.Mesaging.Interfaces;
 using Valuto.AuditTrail.Mesaging.Options;
+using Valuto.AuditTrail.Mesaging.Interfaces;
+
+using Valuto.AuditTrail.Abstractions.Model.Events;
+
 
 #if NETSTANDARD2_0 || NET47 || NETCOREAPP3_1 || NET6_0 || NET7_0
 using GreenPipes;
@@ -16,9 +20,9 @@ namespace Valuto.AuditTrail.Mesaging
         private readonly IBusControl _busControl;
         private bool _isStarted;
 
-        public AuditBusProvider(IOptions<AuditOptions> options)
+        public AuditBusProvider(IAuditOptions options)
         {
-            var opt = options.Value;
+            var opt = options;
 
             _busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
@@ -36,20 +40,20 @@ namespace Valuto.AuditTrail.Mesaging
                 });
 #endif
 
-                cfg.Message<AuditTrailCreatedEvent>(m => m.SetEntityName(options.Value.Exchange));
+                cfg.Message<AuditTrailCreatedEvent>(m => m.SetEntityName(options.Exchange));
                 cfg.Publish<AuditTrailCreatedEvent>(x =>
                 {
-                    x.BindQueue(options.Value.Exchange, options.Value.Queue);
+                    x.BindQueue(options.Exchange, options.Queue);
                 });
 
                 cfg.Message<AuditLogEvent>(m =>
                 {
-                    m.SetEntityName(options.Value.LogExchange);
+                    m.SetEntityName(options.LogExchange);
                 });
 
                 cfg.Publish<AuditLogEvent>(x =>
                 {
-                    x.BindQueue(options.Value.LogExchange, options.Value.LogQueue);
+                    x.BindQueue(options.LogExchange, options.LogQueue);
                 });
 
 #if NETSTANDARD2_0 || NET47 || NETCOREAPP3_1
@@ -77,11 +81,6 @@ namespace Valuto.AuditTrail.Mesaging
 
         public IBusControl GetBus()
         {
-            if (!_isStarted)
-            {
-                _busControl.Start();
-                _isStarted = true;
-            }
             return _busControl;
         }
 

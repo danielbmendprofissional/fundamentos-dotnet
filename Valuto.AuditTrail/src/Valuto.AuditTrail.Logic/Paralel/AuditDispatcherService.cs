@@ -8,11 +8,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Valuto.AuditTrail.Abstractions.Configuration;
 using Valuto.AuditTrail.Abstractions.Contracts;
+using Valuto.AuditTrail.Mesaging.Interfaces;
 
 namespace Valuto.AuditTrail.Logic.Paralel
 {
-    public sealed class AuditDispatcherService<T> : IHostedService, IDisposable where T : class
+    internal sealed class AuditDispatcherService<T> : IHostedService, IDisposable where T : class
     {
+        private readonly IAuditBusProvider _busProvider;
         private readonly IAuditBuffer<T> _buffer;
         private readonly IServiceProvider _serviceProvider;
         private readonly SemaphoreSlim _maxParallelism;
@@ -23,6 +25,7 @@ namespace Valuto.AuditTrail.Logic.Paralel
         private Task? _executingTask = null;
 
         public AuditDispatcherService(
+            IAuditBusProvider busProvider,
             IAuditBuffer<T> buffer,
             IServiceProvider serviceProvider,
             IOptions<BufferOptions> options)
@@ -32,24 +35,28 @@ namespace Valuto.AuditTrail.Logic.Paralel
             _serviceProvider = serviceProvider;
             _maxParallelism = new SemaphoreSlim(config.MaxParallelism);
             _batchSize = config.BatchSize;
+            _busProvider = busProvider;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
             _cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
+            var bus = _busProvider.GetBus();
+            await bus.StartAsync(cancellationToken).ConfigureAwait(false);
+
             _executingTask = ExecuteInternalAsync(_cts.Token);
 
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
         private async Task ExecuteInternalAsync(CancellationToken ct)
         {
             try
             {
-                await foreach (var message in _buffer.ReadAllAsync(ct))
+                await foreach (var message in _buffer.ReadAllAsync(ct).ConfigureAwait(false))
                 {
-                    await _maxParallelism.WaitAsync(ct);
+                    await _maxParallelism.WaitAsync(ct).ConfigureAwait(false);
                     var batch = await BuildBatchAsync(message);
 
                     var task = Task.Run(async () =>
@@ -59,7 +66,7 @@ namespace Valuto.AuditTrail.Logic.Paralel
                             using (var scope = _serviceProvider.CreateScope())
                             {
                                 var bus = scope.ServiceProvider.GetRequiredService<IBusService<T>>();
-                                await bus.PublishAsync(batch, CancellationToken.None);
+                                await bus.PublishAsync(batch, CancellationToken.None).ConfigureAwait(false);
                             }
                         }
                         finally { _maxParallelism.Release(); }
@@ -79,7 +86,12 @@ namespace Valuto.AuditTrail.Logic.Paralel
 
             try
             {
-                await Task.WhenAll(_executingTask!, Task.WhenAll(_activeTasks)).ConfigureAwait(false);
+                if (_executingTask != null)
+                {
+                    await Task.WhenAll(_executingTask!, Task.WhenAll(_activeTasks)).ConfigureAwait(false);
+                }
+
+                await _busProvider.GetBus().StopAsync(cancellationToken).ConfigureAwait(false);
             }
             catch { }
         }
