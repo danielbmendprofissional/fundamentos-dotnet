@@ -44,7 +44,7 @@ namespace Valuto.AuditTrail.EFCore
         /// Método estendido disparado imediatamente antes do processamento da auditoria e persistência assíncrona.
         /// Para o client colocar suas configurações especificas de saveChanges
         /// </summary>
-        protected virtual Task OnBeforeSaveChangesAsync() => Task.CompletedTask;
+        protected virtual Task OnBeforeSaveChangesAsync() => Task.FromResult(0);
 
         /// <summary>
         /// Sobrescrita selada para garantir que o fluxo de 
@@ -72,18 +72,18 @@ namespace Valuto.AuditTrail.EFCore
             if (_isSaving) throw new InvalidOperationException(AuditConstants.RecursionError);
 
             _isSaving = true;
-            var tracker = new AuditTracker(this.ChangeTracker);
+            var tracker = new TrackerAdapter(this.ChangeTracker);
 
             try
             {
                 OnBeforeSaveChanges();
 
-                var snapshots = AuditoriaInterna.GerarSnapshot(tracker);
+                var (snapshots, materializadores) = AuditoriaInterna.GerarSnapshot(tracker);
                 var result = base.SaveChanges(acceptAllChangesOnSuccess);
 
                 if (snapshots.Count > 0)
                 {
-                    MaterializarSnapshots(snapshots);
+                    materializadores.ForEach(materializar => materializar());
 
                     _ = Task.Run(() =>
                     {
@@ -91,6 +91,7 @@ namespace Valuto.AuditTrail.EFCore
                             AuditoriaInterna.ProcessarAuditoriaAsync(snapshots));
 
                     }, CancellationToken.None);
+
                 }
 
                 return result;
@@ -109,18 +110,18 @@ namespace Valuto.AuditTrail.EFCore
             if (_isSaving) throw new InvalidOperationException(AuditConstants.RecursionError);
 
             _isSaving = true;
-            var tracker = new AuditTracker(this.ChangeTracker);
+            var tracker = new TrackerAdapter(this.ChangeTracker);
 
             try
             {
                 await OnBeforeSaveChangesAsync();
 
-                var snapshots = AuditoriaInterna.GerarSnapshot(tracker);
+                var (snapshots, materializadores) = AuditoriaInterna.GerarSnapshot(tracker);
                 var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
 
                 if (snapshots.Count > 0)
                 {
-                    MaterializarSnapshots(snapshots);
+                    materializadores.ForEach(materializar => materializar());
 
                     _ = Task.Run(async () =>
                     {
@@ -134,19 +135,6 @@ namespace Valuto.AuditTrail.EFCore
                 return result;
             }
             finally { _isSaving = false; }
-        }
-
-        private void MaterializarSnapshots(List<IAuditEntry> snapshots)
-        {
-            snapshots.SelectMany(s => s.Properties)
-                     .Cast<AuditPropertySnapshot>()
-                     .Where(p => p.IsTemporary)
-                     .ToList()
-                     .ForEach(p => {
-                         var id = p.CurrentValue;
-                         p.IsTemporary = false;
-                         p.CurrentValue = id;
-                     });
         }
 
         private void SafeAction(Action action)

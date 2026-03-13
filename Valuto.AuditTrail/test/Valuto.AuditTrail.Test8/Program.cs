@@ -19,15 +19,25 @@ var builder = Host.CreateDefaultBuilder(args)
         services.AddAuditTrail<TestDbContext>(options =>
         {
             options.ConfigureEnviroment(Enviroments.Homologacao);
+
+            options.ConfigureBuffer(b =>
+            {
+                b.MaxBufferSize = 50000;
+                b.MaxParallelism = 20;
+            });
+
+            options.ConfigurePublisher(p =>
+            {
+                p.RetryOnFailure = true;
+            });
         });
     });
-    using var host = builder.Build();
-    await host.StartAsync();
+using var host = builder.Build();
+await host.StartAsync();
 {
     using var scope = host.Services.CreateScope();
 
     var db = scope.ServiceProvider.GetRequiredService<TestDbContext>();
-
     db.Database.EnsureDeleted();
     db.Database.EnsureCreated();
 }
@@ -86,76 +96,76 @@ var builder = Host.CreateDefaultBuilder(args)
         });
     }
 
-    for (int h = 1; h <= 2; h++)
-    {
-        solicitacao.SOLICITACAO_HISTORICO_STATUS.Add(new SOLICITACAO_HISTORICO_STATUS
-        {
-            COD_HISTORICO = h,
-            COD_SOLICITACAO = solicitacao.COD_SOLICITACAO,
-            DAT_ALTERACAO = DateTime.Now.AddHours(-h),
-            COD_IND_SITUACAO = h
-        });
-    }
+    //for (int h = 1; h <= 13; h++)
+    //{
+    //    solicitacao.SOLICITACAO_HISTORICO_STATUS.Add(new SOLICITACAO_HISTORICO_STATUS
+    //    {
+    //        COD_HISTORICO = h,
+    //        COD_SOLICITACAO = solicitacao.COD_SOLICITACAO,
+    //        DAT_ALTERACAO = DateTime.Now.AddHours(-h),
+    //        COD_IND_SITUACAO = h
+    //    });
+    //}
 
-    for (int i = 1; i <= 2; i++)
-    {
-        var solicitacaoTramite = new SOLICITACAO_TRAMITE
-        {
-            COD_SOLICIT_TRAMITE = i,
-            COD_SOLICITACAO = solicitacao.COD_SOLICITACAO,
-            IND_RESOLVIDO = "N",
-            COD_IND_SITUACAO = i,
-            COD_IND_TRAMITACAO = i * 10,
-            DSC_TRAMITE = $"Trâmite número {i}",
-            COD_DOC_ANEXO = null,
-            COD_USU_SIGESP = 200 + i,
-            NOM_USU_SIGESP = $"Usuário SIGESP {i}",
-            COD_LOTACAO_SIGESP = 300 + i,
-            DSC_LOTACAO_SIGESP = $"Lotação {i}",
-            COD_CIDADAO = 1000 + i,
-            COD_ENC_SOLICIT_TRAMITE = null,
-            DAT_REAGENDAMENTO = null,
-            DAT_CADASTRO = DateTime.Now.AddMinutes(i),
-            COD_USU_SGI = 400 + i,
-            NOM_USU_SGI = $"Usuário SGI {i}",
-            DSC_TRAMITE_HTML = $"<p>Trâmite HTML {i}</p>",
-            COD_PESSOA_OUV = null,
-            COD_USU_INCLUSAO = 10 + i,
-            COD_IND_CANAL = 1,
-            COD_EQUIPE = 50 + i,
-            DSC_CONCLUSAO_TECNICA = $"Conclusão técnica {i}",
-            DSC_DEPTO_NOTIFICADOS = $"Deptos notificados {i}",
-            COD_USU_ENCAMINHADO = null,
-            COD_DEPTO_ENCAMINHADO = null,
-            NOM_DESTINATARIO = $"Destinatário {i}",
-            DSC_DIAS_TRAMITE = $"{i} dias",
-            IND_NOTIF_WP = "N",
-            COD_REQUEST_WPP = $"REQ-WPP-{i}",
-            SOLICITACAO = solicitacao
-        };
+    //for (int i = 1; i <= 16; i++)
+    //{
+    //    var solicitacaoTramite = new SOLICITACAO_TRAMITE
+    //    {
+    //        COD_SOLICIT_TRAMITE = i,
+    //        COD_SOLICITACAO = solicitacao.COD_SOLICITACAO,
+    //        IND_RESOLVIDO = "N",
+    //        COD_IND_SITUACAO = i,
+    //        COD_IND_TRAMITACAO = i * 10,
+    //        DSC_TRAMITE = $"Trâmite número {i}",
+    //        COD_DOC_ANEXO = null,
+    //        COD_USU_SIGESP = 200 + i,
+    //        NOM_USU_SIGESP = $"Usuário SIGESP {i}",
+    //        COD_LOTACAO_SIGESP = 300 + i,
+    //        DSC_LOTACAO_SIGESP = $"Lotação {i}",
+    //        COD_CIDADAO = 1000 + i,
+    //        COD_ENC_SOLICIT_TRAMITE = null,
+    //        DAT_REAGENDAMENTO = null,
+    //        DAT_CADASTRO = DateTime.Now.AddMinutes(i),
+    //        COD_USU_SGI = 400 + i,
+    //        NOM_USU_SGI = $"Usuário SGI {i}",
+    //        DSC_TRAMITE_HTML = $"<p>Trâmite HTML {i}</p>",
+    //        COD_PESSOA_OUV = null,
+    //        COD_USU_INCLUSAO = 10 + i,
+    //        COD_IND_CANAL = 1,
+    //        COD_EQUIPE = 50 + i,
+    //        DSC_CONCLUSAO_TECNICA = $"Conclusão técnica {i}",
+    //        DSC_DEPTO_NOTIFICADOS = $"Deptos notificados {i}",
+    //        COD_USU_ENCAMINHADO = null,
+    //        COD_DEPTO_ENCAMINHADO = null,
+    //        NOM_DESTINATARIO = $"Destinatário {i}",
+    //        DSC_DIAS_TRAMITE = $"{i} dias",
+    //        IND_NOTIF_WP = "N",
+    //        COD_REQUEST_WPP = $"REQ-WPP-{i}",
+    //        SOLICITACAO = solicitacao
+    //    };
 
-        for (int c = 1; c <= 2; c++)
-        {
-            solicitacaoTramite.COMENTARIOS.Add(new SOLICITACAO_TRAMITE_COMENTARIO
-            {
-                COD_COMENTARIO = (i * 100) + c,
-                COD_SOLICIT_TRAMITE = i,
-                TXT_COMENTARIO = $"Comentário {c} do trâmite {i}"
-            });
-        }
+    //    for (int c = 1; c <= 7; c++)
+    //    {
+    //        solicitacaoTramite.COMENTARIOS.Add(new SOLICITACAO_TRAMITE_COMENTARIO
+    //        {
+    //            COD_COMENTARIO = (i * 100) + c,
+    //            COD_SOLICIT_TRAMITE = i,
+    //            TXT_COMENTARIO = $"Comentário {c} do trâmite {i}"
+    //        });
+    //    }
 
-        for (int l = 1; l <= 2; l++)
-        {
-            solicitacaoTramite.LOGS.Add(new SOLICITACAO_TRAMITE_LOG
-            {
-                COD_LOG_TRAMITE = (i * 1000) + l,
-                COD_SOLICIT_TRAMITE = i,
-                DSC_LOG = $"Log técnico {l} do trâmite {i} - Processado com sucesso."
-            });
-        }
+    //    for (int l = 1; l <= 8; l++)
+    //    {
+    //        solicitacaoTramite.LOGS.Add(new SOLICITACAO_TRAMITE_LOG
+    //        {
+    //            COD_LOG_TRAMITE = (i * 1000) + l,
+    //            COD_SOLICIT_TRAMITE = i,
+    //            DSC_LOG = $"Log técnico {l} do trâmite {i} - Processado com sucesso."
+    //        });
+    //    }
 
-        solicitacao.SOLICITACAO_TRAMITE.Add(solicitacaoTramite);
-    }
+    //solicitacao.SOLICITACAO_TRAMITE.Add(solicitacaoTramite);
+    //}
 
     db.Solicitacao.Add(solicitacao);
     db.SaveChanges();
@@ -166,7 +176,12 @@ var builder = Host.CreateDefaultBuilder(args)
         Console.WriteLine($"{s.COD_SOLICITACAO} ({s.NUM_SOLICITACAO})");
     }
 
+    Console.WriteLine("Pressione qualquer tecla para parar o host e processar o buffer...");
+    Console.ReadKey();
+
     await host.StopAsync();
+
+    Console.WriteLine("Sistema encerrado com sucesso.");
 
     Console.WriteLine("Agora sim, o sistema esperou o envio antes de fechar.");
 }

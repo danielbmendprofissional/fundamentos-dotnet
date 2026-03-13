@@ -4,10 +4,17 @@
 		<TargetFrameworks>netstandard2.0;net47;netcoreapp3.1;net6.0;net7.0;net8.0</TargetFrameworks>
 	</PropertyGroup>
 
-	<PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<Optimize>true</Optimize>
 		<DebugSymbols>false</DebugSymbols>
 		<DebugType>none</DebugType>
+		<IncludeSymbols>false</IncludeSymbols>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<Optimize>false</Optimize>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
 		<EmbedAllSources>false</EmbedAllSources>
 	</PropertyGroup>
 

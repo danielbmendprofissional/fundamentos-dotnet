@@ -1,5 +1,6 @@
 ﻿using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
 using Valuto.AuditTrail.Abstractions.Model.Entities;
+using Valuto.AuditTrail.Abstractions.Model.Snapshots;
 
 namespace Valuto.AuditTrail.Abstractions.Model.Helpers
 {
@@ -12,9 +13,9 @@ namespace Valuto.AuditTrail.Abstractions.Model.Helpers
         /// Obtém a entrada da entidade abstraída.
         /// </summary>
         /// <remarks>
-        /// Sempre será uma interface <see cref="IAuditEntry"/> para garantir independência do ORM.
+        /// Sempre será uma interface <see cref="EntitySnapshot"/> para garantir independência do ORM.
         /// </remarks>
-        public IAuditEntry Entry { get; }
+        public EntitySnapshot Entry { get; }
 
         /// <summary>
         /// Obtém a entidade de trilha de auditoria que armazena os valores para persistência.
@@ -26,7 +27,7 @@ namespace Valuto.AuditTrail.Abstractions.Model.Helpers
         /// </summary>
         /// <param name="entry">A entrada abstraída da entidade.</param>
         /// <param name="trail">A trilha de auditoria vinculada.</param>
-        public AuditHelper(IAuditEntry entry, AuditTrails trail)
+        public AuditHelper(EntitySnapshot entry, AuditTrails trail)
         {
             Entry = entry;
             Trail = trail;

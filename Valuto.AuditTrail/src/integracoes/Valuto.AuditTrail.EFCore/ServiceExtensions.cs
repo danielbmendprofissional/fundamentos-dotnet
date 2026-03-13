@@ -49,10 +49,6 @@ namespace Valuto.AuditTrail.EFCore
 
             services.RegisterAuditEngine<AuditLogEvent>();
 
-            services.AddTransient<IAuditEntry, AuditEntryAdapter>();
-            services.AddTransient<IAuditProperty, AuditPropertyAdapter>();
-            services.AddScoped<IAuditTracker, AuditTracker>();
-
             var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(TContext));
             if (descriptor == null) throw new InvalidOperationException($"DbContext {typeof(TContext).Name} não registrado.");
 
@@ -66,11 +62,18 @@ namespace Valuto.AuditTrail.EFCore
                 },
                 descriptor.Lifetime));
 
-            services.AddSingleton<EfMetadataAdapter>();
-            services.AddSingleton<IEfMetadataAdapter>(sp =>
+            services.AddScoped<ITrackerAdapter>(sp =>
             {
-                var realService = sp.GetRequiredService<EfMetadataAdapter>();
-                return new EfMetadataCacheProxy(realService);
+                var context = sp.GetRequiredService<TContext>();
+                return new TrackerAdapter(context.ChangeTracker);
+            });
+
+
+            services.AddSingleton<MetadataAdapter>();
+            services.AddSingleton<IMetadataAdapter>(sp =>
+            {
+                var realService = sp.GetRequiredService<MetadataAdapter>();
+                return new MetadataCacheProxy(realService);
             });
 
             return services;

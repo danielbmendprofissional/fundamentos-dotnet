@@ -9,25 +9,21 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Valuto.AuditTrail.EFCore.Adapters
 {
-    internal class AuditPropertyAdapter : IAuditProperty
+    internal class PropertyAdapter : IPropertyAdapter
     {
         private readonly PropertyEntry _property;
 
-        public AuditPropertyAdapter(PropertyEntry property)
+        public PropertyAdapter(PropertyEntry property, bool isPrimaryKey)
         {
             _property = property;
+            IsPrimaryKey = isPrimaryKey;
         }
 
         public string Name => _property.Metadata.Name;
-
         public object? CurrentValue => _property.CurrentValue;
-
         public object? OriginalValue => _property.OriginalValue;
-
         public bool IsModified => _property.IsModified;
-
         public bool IsTemporary => _property.IsTemporary;
-
-        public object Metadata => _property.Metadata;
+        public bool IsPrimaryKey { get; }
     }
 }

@@ -5,7 +5,7 @@ namespace Valuto.AuditTrail.Abstractions.Contracts.Auditoria
     /// <summary>
     /// Define o contrato para o acesso aos valores e metadados de uma propriedade de entidade.
     /// </summary>
-    public interface IAuditProperty
+    public interface IPropertyAdapter
     {
         /// <summary>
         /// Obtém o nome da propriedade conforme definido no modelo de dados.
@@ -34,10 +34,6 @@ namespace Valuto.AuditTrail.Abstractions.Contracts.Auditoria
         /// </summary>
         bool IsTemporary { get; }
 
-        /// <summary>
-        /// Armazena os metadados brutos da propriedade (ex: PropertyMetadata ou IProperty).
-        /// Deve ser tratado via Reflection pelo adaptador de metadados.
-        /// </summary>
-        object Metadata { get; }
+        bool IsPrimaryKey { get; }
     }
 }

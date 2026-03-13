@@ -5,28 +5,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Valuto.AuditTrail.Abstractions.Contracts;
 using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
 
 namespace Valuto.AuditTrail.EFCore.Adapters
 {
-    internal class AuditTracker : IAuditTracker
+    internal class TrackerAdapter : ITrackerAdapter
     {
         private readonly ChangeTracker _changeTracker;
 
-        public AuditTracker(ChangeTracker changeTracker)
+        public TrackerAdapter(ChangeTracker changeTracker)
         {
-            _changeTracker = changeTracker ?? throw new ArgumentNullException(nameof(changeTracker));
+            _changeTracker = changeTracker;
         }
 
         /// <summary>
         /// Obtém as entradas do ChangeTracker do EF Core 8 e as adapta para o contrato da Abstractions.
         /// </summary>
         /// <returns>Coleção de entradas prontas para o processamento de auditoria.</returns>
-        public IEnumerable<IAuditEntry> Entries()
+        public IEnumerable<IEntityAdapter> Entries(IMetadataAdapter metadataAdapter)
         {
-            return _changeTracker.Entries()
+            try
+            {
+                return _changeTracker.Entries()
                 .Where(e => e.State != EntityState.Unchanged && e.State != EntityState.Detached)
-                .Select(e => new AuditEntryAdapter(e));
+                .Select(e => new EntityAdapter(e, metadataAdapter));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return Enumerable.Empty<EntityAdapter>();
+            }
         }
     }
 }

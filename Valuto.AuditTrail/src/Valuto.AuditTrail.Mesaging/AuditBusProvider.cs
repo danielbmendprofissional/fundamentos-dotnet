@@ -27,7 +27,7 @@ namespace Valuto.AuditTrail.Mesaging
             _busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
 #if NETSTANDARD2_0 || NET47 || NETCOREAPP3_1
-                cfg.Host(new Uri($"rabbitmq://{opt.Host}"), h =>
+                cfg.Host(new Uri($"{opt.Host}"), h =>
                 {
                     h.Username(opt.Username);
                     h.Password(opt.Password);

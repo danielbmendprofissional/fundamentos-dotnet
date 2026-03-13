@@ -15,9 +15,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DocumentationFile>bin\$(Configuration)\Valuto.AuditTrail.EF.xml</DocumentationFile>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-  <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSymbols>true</IncludeSymbols>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -26,7 +25,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <IncludeSymbols>true</IncludeSymbols>
     <DebugSymbols>true</DebugSymbols>
@@ -128,10 +126,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapters\AuditEntryAdapter.cs" />
-    <Compile Include="Adapters\AuditPropertyAdapter.cs" />
-    <Compile Include="Adapters\AuditTracker.cs" />
-    <Compile Include="Adapters\EfMetadataAdapter.cs" />
+    <Compile Include="Adapters\EntityAdapter.cs" />
+    <Compile Include="Adapters\PropertyAdapter.cs" />
+    <Compile Include="Adapters\TrackerAdapter.cs" />
+    <Compile Include="Adapters\MetadataAdapter.cs" />
+    <Compile Include="Adapters\ForeignKeyAdapter.cs" />
+    <Compile Include="Adapters\NavigationAdapter.cs" />
+    <Compile Include="Adapters\ReferenceAdapter.cs" />
     <Compile Include="MetadatasExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceExtensions.cs" />

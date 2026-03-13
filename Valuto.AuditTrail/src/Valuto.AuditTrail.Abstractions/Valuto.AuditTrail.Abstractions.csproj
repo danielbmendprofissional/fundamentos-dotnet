@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<Authors>Daniel Mendonça</Authors>
-		<Company>VALUTO</Company>
+		<Company>Valuto</Company>
 		<Description>Biblioteca de Trilha de Auditoria para Entity Framework Core com Rabbit.</Description>
 		<Copyright>Copyright © 2026</Copyright>
 	</PropertyGroup>
@@ -25,5 +25,5 @@
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
-	
+
 </Project>

@@ -19,16 +19,17 @@ using Valuto.AuditTrail.Logic.Paralel;
 
 namespace Valuto.AuditTrail.Logic
 {
+    //[System.Diagnostics.DebuggerStepThrough]
     internal class AuditoriaInterna : IAuditoriaInterna
     {
         private readonly IUserProvider _userProvider;
-        private readonly IEfMetadataAdapter _metadataAdapter;
+        private readonly IMetadataAdapter _metadataAdapter;
         private readonly IAuditBuffer<AuditTrailCreatedEvent> _auditBuffer;
         private readonly IAuditBuffer<AuditLogEvent> _logBuffer;
 
         public AuditoriaInterna(
             IUserProvider userProvider,
-            IEfMetadataAdapter metadataAdapter,
+            IMetadataAdapter metadataAdapter,
             IAuditBuffer<AuditTrailCreatedEvent> auditBuffer,
             IAuditBuffer<AuditLogEvent> logBuffer)
         {
@@ -38,79 +39,53 @@ namespace Valuto.AuditTrail.Logic
             _logBuffer = logBuffer;
         }
 
-        public List<IAuditEntry> GerarSnapshot(IAuditTracker tracker)
+        public (List<EntitySnapshot> Snapshots, List<Action> Materializadores) GerarSnapshot(ITrackerAdapter tracker)
         {
-            return tracker.Entries()
-                .Where(ValidarEstadoAuditoria)
-                .Select(e =>
-                {
-                    var snapshot = new AuditEntrySnapshot
+            var materializadores = new List<Action>();
+
+            try
+            {
+                var snapshots = tracker.Entries(_metadataAdapter)
+                    .Where(e => ValidarEstadoAuditoria(e.State, e.Type))
+                    .Select(e =>
                     {
-                        Entity = e.Entity,
-                        State = e.State,
-                        TypeMetadata = e.TypeMetadata,
-                        Properties = e.Properties.Select(p =>
+                        var snapshot = EntitySnapshot.Create(
+                            e.Name,
+                            e.Type.Namespace ?? string.Empty,
+                            e.State);
+
+                        foreach (var prop in e.Properties)
                         {
-                            var propSnapshot = new AuditPropertySnapshot
-                            {
-                                Name = p.Name,
-                                OriginalValue = p.OriginalValue,
-                                IsModified = p.IsModified,
-                                IsTemporary = p.IsTemporary,
-                                Metadata = p.Metadata
-                            };
-
-                            if (p.IsTemporary)
-                            {
-                                var entidadeViva = e.Entity;
-                                var nomeProp = p.Name;
-                                propSnapshot.SetLazyLoader(() =>
-                                    entidadeViva.GetType().GetProperty(nomeProp)?.GetValue(entidadeViva, null));
-                            }
-                            else
-                            {
-                                propSnapshot.CurrentValue = p.CurrentValue;
-                            }
-
-                            return propSnapshot;
-                        }).Cast<IAuditProperty>().ToList()
-                    };
-
-                    var collections = _metadataAdapter.GetCollectionsMetadata(e.TypeMetadata);
-                    if (collections != null)
-                    {
-                        foreach (var metadata in collections)
-                        {
-                            string navName = _metadataAdapter.GetPropertyName(metadata);
-                            var navEntry = e.Navigation(navName);
-
-                            if (navEntry != null)
-                            {
-                                snapshot.NavEntries[navName] = navEntry;
-                            }
+                            snapshot.Properties.Add(PropertySnapshot.Create(prop, e.State));
                         }
-                    }
 
-                    var references = _metadataAdapter.GetReferencesMetadata(e.TypeMetadata);
-                    if (references != null)
-                    {
-                        foreach (var navMetadata in references)
+                        foreach (var foreign in e.ForeignKeys)
                         {
-                            string navName = _metadataAdapter.GetPropertyName(navMetadata);
-                            var navEntry = e.Navigation(navName);
-
-                            if (navEntry != null)
-                            {
-                                snapshot.NavEntries[navName] = navEntry;
-                            }
+                            snapshot.ForeignKeys.Add(ForeignKeySnapshot.Create(foreign));
                         }
-                    }
 
-                    return (IAuditEntry)snapshot;
-                }).ToList();
+                        foreach (var nav in e.Navigations)
+                        {
+                            snapshot.NavEntries.Add(NavigationSnapshot.Create(nav.Name, nav.Values));
+                        }
+
+                        foreach (var @ref in e.References)
+                        {
+                            snapshot.References.Add(ReferenceSnapshot.Create(@ref.Name, @ref.IsModified));
+                        }
+
+                        return snapshot;
+                    }).ToList();
+
+                return (snapshots, materializadores);
+            }
+            catch
+            {
+                return (Enumerable.Empty<EntitySnapshot>().ToList(), materializadores);
+            }
         }
 
-        public async Task ProcessarAuditoriaAsync(List<IAuditEntry> snapshots, CancellationToken cancellationToken = default)
+        public async Task ProcessarAuditoriaAsync(List<EntitySnapshot> snapshots, CancellationToken cancellationToken = default)
         {
             var ctx = new AuditProcessingContextHelper();
             try
@@ -142,36 +117,35 @@ namespace Valuto.AuditTrail.Logic
             }
         }
 
-        private bool ValidarEstadoAuditoria(IAuditEntry entry)
+        private bool ValidarEstadoAuditoria(EntryState state, Type? type)
         {
-            if (entry.State == AuditEntryState.Unchanged)
+            if (type == null || state == EntryState.Unchanged)
                 return false;
 
-            var attribute = _metadataAdapter.GetAuditableAttribute(entry.Entity.GetType());
+            var attribute = _metadataAdapter.GetAuditableAttribute(type);
             if (attribute == null) return false;
 
-            return VerificarPermissaoEstado(entry.State, attribute.Estados);
+            return VerificarPermissaoEstado(state, attribute.Estados);
         }
 
-        private bool VerificarPermissaoEstado(AuditEntryState state, AuditoriaEstado estadosPermitidos)
+        private bool VerificarPermissaoEstado(EntryState state, AuditoriaEstado estadosPermitidos)
         {
             switch (state)
             {
-                case AuditEntryState.Added: return (estadosPermitidos & AuditoriaEstado.Create) != 0;
-                case AuditEntryState.Deleted: return (estadosPermitidos & AuditoriaEstado.Delete) != 0;
-                case AuditEntryState.Modified: return (estadosPermitidos & AuditoriaEstado.Update) != 0;
+                case EntryState.Added: return (estadosPermitidos & AuditoriaEstado.Create) != 0;
+                case EntryState.Deleted: return (estadosPermitidos & AuditoriaEstado.Delete) != 0;
+                case EntryState.Modified: return (estadosPermitidos & AuditoriaEstado.Update) != 0;
                 default: return false;
             }
         }
 
-        private void IniciarAuditoria(AuditProcessingContextHelper ctx, List<IAuditEntry> entries)
+        private void IniciarAuditoria(AuditProcessingContextHelper ctx, List<EntitySnapshot> entries)
         {
             ctx.Step = AuditConstants.PreSaveCapturando;
             var usuario = _userProvider?.GetCurrentUser() ?? AuditConstants.NaoInformado;
 
             foreach (var entry in entries)
             {
-                ctx.EntriesMap[entry.Entity] = entry;
                 ctx.Track(entry, AuditConstants.PreSaveCriando);
 
                 var trail = CriarTrailEntity(entry, usuario, ctx);
@@ -179,12 +153,10 @@ namespace Valuto.AuditTrail.Logic
             }
         }
 
-        private AuditTrails CriarTrailEntity(IAuditEntry entry, string usuario, AuditProcessingContextHelper ctx)
+        private AuditTrails CriarTrailEntity(EntitySnapshot entry, string usuario, AuditProcessingContextHelper ctx)
         {
-            var type = entry.Entity.GetType();
-
-            var entityName = _metadataAdapter.GetEntityName(type);
-            var aplicacao = _metadataAdapter.GetNamespace(type);
+            var entityName = entry.Name;
+            var aplicacao = entry.Namespace;
 
             ctx.Track(entry, AuditConstants.PreSaveMetadados + entityName);
 
@@ -197,7 +169,7 @@ namespace Valuto.AuditTrail.Logic
             return trailEntry;
         }
 
-        private void DefinirValorPropriedades(IAuditEntry entry, AuditTrails trailEntry)
+        private void DefinirValorPropriedades(EntitySnapshot entry, AuditTrails trailEntry)
         {
             var trailType = ObterTipoTrilha(entry.State);
             trailEntry.DefinirTrailType(trailType);
@@ -205,33 +177,32 @@ namespace Valuto.AuditTrail.Logic
             var properties = entry.Properties.Where(x => !x.IsTemporary);
             foreach (var property in properties)
             {
-                string propertyName = _metadataAdapter.GetPropertyName(property.Metadata);
-                ProcessarValoresPropriedade(entry.State, trailEntry, property, propertyName);
+                ProcessarValoresPropriedade(entry.State, trailEntry, property, property.Name);
             }
         }
 
-        private TrailType ObterTipoTrilha(AuditEntryState state)
+        private TrailType ObterTipoTrilha(EntryState state)
         {
             switch (state)
             {
-                case AuditEntryState.Added: return TrailType.Create;
-                case AuditEntryState.Deleted: return TrailType.Delete;
-                case AuditEntryState.Modified: return TrailType.Update;
+                case EntryState.Added: return TrailType.Create;
+                case EntryState.Deleted: return TrailType.Delete;
+                case EntryState.Modified: return TrailType.Update;
                 default: return TrailType.None;
             }
         }
 
-        private void ProcessarValoresPropriedade(AuditEntryState state, AuditTrails trailEntry, IAuditProperty property, string propertyName)
+        private void ProcessarValoresPropriedade(EntryState state, AuditTrails trailEntry, PropertySnapshot property, string propertyName)
         {
             switch (state)
             {
-                case AuditEntryState.Added:
+                case EntryState.Added:
                     trailEntry.AdicionarNewValues(propertyName, property.CurrentValue);
                     break;
-                case AuditEntryState.Deleted:
+                case EntryState.Deleted:
                     trailEntry.AdicionarOldValues(propertyName, property.OriginalValue);
                     break;
-                case AuditEntryState.Modified:
+                case EntryState.Modified:
                     if (property.IsModified && (property.OriginalValue == null || !property.OriginalValue.Equals(property.CurrentValue)))
                     {
                         trailEntry.AdicionarChangedColumns(propertyName);
@@ -242,30 +213,23 @@ namespace Valuto.AuditTrail.Logic
             }
         }
 
-        private void DefinirValoresNavegacao(IAuditEntry entry, AuditTrails trailEntry)
+        private void DefinirValoresNavegacao(EntitySnapshot entry, AuditTrails trailEntry)
         {
-            var collections = _metadataAdapter.GetCollectionsMetadata(entry.TypeMetadata);
+            var collections = entry.NavEntries;
             if (collections == null) return;
 
-            foreach (var metadata in collections)
+            foreach (var collection in collections)
             {
-                string navigationName = _metadataAdapter.GetPropertyName(metadata);
-                if (string.IsNullOrEmpty(navigationName) || navigationName == AuditConstants.Unknown)
-                    continue;
-
-                var navEntry = entry.Navigation(navigationName);
-                if (navEntry == null) continue;
-
-                if (!(_metadataAdapter.GetCurrentValue(navEntry) is IEnumerable values))
-                    continue;
+                var collectionName = collection.Name;
+                var values = collection.Values;
 
                 var changes = ObterMudancasColecao(values, entry.State);
 
-                ProcessarInclusaoColecao(trailEntry, navigationName, changes);
+                ProcessarInclusaoColecao(trailEntry, collectionName, changes);
             }
         }
 
-        private IEnumerable<NavigationHelper> ObterMudancasColecao(IEnumerable values, AuditEntryState state)
+        private IEnumerable<NavigationHelper> ObterMudancasColecao(IEnumerable values, EntryState state)
         {
             if (values == null) yield break;
 
@@ -292,30 +256,23 @@ namespace Valuto.AuditTrail.Logic
             }
         }
 
-        private void DefinirValoresReferencia(IAuditEntry entry, AuditTrails trailEntry)
+        private void DefinirValoresReferencia(EntitySnapshot entry, AuditTrails trailEntry)
         {
-            var references = _metadataAdapter.GetReferencesMetadata(entry.TypeMetadata);
+            var references = entry.References;
             if (references == null) return;
 
-            foreach (var metadata in references)
+            foreach (var reference in references)
             {
-                string referenceName = _metadataAdapter.GetPropertyName(metadata);
-                if (string.IsNullOrEmpty(referenceName) || referenceName == AuditConstants.Unknown)
-                    continue;
-
-                var navEntry = entry.Navigation(referenceName);
-
-                if (navEntry == null || !_metadataAdapter.IsNavigationModified(navEntry))
-                    continue;
-
-                trailEntry.AdicionarChangedColumns(referenceName);
+                string referenceName = reference.Name;
+                if (!reference.IsModified)
+                    trailEntry.AdicionarChangedColumns(referenceName);
             }
         }
 
         private void ProcessarMetadadosPosSave(AuditProcessingContextHelper ctx)
         {
             ctx.Step = AuditConstants.PosSaveMetadados;
-            if (ctx.Helpers == null || ctx.EntriesMap == null) return;
+            if (ctx.Helpers == null) return;
 
             foreach (var audit in ctx.Helpers)
             {
@@ -331,89 +288,80 @@ namespace Valuto.AuditTrail.Logic
             }
         }
 
-        private void DefinirChavePrimaria(IAuditEntry entry, AuditTrails trail, AuditProcessingContextHelper ctx)
+        private void DefinirChavePrimaria(EntitySnapshot entry, AuditTrails trail, AuditProcessingContextHelper ctx)
         {
             if (!string.IsNullOrEmpty(trail.PrimaryKey)) return;
 
-            var entityType = entry.Entity.GetType();
-            var entityName = _metadataAdapter.GetEntityName(entityType);
-
+            var entityName = entry.Name;
             ctx.Step = AuditConstants.PosSavePk + entityName;
 
             var idValue = ObterIdDaEntry(entry);
-
-            if (idValue != AuditConstants.NotAvailable)
-                trail.DefinirPrimaryKey(idValue);
+            trail.DefinirPrimaryKey(idValue);
         }
 
         private void DefinirIdColecoes(AuditTrails trail, AuditProcessingContextHelper ctx)
         {
-            var map = ctx.EntriesMap;
-            if (map == null || trail.NewValues.Count == 0) return;
+            if (ctx == null || trail.NewValues.Count == 0) return;
 
             foreach (var entry in trail.NewValues)
             {
-                if (!(entry.Value is IEnumerable<NavigationHelper> collection)) continue;
-
-                foreach (var change in collection)
+                if (entry.Value is IEnumerable<NavigationHelper> collection)
                 {
-                    ProcessarIdNavegacao(change, map);
+                    foreach (var change in collection)
+                    {
+                        ProcessarIdNavegacao(change, ctx);
+                    }
                 }
             }
         }
 
-        private void ProcessarIdNavegacao(NavigationHelper change, Dictionary<object, IAuditEntry> map)
+        private void ProcessarIdNavegacao(NavigationHelper change, AuditProcessingContextHelper ctx)
         {
-            var instance = change.Instance;
+            if (change.Instance == null) return;
 
-            if (instance == null) return;
+            //var pkNames = change.PrimaryKeyNames;
 
-            if (map.TryGetValue(instance, out var itemEntry))
-            {
-                var id = ObterIdDaEntry(itemEntry);
+            //if (pkNames != null && pkNames.Any())
+            //{
+            //    var values = new List<string>();
 
-                if (id != AuditConstants.NotAvailable)
-                {
-                    change.Id = id;
-                }
-            }
+            //    foreach (var name in pkNames)
+            //    {
+            //        var prop = change.Instance.GetType().GetProperty(name);
+            //        var val = prop?.GetValue(change.Instance);
+            //        if (val != null) values.Add(val.ToString());
+            //    }
 
-            change.Instance = null;
+            //    change.Id = values.Count > 1
+            //        ? string.Join("|", values)
+            //        : values.FirstOrDefault();
+            //}
+
+            //change.Instance = null;
         }
 
-        private string ObterIdDaEntry(IAuditEntry entry)
+        private string ObterIdDaEntry(EntitySnapshot entry)
         {
-            var typeMetadata = entry.TypeMetadata;
-            if (typeMetadata == null) return AuditConstants.NotAvailable;
-
-            var primaryKeyMetadata = _metadataAdapter.FindPrimaryKey(typeMetadata);
-            if (primaryKeyMetadata == null) return AuditConstants.NotAvailable;
-
-            var properties = _metadataAdapter.GetPropertiesFromMetadata(primaryKeyMetadata);
-            if (properties == null) return AuditConstants.NotAvailable;
-
             string firstValue = null;
             StringBuilder compositeId = null;
 
-            foreach (var prop in properties)
+            var primaryKeys = entry.Properties.Where(x => x.IsPrimaryKey);
+
+            foreach (var key in primaryKeys)
             {
-                string propName = _metadataAdapter.GetPropertyName(prop);
-                var property = entry.Property(propName);
-                if (property == null) continue;
+                string propName = key.Name;
+                string propVal = key.CurrentValue?.ToString();
 
-                object val = property.CurrentValue;
-                string valStr = val?.ToString();
-
-                if (string.IsNullOrEmpty(valStr)) continue;
+                if (string.IsNullOrEmpty(propVal)) continue;
 
                 if (firstValue == null)
                 {
-                    firstValue = valStr;
+                    firstValue = propVal;
                 }
                 else
                 {
                     if (compositeId == null) compositeId = new StringBuilder(firstValue);
-                    compositeId.Append("|").Append(valStr);
+                    compositeId.Append("|").Append(propVal);
                 }
             }
 
@@ -421,47 +369,21 @@ namespace Valuto.AuditTrail.Logic
             return firstValue ?? AuditConstants.NotAvailable;
         }
 
-        private void DefinirRoots(IAuditEntry entry, AuditTrails trail, AuditProcessingContextHelper ctx)
+        private void DefinirRoots(EntitySnapshot entry, AuditTrails trail, AuditProcessingContextHelper ctx)
         {
-            var entityType = entry.TypeMetadata;
-            if (entityType == null) return;
+            //ctx.Step = AuditConstants.
 
-            var foreignKeys = _metadataAdapter.GetForeignKeys(entityType);
-            if (foreignKeys == null) return;
-
-            foreach (var fk in foreignKeys)
+            foreach (var fk in entry.ForeignKeys)
             {
-                if (TentarProcessarRoot(entry, trail, ctx, fk))
-                    break;
+                var rootId = fk.CurrentValue?.ToString();
+                if (string.IsNullOrWhiteSpace(rootId)) continue;
+
+                var rootName = fk.PrincipalEntityName;
+                if (string.IsNullOrWhiteSpace(rootName)) continue;
+
+                trail.DefinirRoot(rootName, rootId);
+                return;
             }
-        }
-
-        private bool TentarProcessarRoot(IAuditEntry entry, AuditTrails trail, AuditProcessingContextHelper ctx, object fk)
-        {
-            var navigationName = _metadataAdapter.GetNavigationNameFromForeignKey(fk);
-            if (string.IsNullOrWhiteSpace(navigationName)) return false;
-
-            var navEntry = entry.Navigation(navigationName);
-            var principalInstance = _metadataAdapter.GetCurrentValue(navEntry);
-
-            if (principalInstance == null || !ctx.EntriesMap.TryGetValue(principalInstance, out var principalEntry))
-                return false;
-
-            return DefinirRootFinal(entry, trail, principalEntry, fk);
-        }
-
-        private bool DefinirRootFinal(IAuditEntry entry, AuditTrails trail, IAuditEntry principalEntry, object fk)
-        {
-            var fkName = _metadataAdapter.GetFirstFkPropertyName(fk);
-            if (string.IsNullOrWhiteSpace(fkName)) return false;
-
-            var rootId = entry.Property(fkName).CurrentValue?.ToString();
-            if (string.IsNullOrWhiteSpace(rootId)) return false;
-
-            var rootName = _metadataAdapter.GetCleanEntityName(principalEntry.TypeMetadata);
-
-            trail.DefinirRoot(rootName, rootId);
-            return true;
         }
 
         private async Task EnviarParaFilaAsync(IEnumerable<AuditTrails> entries, CancellationToken ct = default)
@@ -496,8 +418,7 @@ namespace Valuto.AuditTrail.Logic
 
                 if (ctx.CurrentEntry != null)
                 {
-                    var nome = _metadataAdapter?.GetCleanEntityName(ctx.CurrentEntry.TypeMetadata)
-                               ?? ctx.CurrentEntry.Entity.GetType().Name;
+                    var nome = ctx.CurrentEntry.Name;
 
                     var idValue = ObterIdDaEntry(ctx.CurrentEntry);
                     entityInfo = $"{nome} [ID: {idValue}]";

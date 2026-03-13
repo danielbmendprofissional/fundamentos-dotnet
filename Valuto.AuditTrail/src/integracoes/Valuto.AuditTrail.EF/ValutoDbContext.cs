@@ -52,18 +52,18 @@ namespace Valuto.AuditTrail.EF
             if (_isSaving) throw new InvalidOperationException(AuditConstants.RecursionError);
 
             _isSaving = true;
-            var tracker = new AuditTracker(this);
+            var tracker = new TrackerAdapter(this);
 
             try
             {
                 OnBeforeSaveChanges();
 
-                var snapshots = AuditoriaInterna.GerarSnapshot(tracker);
+                var (snapshots, materializadores) = AuditoriaInterna.GerarSnapshot(tracker);
                 var result = base.SaveChanges();
 
                 if (snapshots.Count > 0)
                 {
-                    MaterializarSnapshots(snapshots);
+                    materializadores.ForEach(materializar => materializar());
 
                     _ = Task.Run(() =>
                     {
@@ -92,18 +92,18 @@ namespace Valuto.AuditTrail.EF
             if (_isSaving) throw new InvalidOperationException(AuditConstants.RecursionError);
 
             _isSaving = true;
-            var tracker = new AuditTracker(this);
+            var tracker = new TrackerAdapter(this);
 
             try
             {
                 await OnBeforeSaveChangesAsync();
 
-                var snapshots = AuditoriaInterna.GerarSnapshot(tracker);
+                var (snapshots, materializadores) = AuditoriaInterna.GerarSnapshot(tracker);
                 var result = await base.SaveChangesAsync(cancellationToken);
 
                 if (snapshots.Count > 0)
                 {
-                    MaterializarSnapshots(snapshots);
+                    materializadores.ForEach(materializar => materializar());
 
                     _ = Task.Run(async () =>
                     {
@@ -118,19 +118,6 @@ namespace Valuto.AuditTrail.EF
             }
             finally { _isSaving = false; }
         }
-
-        private void MaterializarSnapshots(List<IAuditEntry> snapshots)
-        {
-            foreach (var prop in snapshots.SelectMany(s => s.Properties)
-                                          .OfType<AuditPropertySnapshot>()
-                                          .Where(p => p.IsTemporary))
-            {
-                var valorFinal = prop.CurrentValue;
-                prop.IsTemporary = false;
-                prop.CurrentValue = valorFinal;
-            }
-        }
-
 
         private void SafeAction(Action action)
         {

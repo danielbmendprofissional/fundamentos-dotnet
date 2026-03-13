@@ -10,7 +10,7 @@ namespace Valuto.AuditTrail.Abstractions.Model.Enums
         /// Representa o estado de rastreamento de uma entidade de forma agnóstica ao ORM.
         /// Esta enumeração é utilizada pela Logic para decidir quais mudanças devem ser auditadas.
         /// </summary>
-        public enum AuditEntryState
+        public enum EntryState
         {
             /// <summary>
             /// A entidade não foi alterada. Corresponde ao estado Unchanged do EF.

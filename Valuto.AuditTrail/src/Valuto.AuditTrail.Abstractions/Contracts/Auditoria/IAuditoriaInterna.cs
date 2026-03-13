@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Valuto.AuditTrail.Abstractions.Model.Helpers;
+using Valuto.AuditTrail.Abstractions.Model.Snapshots;
 
 namespace Valuto.AuditTrail.Abstractions.Contracts.Auditoria
 {
@@ -15,11 +17,11 @@ namespace Valuto.AuditTrail.Abstractions.Contracts.Auditoria
         /// antes de ser alterado no saveChgens.
         /// </summary>
         /// <param name="tracker">ChangeTracker que contém as informações da operação atual do client.</param>
-        List<IAuditEntry> GerarSnapshot(IAuditTracker tracker);
+        (List<EntitySnapshot> Snapshots, List<Action> Materializadores) GerarSnapshot(ITrackerAdapter tracker);
         /// <summary>
         /// Finaliza o rastro de auditoria de forma assincrona, obtendo informações do ChangeTracker
         /// depois ser alterado no saveChgens.
         /// </summary>
-        Task ProcessarAuditoriaAsync(List<IAuditEntry> snapshots, CancellationToken cancellationToken = default);
+        Task ProcessarAuditoriaAsync(List<EntitySnapshot> snapshots, CancellationToken cancellationToken = default);
     }
 }

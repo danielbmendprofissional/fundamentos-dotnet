@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Valuto.AuditTrail.Abstractions.Commom;
 using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
+using Valuto.AuditTrail.Abstractions.Model.Snapshots;
 
 namespace Valuto.AuditTrail.Abstractions.Model.Helpers
 {
@@ -24,14 +25,9 @@ namespace Valuto.AuditTrail.Abstractions.Model.Helpers
         /// Referência para a entrada que está sendo processada no momento.
         /// </summary>
         /// <remarks>
-        /// Utiliza <see cref="IAuditEntry"/> para permitir a captura de IDs via Reflection em caso de erro.
+        /// Utiliza <see cref="EntitySnapshot"/> para permitir a captura de IDs via Reflection em caso de erro.
         /// </remarks>
-        public IAuditEntry CurrentEntry { get; set; }
-
-        /// <summary>
-        /// Mapeia instâncias de objetos reais para suas respectivas abstrações de entrada.
-        /// </summary>
-        public Dictionary<object, IAuditEntry> EntriesMap { get; set; }
+        public EntitySnapshot CurrentEntry { get; set; }
 
         /// <summary>
         /// Lista de auxiliares que contêm o par (Entrada, Trilha) para processamento pós-persistência.
@@ -45,7 +41,6 @@ namespace Valuto.AuditTrail.Abstractions.Model.Helpers
         {
             TransactionId = Guid.NewGuid();
             Helpers = new List<AuditHelper>();
-            EntriesMap = new Dictionary<object, IAuditEntry>();
             Step = AuditConstants.PreSaveInicializando;
         }
 
@@ -54,7 +49,7 @@ namespace Valuto.AuditTrail.Abstractions.Model.Helpers
         /// </summary>
         /// <param name="entry">Entrada atual.</param>
         /// <param name="step">Etapa atual.</param>
-        public void Track(IAuditEntry entry, string step)
+        public void Track(EntitySnapshot entry, string step)
         {
             CurrentEntry = entry;
             Step = step;

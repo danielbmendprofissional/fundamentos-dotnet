@@ -52,10 +52,6 @@ namespace Valuto.AuditTrail.EF
 
             services.RegisterAuditEngine<AuditLogEvent>();
 
-            services.AddTransient<IAuditEntry, AuditEntryAdapter>();
-            services.AddTransient<IAuditProperty, AuditPropertyAdapter>();
-            services.AddScoped<IAuditTracker, AuditTracker>();
-
             var descriptor = services.FirstOrDefault(d =>
                     d.ServiceType == typeof(TContext) ||
                     (d.ImplementationType == typeof(TContext)) ||
@@ -85,11 +81,18 @@ namespace Valuto.AuditTrail.EF
                 },
                 descriptor.Lifetime));
 
-            services.AddSingleton<EfMetadataAdapter>();
-            services.AddSingleton<IEfMetadataAdapter>(sp =>
+            services.AddScoped<ITrackerAdapter>(sp =>
             {
-                var realService = sp.GetRequiredService<EfMetadataAdapter>();
-                return new EfMetadataCacheProxy(realService);
+                var context = sp.GetRequiredService<TContext>();
+                return new TrackerAdapter(context);
+            });
+
+
+            services.AddSingleton<MetadataAdapter>();
+            services.AddSingleton<IMetadataAdapter>(sp =>
+            {
+                var realService = sp.GetRequiredService<MetadataAdapter>();
+                return new MetadataCacheProxy(realService);
             });
 
             return services;

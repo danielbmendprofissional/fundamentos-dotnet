@@ -31,9 +31,10 @@ namespace Valuto.AuditTrail.TestEF
                 {
                     var sQLiteConn = "SQLiteConn";
                     services.AddScoped<TestDbContext>(sp => new TestDbContext(sQLiteConn));
+
                     services.AddAuditTrail<TestDbContext>(options =>
                     {
-                        options.ConfigureEnviroment(Enviroments.Homologacao);
+                        options.ConfigureEnviroment(Abstractions.Model.Enums.Enviroments.Homologacao);
 
                         options.ConfigureBuffer(b =>
                         {
@@ -51,6 +52,11 @@ namespace Valuto.AuditTrail.TestEF
             using (var host = builder.Build())
             {
                 await host.StartAsync();
+
+                using (var scope = host.Services.CreateScope())
+                {
+                    var context = scope.ServiceProvider.GetRequiredService<TestDbContext>();
+                }
 
                 using (var scope = host.Services.CreateScope())
                 {
@@ -175,8 +181,42 @@ namespace Valuto.AuditTrail.TestEF
                     await db.SaveChangesAsync();
                 }
 
-                Console.WriteLine("Sucesso. Pressione qualquer tecla...");
+                Console.WriteLine("Sucesso ao Cadastrar. Pressione qualquer tecla...");
                 Console.ReadKey();
+
+                using (var scope = host.Services.CreateScope())
+                {
+                    var db = scope.ServiceProvider.GetRequiredService<TestDbContext>();
+
+                    var itens = db.Solicitacao.ToList();
+
+                    foreach (var itensItem in itens)
+                    {
+                        itensItem.NOM_ULT_RESPONSAVEL = "kkkkkkk";
+                        await db.SaveChangesAsync();
+                    }
+
+                }
+
+                Console.WriteLine("Sucesso ao Atualizar. Pressione qualquer tecla...");
+                Console.ReadKey();
+
+                using (var scope = host.Services.CreateScope())
+                {
+                    var db = scope.ServiceProvider.GetRequiredService<TestDbContext>();
+
+                    var itens = db.Solicitacao.ToList();
+
+                    foreach (var itensItem in itens)
+                    {
+                        db.Solicitacao.Remove(itensItem);
+                        await db.SaveChangesAsync();
+                    }
+                }
+
+                Console.WriteLine("Sucesso ao Remover. Pressione qualquer tecla...");
+                Console.ReadKey();
+
                 await host.StopAsync();
             }
         }
@@ -221,7 +261,7 @@ namespace Valuto.AuditTrail.TestEF
                 IND_EXIBE_RESPONSAVEL_SOLICIT = "S"
             };
 
-            for (int i = 1; i <= 5; i++)
+            for (int i = 1; i <= 2; i++)
             {
                 var solicitacaoTramite = new SOLICITACAO_TRAMITE
                 {
