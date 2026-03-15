@@ -57,7 +57,7 @@ namespace Valuto.AuditTrail.EF.Adapters
                         }
                     }
                 }
-                return list;
+                return list.ToList();
             }
             return Enumerable.Empty<ForeignKeyMetadata>();
         }
@@ -71,9 +71,9 @@ namespace Valuto.AuditTrail.EF.Adapters
                     {
                         var targetEntityType = n.ToEndMember.GetEntityType();
 
-                        var targetPkNames = targetEntityType.KeyMembers
+                        var targetPkNames = targetEntityType?.KeyMembers
                             .Select(k => k.Name)
-                            .ToArray();
+                            .ToArray() ?? Array.Empty<string>();
 
                         return new NavigationMetadata(
                             n.Name,

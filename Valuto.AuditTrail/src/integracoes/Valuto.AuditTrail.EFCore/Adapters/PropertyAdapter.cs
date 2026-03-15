@@ -19,11 +19,11 @@ namespace Valuto.AuditTrail.EFCore.Adapters
             IsPrimaryKey = isPrimaryKey;
         }
 
-        public string Name => _property.Metadata.Name;
-        public object? CurrentValue => _property.CurrentValue;
-        public object? OriginalValue => _property.OriginalValue;
-        public bool IsModified => _property.IsModified;
-        public bool IsTemporary => _property.IsTemporary;
+        public string Name => _property?.Metadata.Name ?? string.Empty;
+        public object? CurrentValue => _property?.CurrentValue;
+        public object? OriginalValue => _property?.OriginalValue;
+        public bool IsModified => _property?.IsModified ?? false;
+        public bool IsTemporary => _property?.IsTemporary ?? false;
         public bool IsPrimaryKey { get; }
     }
 }

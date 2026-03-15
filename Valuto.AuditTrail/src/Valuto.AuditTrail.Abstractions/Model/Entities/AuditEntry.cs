@@ -9,7 +9,7 @@ namespace Valuto.AuditTrail.Abstractions.Model.Entities
     /// <summary>
     /// Representa um registro detalhado de alteração de estado de uma entidade (Trilha de Auditoria).
     /// </summary>
-    public sealed class AuditTrails
+    public sealed class AuditEntry
     {
         /// <summary>
         /// Identificador único do rastro de auditoria. 
@@ -45,17 +45,12 @@ namespace Valuto.AuditTrail.Abstractions.Model.Entities
         /// </summary>
         [AllowNull]
         public string? PrimaryKey { get; private set; }
-        /// <summary>
-        /// Nome da entidade raiz (Aggregate Root) caso faça parte de um grafo complexo.
-        /// </summary>
+
         [AllowNull]
-        public string? Root { get; private set; }
-        /// <summary>
-        /// Identificador da entidade raiz.
-        /// </summary>
+        public IReadOnlyCollection<AuditBinding>? AuditBindings => _auditBinding?.AsReadOnly();
         [AllowNull]
-        public string? RootId { get; private set; }
-        
+        private List<AuditBinding>? _auditBinding = new List<AuditBinding>();
+
         /// <summary>
         /// Coleção de valores antes da alteração.
         /// </summary>
@@ -80,7 +75,7 @@ namespace Valuto.AuditTrail.Abstractions.Model.Entities
         [AllowNull]
         private List<string>? _changedColumns = new List<string>();
 
-        private AuditTrails(string usuario, string sistemaName, string entityName, Guid? id = null)
+        private AuditEntry(string usuario, string sistemaName, string entityName, Guid? id = null)
         {
             Guard.AgainstNullOrWhiteSpace(entityName, nameof(entityName));
 
@@ -93,7 +88,7 @@ namespace Valuto.AuditTrail.Abstractions.Model.Entities
             SistemaName = sistemaName;
         }
 
-        private AuditTrails() { }
+        private AuditEntry() { }
         /// <summary>
         /// Cria uma nova instância da auditoria.
         /// </summary>
@@ -101,8 +96,8 @@ namespace Valuto.AuditTrail.Abstractions.Model.Entities
         /// <param name="sistemaName">Nome do sistema de origem.</param>
         /// <param name="entityName">Nome da entidade auditada.</param>
         /// <param name="id">ID fixo para idempotência. Se nulo, um novo Guid será gerado.</param>
-        public static AuditTrails Criar(string usuario, string sistemaName, string entityName, Guid? id = null)
-            => new AuditTrails(usuario, sistemaName, entityName, id);
+        public static AuditEntry Criar(string usuario, string sistemaName, string entityName, Guid? id = null)
+            => new AuditEntry(usuario, sistemaName, entityName, id);
         /// <summary>
         /// Define o vínculo da auditoria com uma transação específica.
         /// </summary>
@@ -126,14 +121,26 @@ namespace Valuto.AuditTrail.Abstractions.Model.Entities
         {
             PrimaryKey = valor;
         }
-        /// <summary>
-        /// Registra o pai da transação se houver
-        /// </summary>
-        public void DefinirRoot(string nome, string id)
+
+        public void AdicionarBinding(
+            Guid transactionId,
+            string primaryKey,
+            string foreignKey,
+            string name,
+            string propertyName)
         {
-            Root = nome;
-            RootId = id;
+            if (_auditBinding != null)
+            {
+                _auditBinding.Add(new AuditBinding(
+                    Id,
+                    transactionId,
+                    primaryKey, 
+                    foreignKey, 
+                    name, 
+                    propertyName));
+            }
         }
+
         /// <summary>
         /// Registra os valores originais da entidade antes da persistência, em caso de atualização
         /// </summary>

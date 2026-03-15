@@ -28,9 +28,10 @@ namespace Valuto.AuditTrail.EF
         {
             get
             {
-                if (_entry.State == EntityState.Deleted) return null;
+                if (_entry == null || _entry.State == EntityState.Deleted)
+                    return null;
 
-                return _entry.CurrentValues[_propertyName];
+                return _entry.CurrentValues?.GetValue<object>(_propertyName);
             }
         }
 
@@ -38,13 +39,16 @@ namespace Valuto.AuditTrail.EF
         {
             get
             {
-                if (_entry.State == EntityState.Added) return null;
+                if (_entry == null || _entry.State == EntityState.Added)
+                    return null;
 
-                return _entry.OriginalValues[_propertyName];
+                return _entry.OriginalValues?.GetValue<object>(_propertyName);
             }
         }
 
-        public bool IsModified => _entry.Property(_propertyName).IsModified;
+        public bool IsModified => _entry != null &&
+                                 _entry.State == EntityState.Modified &&
+                                 _entry.Property(_propertyName).IsModified;
 
         public bool IsTemporary => false;
 

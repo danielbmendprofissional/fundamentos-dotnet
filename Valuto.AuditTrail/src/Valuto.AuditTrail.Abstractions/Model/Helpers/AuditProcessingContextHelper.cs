@@ -30,18 +30,18 @@ namespace Valuto.AuditTrail.Abstractions.Model.Helpers
         public EntitySnapshot CurrentEntry { get; set; }
 
         /// <summary>
-        /// Lista de auxiliares que contêm o par (Entrada, Trilha) para processamento pós-persistência.
-        /// </summary>
-        public List<AuditHelper> Helpers { get; }
-
-        /// <summary>
         /// Inicializa um novo contexto de processamento com um ID de transação único.
         /// </summary>
         public AuditProcessingContextHelper()
         {
             TransactionId = Guid.NewGuid();
-            Helpers = new List<AuditHelper>();
-            Step = AuditConstants.PreSaveInicializando;
+            Step = AuditConstants.Inicializando;
+        }
+
+        public void Start(EntitySnapshot entity)
+        {
+            CurrentEntry = entity;
+            Step = AuditConstants.Criacao;
         }
 
         /// <summary>
@@ -49,10 +49,9 @@ namespace Valuto.AuditTrail.Abstractions.Model.Helpers
         /// </summary>
         /// <param name="entry">Entrada atual.</param>
         /// <param name="step">Etapa atual.</param>
-        public void Track(EntitySnapshot entry, string step)
+        public void Track(string step)
         {
-            CurrentEntry = entry;
-            Step = step;
+            Step = step + CurrentEntry.Name;
         }
     }
 }

@@ -4,6 +4,6 @@ namespace Valuto.AuditTrail.Worker.Interfaces
 {
     public interface IAuditLogsRepository
     {
-        Task AdicionarUnicoAsync(AuditLogs auditTrails, CancellationToken cancellationToken = default);
+        Task AdicionarUnicoAsync(AuditLogs auditLogs, CancellationToken cancellationToken = default);
     }
 }

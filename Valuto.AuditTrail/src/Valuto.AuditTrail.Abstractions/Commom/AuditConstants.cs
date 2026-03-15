@@ -9,42 +9,38 @@
         /// <summary>
         /// Log indicando o início do processo de auditoria antes da persistência.
         /// </summary>
-        public const string PreSaveInicializando = "Pre-Save: Inicializando";
+        public const string Inicializando = "Inicializando auditoria";
 
         /// <summary>
         /// Log indicando a captura das entidades no ChangeTracker.
         /// </summary>
-        public const string PreSaveCapturando = "Pre-Save: Capturando Tracker";
+        public const string Capturando = "Capturando dados do tracker";
 
         /// <summary>
         /// Prefixo para log de mapeamento de metadados de uma entidade específica.
         /// </summary>
-        public const string PreSaveMetadados = "Pre-Save: Mapeando metadados de ";
+        public const string Criacao = "Criando entidade de auditoria";
+
+        public const string DefinirType = "Definindo type";
 
         /// <summary>
         /// Log indicando a criação da instância de trilha de auditoria.
         /// </summary>
-        public const string PreSaveCriando = "Pre-Save: Criando Trail";
+        public const string DefinirPropriedades = "Definindo propriedades";
 
         /// <summary>
         /// Prefixo para log de extração da chave primária após o salvamento.
         /// </summary>
-        public const string PosSavePk = "Pos-Save: Extraindo PK de ";
+        public const string DefinirValoresNavegacao = "Definindo valores de navegação";
+
+        public const string DefinirValoresReferencia = "Definindo valores de referencia";
 
         /// <summary>
         /// Prefixo para log de resolução da entidade raiz (Aggregate Root).
         /// </summary>
-        public const string PosSaveHierarchy = "Pos-Save: Resolvendo Hierarquia (Root) de ";
+        public const string DefinirRoots = "Definindo valores de Hierarquia (Root)";
 
-        /// <summary>
-        /// Log indicando a extração de chaves estrangeiras via Reflection para relacionamentos complexos.
-        /// </summary>
-        public const string PosSaveReflection = "Pos-Save: Extraindo ForeignKeys via Reflection";
-
-        /// <summary>
-        /// Log genérico para o processamento final de metadados.
-        /// </summary>
-        public const string PosSaveMetadados = "Pos-Save: Processamento de Metadados";
+        public const string DefinirPrimaryKey = "Definindo valores da chave primaria";
         #endregion
 
         #region REFLECTION

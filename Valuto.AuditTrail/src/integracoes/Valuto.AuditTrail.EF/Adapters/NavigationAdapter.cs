@@ -12,40 +12,34 @@ namespace Valuto.AuditTrail.EF.Adapters
     internal class NavigationAdapter : INavigationAdapter
     {
         private readonly DbMemberEntry _entry;
-        private readonly bool _isCollection;
 
-        public NavigationAdapter(DbMemberEntry entry, bool isCollection)
+        public NavigationAdapter(DbMemberEntry entry, string[] namesPrimaryKeys)
         {
             _entry = entry;
-            _isCollection = isCollection;
+            PrimaryKeys = namesPrimaryKeys ?? Array.Empty<string>();
         }
 
-        public string Name => _entry.Name;
+        public string Name => _entry?.Name ?? string.Empty;
+
+        public IReadOnlyList<string> PrimaryKeys { get; }
 
         public IEnumerable<object> Values
         {
             get
             {
-                if (_isCollection)
-                {
-                    if (_entry is DbCollectionEntry col && !col.IsLoaded)
-                        return Enumerable.Empty<object>();
-                }
-                else
-                {
-                    if (_entry is DbReferenceEntry refEntry && !refEntry.IsLoaded)
-                        return Enumerable.Empty<object>();
-                }
+                if (_entry == null) return Enumerable.Empty<object>();
+
+                if (_entry is DbCollectionEntry col && !col.IsLoaded)
+                    return Enumerable.Empty<object>();
 
                 var val = _entry.CurrentValue;
-                if (val == null) return Enumerable.Empty<object>();
 
-                if (_isCollection && val is IEnumerable enumerable)
+                if (val is IEnumerable enumerable)
                 {
                     return enumerable.Cast<object>();
                 }
 
-                return new[] { val };
+                return Enumerable.Empty<object>();
             }
         }
     }

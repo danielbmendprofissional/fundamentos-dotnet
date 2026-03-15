@@ -5,9 +5,9 @@ using Valuto.AuditTrail.Core;
 
 namespace Valuto.AuditTrail.Worker.Persistence
 {
-    internal class AuditTrailsMap : IEntityTypeConfiguration<AuditTrails>
+    internal class AuditEntryMap : IEntityTypeConfiguration<AuditEntry>
     {
-        public void Configure(EntityTypeBuilder<AuditTrails> builder)
+        public void Configure(EntityTypeBuilder<AuditEntry> builder)
         {
             builder.ToTable("AUDIT_TRAILS");
 

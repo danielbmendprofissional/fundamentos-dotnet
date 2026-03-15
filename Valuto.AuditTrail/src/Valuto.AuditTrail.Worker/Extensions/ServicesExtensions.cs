@@ -24,7 +24,7 @@ namespace Valuto.AuditTrail.Worker.Extensions
                 opt.EnableSensitiveDataLogging();
             });
 
-            services.AddScoped<IAuditTrailsRepository, AuditTrailsRepository>();
+            services.AddScoped<IAuditEntryRepository, AuditEntryRepository>();
             services.AddScoped<IAuditLogsRepository, AuditLogsRepository>();
 
             services.Configure<RabbitOptions>(configuration.GetSection("RabbitOptions"));

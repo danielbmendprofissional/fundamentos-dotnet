@@ -15,7 +15,6 @@ namespace Valuto.AuditTrail.EF.Adapters
         private readonly bool _isTemporary;
 
         public string Name { get; }
-        public string PrincipalEntityName { get; }
         public string PropertyName => _property.Name;
         public object CurrentValue => _property.CurrentValue;
         public bool IsTemporary => _isTemporary;
@@ -23,14 +22,11 @@ namespace Valuto.AuditTrail.EF.Adapters
         public ForeignKeyAdapter(
             DbPropertyEntry property,
             string resolvedName,
-            IMetadataAdapter metadataAdapter,
-            object edmMetadata,
             bool isTemporary)
         {
             _property = property;
             Name = resolvedName;
             _isTemporary = isTemporary;
-            PrincipalEntityName = metadataAdapter.GetPrincipalEntityName(edmMetadata);
         }
     }
 }

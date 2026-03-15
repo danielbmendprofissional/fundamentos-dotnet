@@ -12,18 +12,15 @@ namespace Valuto.AuditTrail.EFCore.Adapters
         private readonly PropertyEntry _property;
 
         public string Name { get; }
-        public string PrincipalEntityName { get; }
 
-        public bool IsTemporary => _property.IsTemporary;
-        public object? CurrentValue => _property.CurrentValue;
-        public string PropertyName => _property.Metadata.Name;
+        public bool IsTemporary => _property?.IsTemporary ?? false;
+        public object? CurrentValue => _property?.CurrentValue;
+        public string PropertyName => _property?.Metadata.Name ?? string.Empty;
 
-        public ForeignKeyAdapter(PropertyEntry property, string resolvedName, IMetadataAdapter metadataAdapter)
+        public ForeignKeyAdapter(PropertyEntry property, string resolvedName)
         {
             _property = property;
             Name = resolvedName;
-
-            PrincipalEntityName = metadataAdapter.GetPrincipalEntityName(property.Metadata);
         }
     }
 }

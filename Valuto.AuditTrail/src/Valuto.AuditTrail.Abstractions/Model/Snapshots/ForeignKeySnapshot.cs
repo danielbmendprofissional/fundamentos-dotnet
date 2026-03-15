@@ -22,8 +22,6 @@ namespace Valuto.AuditTrail.Abstractions.Model.Snapshots
         /// </summary>
         public bool IsTemporary { get; set; }
 
-        public string PrincipalEntityName { get; }
-
         /// <summary>
         /// Obtém ou define o valor da chave estrangeira.
         /// </summary>
@@ -36,14 +34,12 @@ namespace Valuto.AuditTrail.Abstractions.Model.Snapshots
             string name,
             string propertyName,
             object? currentValue,
-            bool isTemporary,
-            string principalEntityName)
+            bool isTemporary)
         {
             Name = name;
             PropertyName = propertyName;
             CurrentValue = currentValue;
             IsTemporary = isTemporary;
-            PrincipalEntityName = principalEntityName;
         }
 
         /// <summary>
@@ -61,8 +57,7 @@ namespace Valuto.AuditTrail.Abstractions.Model.Snapshots
                 adapter.Name,
                 adapter.PropertyName,
                 value,
-                isTemp,
-                adapter.PrincipalEntityName
+                isTemp
             );
         }
     }

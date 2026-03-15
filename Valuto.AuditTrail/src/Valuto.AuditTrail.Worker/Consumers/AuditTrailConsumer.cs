@@ -7,13 +7,13 @@ using Valuto.AuditTrail.Worker.Interfaces;
 
 namespace Valuto.AuditTrail.Worker
 {
-    public class AuditTrailConsumer(IAuditTrailsRepository repository) : IConsumer<AuditTrailCreatedEvent>
+    public class AuditTrailConsumer(IAuditEntryRepository repository) : IConsumer<AuditEntryCreatedEvent>
     {
-        public async Task Consume(ConsumeContext<AuditTrailCreatedEvent> context)
+        public async Task Consume(ConsumeContext<AuditEntryCreatedEvent> context)
         {
             var message = context.Message;
 
-            var auditEntity = AuditTrails.Criar(
+            var auditEntity = AuditEntry.Criar(
                     message.Usuario, 
                     message.SistemaName, 
                     message.EntityName, 

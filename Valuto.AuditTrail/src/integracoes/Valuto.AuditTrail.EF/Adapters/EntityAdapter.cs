@@ -19,10 +19,13 @@ namespace Valuto.AuditTrail.EF
         private readonly DbContext _context;
         private readonly DbEntityEntry _entry;
         private readonly IMetadataAdapter _metadataAdapter;
+
         private IEnumerable<IPropertyAdapter> _properties;
         private IEnumerable<IForeignKeyAdapter> _foreignKeys;
         private IEnumerable<INavigationAdapter> _navigations;
         private IEnumerable<IReferenceAdapter> _references;
+
+        private Type _actualType;
 
         public EntityAdapter(DbContext context, DbEntityEntry entry, IMetadataAdapter metadataAdapter)
         {
@@ -31,10 +34,10 @@ namespace Valuto.AuditTrail.EF
             _metadataAdapter = metadataAdapter;
         }
 
-        public Type Type => ObjectContext.GetObjectType(_entry.Entity.GetType());
+        public Type Type => _actualType ?? (_actualType = ObjectContext.GetObjectType(_entry.Entity.GetType()));
 
-        public string Name => ObjectContext.GetObjectType(_entry.Entity.GetType()).Name;
-        public string Namespace => ObjectContext.GetObjectType(_entry.Entity.GetType()).Namespace;
+        public string Name => Type.Name;
+        public string Namespace => Type.Namespace;
 
         public EntryState State => MapState(_entry.State);
 
@@ -47,10 +50,8 @@ namespace Valuto.AuditTrail.EF
                     var objectContext = ((IObjectContextAdapter)_context).ObjectContext;
                     var workspace = objectContext.MetadataWorkspace;
 
-                    var type = ObjectContext.GetObjectType(_entry.Entity.GetType());
-
                     var conceptualEntity = workspace.GetItems<EntityType>(DataSpace.CSpace)
-                        .FirstOrDefault(e => e.Name == type.Name);
+                        .FirstOrDefault(e => e.Name == Type.Name);
 
                     if (conceptualEntity != null)
                     {
@@ -60,8 +61,7 @@ namespace Valuto.AuditTrail.EF
                             new PropertyAdapter(
                                 _entry,
                                 p.Name,
-                                p.IsPrimaryKey
-                            )).ToList();
+                                p.IsPrimaryKey));
                     }
                     else
                     {
@@ -78,45 +78,30 @@ namespace Valuto.AuditTrail.EF
             {
                 if (_foreignKeys == null)
                 {
-                    var list = new List<IForeignKeyAdapter>();
-                    var objectContext = ((IObjectContextAdapter)_context).ObjectContext;
-
-                    var entityType = ObjectContext.GetObjectType(_entry.Entity.GetType());
-                    var workspace = objectContext.MetadataWorkspace;
-
-                    var conceptualEntity = workspace.GetItems<EntityType>(DataSpace.CSpace)
-                        .FirstOrDefault(e => e.Name == entityType.Name);
+                    var conceptualEntity = ((IObjectContextAdapter)_context).ObjectContext
+                        .MetadataWorkspace.GetItem<EntityType>(this.Type.Name, DataSpace.CSpace);
 
                     if (conceptualEntity != null)
                     {
-                        foreach (var navProperty in conceptualEntity.NavigationProperties)
-                        {
-                            var association = navProperty.RelationshipType as AssociationType;
-                            if (association?.ReferentialConstraints.Any() == true)
+                        _foreignKeys = _metadataAdapter.GetForeignKeys(conceptualEntity)
+                            .Select(meta =>
                             {
-                                var constraint = association.ReferentialConstraints.First();
+                                var dbProperty = _entry.Property(meta.PropertyName);
 
-                                if (constraint.ToRole.Name == navProperty.FromEndMember.Name)
-                                {
-                                    foreach (var prop in constraint.ToProperties)
-                                    {
-                                        var dbProperty = _entry.Property(prop.Name);
+                                bool isTemporary = _entry.State == EntityState.Added &&
+                                                 IsDefaultValue(dbProperty.CurrentValue);
 
-                                        bool isTemporary = _entry.State == EntityState.Added && IsDefaultValue(dbProperty.CurrentValue);
-
-                                        list.Add(new ForeignKeyAdapter(
-                                            dbProperty,
-                                            prop.Name,
-                                            _metadataAdapter,
-                                            navProperty,
-                                            isTemporary
-                                        ));
-                                    }
-                                }
-                            }
-                        }
+                                return new ForeignKeyAdapter(
+                                    dbProperty,
+                                    meta.PropertyName,
+                                    isTemporary
+                                );
+                            });
                     }
-                    _foreignKeys = list;
+                    else
+                    {
+                        _foreignKeys = Enumerable.Empty<IForeignKeyAdapter>();
+                    }
                 }
                 return _foreignKeys;
             }
@@ -129,12 +114,8 @@ namespace Valuto.AuditTrail.EF
                 if (_navigations == null)
                 {
                     var objectContext = ((IObjectContextAdapter)_context).ObjectContext;
-                    var workspace = objectContext.MetadataWorkspace;
-
-                    var type = ObjectContext.GetObjectType(_entry.Entity.GetType());
-
-                    var conceptualEntity = workspace.GetItems<EntityType>(DataSpace.CSpace)
-                        .FirstOrDefault(e => e.Name == type.Name);
+                    var conceptualEntity = objectContext.MetadataWorkspace
+                                    .GetItem<EntityType>(this.Type.Name, DataSpace.CSpace);
 
                     if (conceptualEntity != null)
                     {
@@ -146,7 +127,7 @@ namespace Valuto.AuditTrail.EF
                         {
                             var collectionEntry = _entry.Collection(n.Name);
 
-                            return new NavigationAdapter(collectionEntry, true);
+                            return new NavigationAdapter(collectionEntry, n.PrimaryKeys);
                         }).ToList();
                     }
                     else
@@ -166,24 +147,20 @@ namespace Valuto.AuditTrail.EF
                 {
                     var list = new List<IReferenceAdapter>();
                     var objectContext = ((IObjectContextAdapter)_context).ObjectContext;
-                    var workspace = objectContext.MetadataWorkspace;
 
-                    var entityType = workspace.GetItems<EntityType>(DataSpace.CSpace)
-                        .FirstOrDefault(e => e.Name == this.Name);
+                    var entityType = objectContext.MetadataWorkspace.GetItem<EntityType>(this.Name, DataSpace.CSpace);
 
                     if (entityType != null)
                     {
-                        var navigations = _metadataAdapter.GetNavigations(entityType)
-                            .Where(n => !n.IsCollection);
+                        var navigations = _metadataAdapter.GetNavigations(entityType).Where(n => !n.IsCollection);
 
                         var allForeignKeys = _metadataAdapter.GetForeignKeys(entityType);
 
+                        var fkLookup = allForeignKeys.ToLookup(fk => fk.Name, fk => fk.PropertyName);
+
                         foreach (var nav in navigations)
                         {
-                            var dependentProps = allForeignKeys
-                                .Where(fk => fk.Name == nav.Name)
-                                .Select(fk => fk.PropertyName)
-                                .ToList();
+                            var dependentProps = fkLookup[nav.Name].ToList();
 
                             list.Add(new ReferenceAdapter(
                                 _entry,

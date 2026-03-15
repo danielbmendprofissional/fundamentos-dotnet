@@ -11,7 +11,7 @@ namespace Valuto.AuditTrail.Abstractions.Model.Events
     /// Evento de integração que transporta os dados de uma trilha de auditoria para processamento assíncrono.
     /// </summary>
     [DataContract]
-    public sealed class AuditTrailCreatedEvent
+    public sealed class AuditEntryCreatedEvent
     {
         /// <summary>
         /// Identificador único do evento. Utilizado como chave primária no banco de dados para garantir idempotência.
@@ -64,6 +64,11 @@ namespace Valuto.AuditTrail.Abstractions.Model.Events
         [AllowNull]
         public string? RootId { get; set; }
 
+
+        [DataMember(Name = "AuditBindings")]
+        [AllowNull]
+        public List<AuditBindingCreatedEvent>? AuditBindings { get; set; }
+
         /// <summary>
         /// Dicionário contendo os valores originais antes da alteração.
         /// </summary>
@@ -98,10 +103,12 @@ namespace Valuto.AuditTrail.Abstractions.Model.Events
         public DateTime DateUtc { get; set; }
         
         /// <summary>
-        /// Inicializa uma nova instância de <see cref="AuditTrailCreatedEvent"/> com coleções instanciadas.
+        /// Inicializa uma nova instância de <see cref="AuditEntryCreatedEvent"/> com coleções instanciadas.
         /// </summary>
-        public AuditTrailCreatedEvent()
+        public AuditEntryCreatedEvent()
         {
+            Id = Guid.Empty;
+            AuditBindings = new List<AuditBindingCreatedEvent>();
             OldValues = new Dictionary<string, object>();
             NewValues = new Dictionary<string, object>();
             ChangedColumns = new List<string>();
@@ -109,8 +116,6 @@ namespace Valuto.AuditTrail.Abstractions.Model.Events
             EntityName = string.Empty;
             SistemaName = string.Empty;
             PrimaryKey = string.Empty;
-            Root = string.Empty;
-            RootId = string.Empty;
         }
 
         /// <summary>
@@ -126,9 +131,7 @@ namespace Valuto.AuditTrail.Abstractions.Model.Events
         /// <param name="newValues">Novos valores.</param>
         /// <param name="changedColumns">Colunas alteradas.</param>
         /// <param name="tipo">Tipo da operação.</param>
-        /// <param name="root">Nome da raiz (opcional).</param>
-        /// <param name="rootId">ID da raiz (opcional).</param>
-        public AuditTrailCreatedEvent(
+        public AuditEntryCreatedEvent(
             Guid id,
             Guid transactionId,
             string usuario,
@@ -138,9 +141,8 @@ namespace Valuto.AuditTrail.Abstractions.Model.Events
             Dictionary<string, object> oldValues,
             Dictionary<string, object> newValues,
             List<string> changedColumns,
-            TrailType tipo,
-            string root,
-            string rootId) : this()
+            List<AuditBindingCreatedEvent> auditBindings,
+            TrailType tipo) : this()
         {
             Id = id;
             TransactionId = transactionId;
@@ -151,10 +153,9 @@ namespace Valuto.AuditTrail.Abstractions.Model.Events
             OldValues = oldValues ?? new Dictionary<string, object>();
             NewValues = newValues ?? new Dictionary<string, object>();
             ChangedColumns = changedColumns ?? new List<string>();
+            AuditBindings = auditBindings ?? new List<AuditBindingCreatedEvent>();
             Tipo = tipo;
             DateUtc = DateTime.UtcNow;
-            Root = root;
-            RootId = rootId;
         }
     }
 }

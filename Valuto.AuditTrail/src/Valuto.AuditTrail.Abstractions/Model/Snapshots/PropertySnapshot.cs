@@ -21,7 +21,7 @@ namespace Valuto.AuditTrail.Abstractions.Model.Snapshots
         /// <summary>
         /// Obtém o valor atual da propriedade. 
         /// </summary>
-        public object? CurrentValue { get; set; }
+        public object? CurrentValue { get; private set; }
 
         /// <summary>
         /// Obtém ou define o valor original da propriedade antes da modificação.
@@ -59,17 +59,21 @@ namespace Valuto.AuditTrail.Abstractions.Model.Snapshots
 
         public static PropertySnapshot Create(IPropertyAdapter adapter, EntryState state)
         {
-            bool isTemp = adapter.IsPrimaryKey && state == EntryState.Added;
-            object? value = isTemp ? null : adapter.CurrentValue;
+            bool isTemp = adapter.IsTemporary;
 
             return new PropertySnapshot(
                 adapter.Name,
-                value,
+                isTemp ? null : adapter.CurrentValue,
                 adapter.OriginalValue,
                 adapter.IsModified,
                 adapter.IsPrimaryKey,
                 isTemp
             );
+        }
+
+        internal void UpdateValueAfterSave(object value)
+        {
+            CurrentValue = value;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Valuto.AuditTrail.EF.Adapters
         {
             _parentEntry = parentEntry;
             _navigationName = navigationName;
-            _dependentPropertyNames = dependentPropertyNames.ToList();
+            _dependentPropertyNames = dependentPropertyNames?.ToList() ?? new List<string>();
         }
 
         public string Name => _navigationName;
@@ -30,7 +30,8 @@ namespace Valuto.AuditTrail.EF.Adapters
         {
             get
             {
-                if (_dependentPropertyNames.Count == 0) return false;
+                if (_parentEntry == null || _dependentPropertyNames.Count == 0)
+                    return false;
 
                 return _dependentPropertyNames.Any(propName =>
                     _parentEntry.Property(propName).IsModified);

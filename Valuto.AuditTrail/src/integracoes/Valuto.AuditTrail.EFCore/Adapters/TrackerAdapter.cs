@@ -27,13 +27,17 @@ namespace Valuto.AuditTrail.EFCore.Adapters
         {
             try
             {
+                if (!_changeTracker.HasChanges())
+                    return Enumerable.Empty<IEntityAdapter>();
+
                 return _changeTracker.Entries()
-                .Where(e => e.State != EntityState.Unchanged && e.State != EntityState.Detached)
-                .Select(e => new EntityAdapter(e, metadataAdapter));
+                    .Where(e => e.State == EntityState.Added ||
+                                e.State == EntityState.Modified ||
+                                e.State == EntityState.Deleted)
+                    .Select(e => new EntityAdapter(e, metadataAdapter));
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
                 return Enumerable.Empty<EntityAdapter>();
             }
         }

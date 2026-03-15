@@ -10,6 +10,5 @@ namespace Valuto.AuditTrail.Abstractions.Contracts.Auditoria.Adapters
         bool IsTemporary { get; }
         object? CurrentValue { get; }
         string PropertyName { get; }
-        string PrincipalEntityName { get; }
     }
 }

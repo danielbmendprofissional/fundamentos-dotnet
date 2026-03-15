@@ -13,12 +13,12 @@ namespace Valuto.AuditTrail.Worker.Persistence.Repository
             _context = context;
         }
 
-        public async Task AdicionarUnicoAsync(AuditLogs auditTrails, CancellationToken cancellationToken = default)
+        public async Task AdicionarUnicoAsync(AuditLogs auditLogs, CancellationToken cancellationToken = default)
         {
-            if (await _context.AuditLogs.AnyAsync(x => x.Id == auditTrails.Id))
+            if (await _context.AuditLogs.AnyAsync(x => x.Id == auditLogs.Id))
                 return;
 
-            await _context.AuditLogs.AddAsync(auditTrails, cancellationToken);
+            await _context.AuditLogs.AddAsync(auditLogs, cancellationToken);
             await _context.SaveChangesAsync();
         }
     }

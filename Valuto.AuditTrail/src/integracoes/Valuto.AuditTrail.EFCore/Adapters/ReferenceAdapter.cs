@@ -14,8 +14,7 @@ namespace Valuto.AuditTrail.EFCore.Adapters
             _navigation = navigation;
         }
 
-        public string Name => _navigation.Metadata.Name;
-
-        public bool IsModified => _navigation.IsModified;
+        public string Name => _navigation?.Metadata?.Name ?? string.Empty;
+        public bool IsModified => _navigation?.IsModified ?? false;
     }
 }

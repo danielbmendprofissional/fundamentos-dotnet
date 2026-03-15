@@ -45,7 +45,7 @@ namespace Valuto.AuditTrail.EFCore
 
             services.AddAuditLogic(options.SelectedEnviroment);
 
-            services.RegisterAuditEngine<AuditTrailCreatedEvent>();
+            services.RegisterAuditEngine<AuditEntryCreatedEvent>();
 
             services.RegisterAuditEngine<AuditLogEvent>();
 

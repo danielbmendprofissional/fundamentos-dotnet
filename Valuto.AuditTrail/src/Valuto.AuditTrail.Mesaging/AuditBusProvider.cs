@@ -40,8 +40,8 @@ namespace Valuto.AuditTrail.Mesaging
                 });
 #endif
 
-                cfg.Message<AuditTrailCreatedEvent>(m => m.SetEntityName(options.Exchange));
-                cfg.Publish<AuditTrailCreatedEvent>(x =>
+                cfg.Message<AuditEntryCreatedEvent>(m => m.SetEntityName(options.Exchange));
+                cfg.Publish<AuditEntryCreatedEvent>(x =>
                 {
                     x.BindQueue(options.Exchange, options.Queue);
                 });

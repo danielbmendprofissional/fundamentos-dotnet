@@ -16,6 +16,7 @@ namespace Valuto.AuditTrail.EFCore.Adapters
     {
         private readonly EntityEntry _entry;
         private readonly IMetadataAdapter _metadataAdapter;
+
         private IEnumerable<IPropertyAdapter>? _properties;
         private IEnumerable<IForeignKeyAdapter>? _foreignKeys;
         private IEnumerable<INavigationAdapter>? _navigations;
@@ -50,9 +51,7 @@ namespace Valuto.AuditTrail.EFCore.Adapters
                     else
                     {
                         _properties = metadatas
-                            .Select(x => new PropertyAdapter(_entry.Property(x.Name), x.IsPrimaryKey))
-                            .Cast<IPropertyAdapter>()
-                            .ToList();
+                            .Select(x => new PropertyAdapter(_entry.Property(x.Name), x.IsPrimaryKey));
                     }
                 }
                 return _properties;
@@ -74,8 +73,7 @@ namespace Valuto.AuditTrail.EFCore.Adapters
                     else
                     {
                         _foreignKeys = metadatas
-                            .Select(x => new ForeignKeyAdapter(_entry.Property(x.PropertyName), x.Name, _metadataAdapter))
-                            .ToList();
+                            .Select(x => new ForeignKeyAdapter(_entry.Property(x.PropertyName), x.Name));
                     }
                 }
                 return _foreignKeys;
@@ -98,8 +96,7 @@ namespace Valuto.AuditTrail.EFCore.Adapters
                     {
                         _navigations = metadatas
                             .Where(x => x.IsCollection)
-                            .Select(x => new NavigationAdapter(_entry.Navigation(x.Name), x.PrimaryKeys))
-                            .ToList();
+                            .Select(x => new NavigationAdapter(_entry.Navigation(x.Name), x.PrimaryKeys));
                     }
                 }
                 return _navigations;
@@ -122,8 +119,7 @@ namespace Valuto.AuditTrail.EFCore.Adapters
                     {
                         _references = metadatas
                             .Where(x => !x.IsCollection)
-                            .Select(r => new ReferenceAdapter(_entry.Reference(r.Name)))
-                            .ToList();
+                            .Select(r => new ReferenceAdapter(_entry.Reference(r.Name)));
                     }
                 }
                 return _references;

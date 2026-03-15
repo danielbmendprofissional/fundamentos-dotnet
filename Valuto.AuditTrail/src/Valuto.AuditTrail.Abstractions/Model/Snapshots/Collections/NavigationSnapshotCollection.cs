@@ -9,8 +9,19 @@ namespace Valuto.AuditTrail.Abstractions.Model.Snapshots.Collections
     {
         protected override string GetKeyForItem(NavigationSnapshot item) => item.Name;
 
-        public NavigationSnapshot? Get(string name)
-            => Contains(name) ? this[name] : null;
+        /// <summary>
+        /// Adiciona uma sequência de itens à coleção.
+        /// </summary>
+        /// <param name="items">Sequência de snapshots a ser adicionada.</param>
+        public void AddRange(IEnumerable<NavigationSnapshot> items)
+        {
+            if (items == null) return;
+
+            foreach (var item in items)
+            {
+                this.Add(item);
+            }
+        }
 
         public IEnumerable<NavigationSnapshot> AsEnumerable() => this.Items;
     }

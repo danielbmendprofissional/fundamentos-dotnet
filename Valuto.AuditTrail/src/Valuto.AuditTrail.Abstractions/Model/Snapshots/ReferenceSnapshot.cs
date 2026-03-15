@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Valuto.AuditTrail.Abstractions.Contracts.Auditoria.Adapters;
 
 namespace Valuto.AuditTrail.Abstractions.Model.Snapshots
 {
@@ -9,10 +10,15 @@ namespace Valuto.AuditTrail.Abstractions.Model.Snapshots
         public string Name { get; } = string.Empty;
         public bool IsModified { get; }
 
-        private ReferenceSnapshot(string name, bool isNavigationModified)
-            => (Name, IsModified) = (name, isNavigationModified);
+        private ReferenceSnapshot(string name, bool isModified)
+            => (Name, IsModified) = (name, isModified);
 
-        public static ReferenceSnapshot Create(string name, bool isNavigationModified)
-            => new ReferenceSnapshot(name, isNavigationModified);
+        public static ReferenceSnapshot Create(IReferenceAdapter adapter)
+        {
+            return new ReferenceSnapshot(
+                    adapter.Name,
+                    adapter.IsModified
+                );
+        }
     }
 }
