@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
@@ -78,8 +79,11 @@ namespace Valuto.AuditTrail.EF
             {
                 if (_foreignKeys == null)
                 {
-                    var conceptualEntity = ((IObjectContextAdapter)_context).ObjectContext
-                        .MetadataWorkspace.GetItem<EntityType>(this.Type.Name, DataSpace.CSpace);
+                    var entityType = ObjectContext.GetObjectType(this.Type);
+
+                    var conceptualEntity = GetConceptualEntity(
+                        ((IObjectContextAdapter)_context).ObjectContext.MetadataWorkspace,
+                        entityType);
 
                     if (conceptualEntity != null)
                     {
@@ -113,9 +117,11 @@ namespace Valuto.AuditTrail.EF
             {
                 if (_navigations == null)
                 {
-                    var objectContext = ((IObjectContextAdapter)_context).ObjectContext;
-                    var conceptualEntity = objectContext.MetadataWorkspace
-                                    .GetItem<EntityType>(this.Type.Name, DataSpace.CSpace);
+                    var entityType = ObjectContext.GetObjectType(this.Type);
+
+                    var conceptualEntity = GetConceptualEntity(
+                        ((IObjectContextAdapter)_context).ObjectContext.MetadataWorkspace,
+                        entityType);
 
                     if (conceptualEntity != null)
                     {
@@ -123,12 +129,21 @@ namespace Valuto.AuditTrail.EF
                         var navigationsMetadata = _metadataAdapter.GetNavigations(conceptualEntity)
                             .Where(n => n.IsCollection);
 
-                        _navigations = navigationsMetadata.Select(n =>
-                        {
-                            var collectionEntry = _entry.Collection(n.Name);
+                        _navigations = navigationsMetadata
+                            .Select(n =>
+                            {
+                                var collectionEntry = _entry.Collection(n.Name);
+                                bool hasDataInMemory = collectionEntry.CurrentValue is IEnumerable e && e.Cast<object>().Any();
 
-                            return new NavigationAdapter(collectionEntry, n.PrimaryKeys);
-                        }).ToList();
+                                if (collectionEntry.IsLoaded || hasDataInMemory)
+                                {
+                                    return new NavigationAdapter(collectionEntry, n.PrimaryKeys);
+                                }
+
+                                return null;
+                            })
+                            .Where(adapter => adapter != null)
+                            .ToList();
                     }
                     else
                     {
@@ -146,15 +161,18 @@ namespace Valuto.AuditTrail.EF
                 if (_references == null)
                 {
                     var list = new List<IReferenceAdapter>();
-                    var objectContext = ((IObjectContextAdapter)_context).ObjectContext;
 
-                    var entityType = objectContext.MetadataWorkspace.GetItem<EntityType>(this.Name, DataSpace.CSpace);
+                    var entityType = ObjectContext.GetObjectType(this.Type);
 
-                    if (entityType != null)
+                    var conceptualEntity = GetConceptualEntity(
+                        ((IObjectContextAdapter)_context).ObjectContext.MetadataWorkspace,
+                        entityType);
+
+                    if (conceptualEntity != null)
                     {
-                        var navigations = _metadataAdapter.GetNavigations(entityType).Where(n => !n.IsCollection);
+                        var navigations = _metadataAdapter.GetNavigations(conceptualEntity).Where(n => !n.IsCollection);
 
-                        var allForeignKeys = _metadataAdapter.GetForeignKeys(entityType);
+                        var allForeignKeys = _metadataAdapter.GetForeignKeys(conceptualEntity);
 
                         var fkLookup = allForeignKeys.ToLookup(fk => fk.Name, fk => fk.PropertyName);
 
@@ -195,6 +213,20 @@ namespace Valuto.AuditTrail.EF
             if (value == null) return true;
             var type = value.GetType();
             return type.IsValueType ? value.Equals(Activator.CreateInstance(type)) : false;
+        }
+
+        private EntityType GetConceptualEntity(MetadataWorkspace workspace, Type type)
+        {
+            if (workspace.TryGetItem<EntityType>(type.FullName, DataSpace.CSpace, out var entityByFullName))
+            {
+                return entityByFullName;
+            }
+            if (workspace.TryGetItem<EntityType>(type.Name, DataSpace.CSpace, out var entityByName))
+            {
+                return entityByName;
+            }
+
+            return null;
         }
     }
 }

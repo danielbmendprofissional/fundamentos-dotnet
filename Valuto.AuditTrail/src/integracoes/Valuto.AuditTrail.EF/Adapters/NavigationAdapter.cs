@@ -29,9 +29,6 @@ namespace Valuto.AuditTrail.EF.Adapters
             {
                 if (_entry == null) return Enumerable.Empty<object>();
 
-                if (_entry is DbCollectionEntry col && !col.IsLoaded)
-                    return Enumerable.Empty<object>();
-
                 var val = _entry.CurrentValue;
 
                 if (val is IEnumerable enumerable)
@@ -39,7 +36,7 @@ namespace Valuto.AuditTrail.EF.Adapters
                     return enumerable.Cast<object>();
                 }
 
-                return Enumerable.Empty<object>();
+                return val != null ? new[] { val } : Enumerable.Empty<object>();
             }
         }
     }
