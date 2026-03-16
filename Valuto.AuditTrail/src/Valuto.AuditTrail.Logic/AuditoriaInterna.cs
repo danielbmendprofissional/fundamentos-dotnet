@@ -287,12 +287,14 @@ namespace Valuto.AuditTrail.Logic
 
         private async Task EnviarParaFilaAsync(IEnumerable<AuditEntry> entries, CancellationToken ct = default)
         {
+            var transactionId = _contextHelper.TransactionId;
+
             foreach (var e in entries)
             {
                 var bindingEvents = e.AuditBindings.Select(x => new AuditBindingCreatedEvent(
                     x.Id,
-                    e.Id, // AuditEntryId
-                    e.TransactionId,
+                    e.Id,
+                    transactionId,
                     x.PrimaryKey,
                     x.ForeignKey,
                     x.Name,
@@ -301,7 +303,7 @@ namespace Valuto.AuditTrail.Logic
 
                 var @event = new AuditEntryCreatedEvent(
                     e.Id,
-                    e.TransactionId,
+                    transactionId,
                     e.Usuario,
                     e.EntityName,
                     e.SistemaName,

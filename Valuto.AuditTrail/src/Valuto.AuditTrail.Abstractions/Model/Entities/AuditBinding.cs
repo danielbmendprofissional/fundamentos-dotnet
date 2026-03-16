@@ -23,11 +23,12 @@ namespace Valuto.AuditTrail.Abstractions.Model.Entities
             string primaryKey, 
             string foreignKey, 
             string name, 
-            string propertyName) 
+            string propertyName,
+            Guid? id = null) 
         {
 
             Guard.AgainstEmptyGuid(auditEntryId, nameof(auditEntryId));
-            Id = Guid.NewGuid();
+            Id = id ?? Guid.NewGuid();
 
             AuditEntryId = auditEntryId;
             TransactionId = transactionId;

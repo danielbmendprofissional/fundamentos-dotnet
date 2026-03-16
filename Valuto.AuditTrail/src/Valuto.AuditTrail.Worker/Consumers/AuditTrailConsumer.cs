@@ -23,11 +23,19 @@ namespace Valuto.AuditTrail.Worker
 
             auditEntity.DefinirPrimaryKey(message.PrimaryKey);
             auditEntity.DefinirTrailType(message.Tipo);
-            auditEntity.DefinirRoot(message.Root, message.RootId);
 
             message.OldValues?.ToList().ForEach(x => auditEntity.AdicionarOldValues(x.Key, x.Value));
             message.NewValues?.ToList().ForEach(x => auditEntity.AdicionarNewValues(x.Key, x.Value));
             message.ChangedColumns?.ToList().ForEach(auditEntity.AdicionarChangedColumns);
+
+            message.AuditBindings?.ToList().ForEach(x => auditEntity.AdicionarBinding(
+                x.TransactionId,
+                x.PrimaryKey,
+                x.ForeignKey,
+                x.Name,
+                x.PropertyName,
+                x.Id
+            ));
 
             try
             {

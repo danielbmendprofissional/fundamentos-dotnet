@@ -127,7 +127,8 @@ namespace Valuto.AuditTrail.Abstractions.Model.Entities
             string primaryKey,
             string foreignKey,
             string name,
-            string propertyName)
+            string propertyName,
+            Guid? id = null)
         {
             if (_auditBinding != null)
             {
@@ -137,7 +138,8 @@ namespace Valuto.AuditTrail.Abstractions.Model.Entities
                     primaryKey, 
                     foreignKey, 
                     name, 
-                    propertyName));
+                    propertyName,
+                    id));
             }
         }
 
