@@ -1,0 +1,29 @@
+using System;
+using System.Net.Mail;
+using Onion.Domain.Common.Validation;
+using Onion.Domain.Common.Exceptions;
+
+namespace Onion.Domain.Partners.ValueObjects
+{
+    public sealed class Email
+    {
+        public string Address { get; private set; }
+
+        public Email(string address)
+        {
+            Guard.AgainstNullOrWhiteSpace(address, nameof(address));
+            try
+            {
+                var _ = new MailAddress(address);
+            }
+            catch (FormatException)
+            {
+                throw new DomainException("Invalid email format.");
+            }
+
+            Address = address;
+        }
+
+        public override string ToString() => Address;
+    }
+}
