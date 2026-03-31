@@ -10,8 +10,5 @@ namespace Onion.Domain.Partners.Interfaces
 
         Task AddAsync(Partner partner,
             CancellationToken cancellationToken = default);
-
-        Task<PagedResult<Partner>> ListAsync(ISpecification<Partner> specification,
-            CancellationToken cancellationToken = default);
     }
 }

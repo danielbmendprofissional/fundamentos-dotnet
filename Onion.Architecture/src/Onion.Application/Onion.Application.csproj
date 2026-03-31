@@ -6,4 +6,36 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Onion.Domain\Onion.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Accounts\DTOs\Requests\" />
+    <Folder Include="Accounts\Extensions\" />
+    <Folder Include="Accounts\Mappings\" />
+    <Folder Include="Accounts\EventHandlers\" />
+    <Folder Include="Accounts\Validations\" />
+    <Folder Include="Accounts\Services\" />
+    <Folder Include="Appointments\EventHandlers\" />
+    <Folder Include="Appointments\Extensions\" />
+    <Folder Include="Appointments\Mappings\" />
+    <Folder Include="Appointments\Services\" />
+    <Folder Include="Appointments\Validations\" />
+    <Folder Include="Invitations\DTOs\Requests\" />
+    <Folder Include="Invitations\DTOs\Responses\" />
+    <Folder Include="Invitations\EventHandlers\" />
+    <Folder Include="Invitations\Extensions\" />
+    <Folder Include="Invitations\Mappings\" />
+    <Folder Include="Invitations\Services\" />
+    <Folder Include="Invitations\Validations\" />
+    <Folder Include="Partners\DTOs\Requests\" />
+    <Folder Include="Partners\DTOs\Responses\" />
+    <Folder Include="Partners\EventHandlers\" />
+    <Folder Include="Partners\Extensions\" />
+    <Folder Include="Partners\Mappings\" />
+    <Folder Include="Partners\Services\" />
+    <Folder Include="Partners\Validations\" />
+  </ItemGroup>
+
 </Project>

@@ -58,7 +58,7 @@ namespace Onion.Domain.Partners.Entities
             Name = name;
             Image = image;
 
-            SetDataAtualizacao();
+            SetUpdateDate();
         }
 
         private void Validate(

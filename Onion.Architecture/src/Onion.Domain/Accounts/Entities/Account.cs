@@ -3,7 +3,7 @@ using Onion.Domain.Common.Base;
 using Onion.Domain.Common.Validation;
 using Onion.Domain.Common.Exceptions;
 
-namespace Onion.Domain.Identity.Entities
+namespace Onion.Domain.Accounts.Entities
 {
     public sealed class Account : AggregateRoot
     {

@@ -51,7 +51,7 @@ namespace Onion.Domain.Invitations.Entities
 
             Status = InvitationStatus.Accepted;
             RespondedAt = DateTime.UtcNow;
-            SetDataAtualizacao();
+            SetUpdateDate();
         }
 
         public void Reject(string? reason = null)
@@ -61,7 +61,7 @@ namespace Onion.Domain.Invitations.Entities
             Status = InvitationStatus.Rejected;
             Note = reason ?? Note;
             RespondedAt = DateTime.UtcNow;
-            SetDataAtualizacao();
+            SetUpdateDate();
         }
 
         public void Cancel(string? reason = null)
@@ -71,7 +71,7 @@ namespace Onion.Domain.Invitations.Entities
             Status = InvitationStatus.Cancelled;
             Note = reason ?? Note;
             RespondedAt = DateTime.UtcNow;
-            SetDataAtualizacao();
+            SetUpdateDate();
         }
 
         public void Expire()
@@ -79,7 +79,7 @@ namespace Onion.Domain.Invitations.Entities
             if (Status == InvitationStatus.Pending && ExpiresAt.HasValue && ExpiresAt < DateTime.UtcNow)
             {
                 Status = InvitationStatus.Expired;
-                SetDataAtualizacao();
+                SetUpdateDate();
             }
         }
     }

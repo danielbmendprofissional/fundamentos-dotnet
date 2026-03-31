@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="AntiCorruption\" />
+    <Folder Include="Persistence\Accounts\IntegrationEventHandlers\" />
+    <Folder Include="Persistence\Appointments\" />
+    <Folder Include="Persistence\Invitations\" />
+    <Folder Include="Persistence\Partners\" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="MediatR" Version="14.1.0" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.25" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.25" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.25" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.25" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Onion.Application\Onion.Application.csproj" />
+  </ItemGroup>
+
+</Project>

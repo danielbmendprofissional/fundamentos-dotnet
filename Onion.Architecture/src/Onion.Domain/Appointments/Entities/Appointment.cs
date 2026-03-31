@@ -83,7 +83,7 @@ namespace Onion.Domain.Appointments.Entities
             EndDate = endDate;
             Address = address;
 
-            SetDataAtualizacao();
+            SetUpdateDate();
         }
 
         public void AddDate(
@@ -108,7 +108,7 @@ namespace Onion.Domain.Appointments.Entities
 
             var newDate = AppointmentDate.Create(name, endDate, startDate, description);
             _dates.Add(newDate);
-            SetDataAtualizacao();
+            SetUpdateDate();
         }
 
         public void UpdateDate(
@@ -138,7 +138,7 @@ namespace Onion.Domain.Appointments.Entities
 
 
             date!.Update(name, startDate, endDate, description);
-            SetDataAtualizacao();
+            SetUpdateDate();
         }
 
         public void RemoveDate(Guid dateId)
@@ -153,7 +153,7 @@ namespace Onion.Domain.Appointments.Entities
                 "Specific date not found in this appointment.");
             
             _dates.Remove(date!);
-            SetDataAtualizacao();
+            SetUpdateDate();
         }
 
         public void AddParticipant(string name, string email, Guid partnerId)
@@ -172,7 +172,7 @@ namespace Onion.Domain.Appointments.Entities
             var participant = Participant.Create(name, email, partnerId);
 
             _participants.Add(participant);
-            SetDataAtualizacao();
+            SetUpdateDate();
         }
 
         public void UpdateParticipant(Guid participantId, string name, string email)
@@ -190,7 +190,7 @@ namespace Onion.Domain.Appointments.Entities
                 "Specific participant not found in this appointment.");
 
             participant!.Update(name, email);
-            SetDataAtualizacao();
+            SetUpdateDate();
         }
 
         public void UpdateParticipantSituation(Guid participantId, ParticipantSituation situation)
@@ -205,7 +205,7 @@ namespace Onion.Domain.Appointments.Entities
                 "Specific participant not found in this appointment.");
 
             participant!.UpdateSituation(situation);
-            SetDataAtualizacao();
+            SetUpdateDate();
         }
 
         public void RemoveParticipant(Guid participantId)
@@ -220,7 +220,7 @@ namespace Onion.Domain.Appointments.Entities
                 "Specific participant not found in this appointment.");
 
             _participants.Remove(participant!);
-            SetDataAtualizacao();
+            SetUpdateDate();
 
         }
 

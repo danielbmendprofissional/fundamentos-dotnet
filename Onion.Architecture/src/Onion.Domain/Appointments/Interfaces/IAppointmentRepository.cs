@@ -10,8 +10,5 @@ namespace Onion.Domain.Appointments.Interfaces
 
         Task AddAsync(Appointment appointment,
             CancellationToken cancellationToken = default);
-
-        Task<PagedResult<Appointment>> ListAsync(ISpecification<Appointment> specification,
-            CancellationToken cancellationToken = default);
     }
 }

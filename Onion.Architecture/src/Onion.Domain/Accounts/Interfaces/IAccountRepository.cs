@@ -1,9 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Onion.Domain.Identity.Entities;
+using Onion.Domain.Accounts.Entities;
 
-namespace Onion.Domain.Identity.Interfaces
+namespace Onion.Domain.Accounts.Interfaces
 {
     public interface IAccountRepository
     {

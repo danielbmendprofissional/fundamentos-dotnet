@@ -8,7 +8,4 @@
 
         Task AddAsync(Invitation invitation,
             CancellationToken cancellationToken = default);
-
-        Task<PagedResult<Invitation>> ListAsync(ISpecification<Invitation> specification,
-            CancellationToken cancellationToken = default);
     }

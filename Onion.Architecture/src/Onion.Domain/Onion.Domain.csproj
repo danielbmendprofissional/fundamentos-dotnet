@@ -7,8 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Appointments\Events\" />
+    <Compile Remove="Appointments\Events\ParticipantAddedEvent.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Partners\Events\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Appointments\Events\ParticipantAddedEvent.cs" />
   </ItemGroup>
 
 

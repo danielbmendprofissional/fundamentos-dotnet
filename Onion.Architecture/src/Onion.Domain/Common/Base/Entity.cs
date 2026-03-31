@@ -10,18 +10,18 @@ namespace Onion.Domain.Common.Base
     {
 
         public Guid Id { get; protected set; }
-        public DateTime DataCriacao { get; protected set; }
-        public DateTime? DataAtualizacao { get; protected set; }
+        public DateTime CreateDate { get; protected set; }
+        public DateTime? UpdateDate { get; protected set; }
 
         protected Entity(Guid? id = null)
         {
             Id = id ?? Guid.NewGuid();
-            DataCriacao = DateTime.UtcNow;
+            CreateDate = DateTime.UtcNow;
         }
 
-        protected void SetDataAtualizacao()
+        protected void SetUpdateDate()
         {
-            DataAtualizacao = DateTime.UtcNow;
+            UpdateDate = DateTime.UtcNow;
         }
 
         public override bool Equals(object? obj)
