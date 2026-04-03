@@ -8,10 +8,11 @@ namespace Onion.Application.Invitations.Interfaces
 {
     public interface IInvitationQueryRepository
     {
-        Task<InvitationDetails> GetById(Guid id, CancellationToken cancellationToken = default);
+        Task<InvitationDetails?> GetDetailsAsync(Guid id, CancellationToken ct = default);
 
-        Task<PagedResult<InvitationSummary>> GetAsync(
-            InvitationFilter? filter,
-            CancellationToken cancellationToken = default);
+        Task<PagedResult<InvitationSummary>> GetFilteredListAsync(
+            Guid accountId,
+            InvitationFilter filter,
+            CancellationToken ct = default);
     }
 }

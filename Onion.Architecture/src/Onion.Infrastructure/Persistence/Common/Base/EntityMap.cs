@@ -22,6 +22,10 @@ namespace Onion.Infrastructure.Persistence.Common.Base
             builder.Property(e => e.UpdateDate);
 
             ConfigureMapping(builder);
+
+            builder.HasIndex(e => e.CreateDate);
+            builder.HasIndex(e => e.UpdateDate);
+            builder.Property<byte[]>("RowVersion").IsRowVersion();
         }
 
         protected abstract void ConfigureMapping(EntityTypeBuilder<TEntity> builder);

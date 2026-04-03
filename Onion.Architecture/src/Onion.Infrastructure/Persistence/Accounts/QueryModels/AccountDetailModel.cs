@@ -8,11 +8,11 @@ namespace Onion.Infrastructure.Persistence.Accounts.QueryModels
 {
     public sealed class AccountDetailsModel
     {
-        public Guid Id { get; }
-        public string Email { get; } = string.Empty;
-        public string Name { get; } = string.Empty;
-        public string? PhotoUrl { get; }
-        public bool IsActive { get; }
-        public DateTime CreatedAt { get; }
+        public Guid Id { get; init; }
+        public string Email { get; init; } = string.Empty;
+        public string Name { get; init; } = string.Empty;
+        public string? PhotoUrl { get; init; }
+        public bool IsActive { get; init; }
+        public DateTime CreatedAt { get; init; }
     }
 }

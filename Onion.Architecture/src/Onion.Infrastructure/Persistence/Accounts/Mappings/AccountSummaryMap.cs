@@ -9,7 +9,7 @@ namespace Onion.Infrastructure.Persistence.Accounts.Mappings
     {
         public void Configure(EntityTypeBuilder<AccountSummaryModel> builder)
         {
-            builder.ToTable("Account");
+            builder.ToTable("Accounts");
 
             builder.HasKey(p => p.Id);
 

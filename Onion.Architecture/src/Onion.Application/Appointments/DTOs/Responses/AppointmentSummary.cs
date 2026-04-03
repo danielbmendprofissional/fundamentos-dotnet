@@ -9,7 +9,5 @@ namespace Onion.Application.Appointments.DTOs.Responses
     public sealed record AppointmentSummary(
         Guid Id,
         string Name,
-        string? Description,
-        string? Image,
         string AppointmentTypeName);
 }

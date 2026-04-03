@@ -4,12 +4,12 @@ namespace Onion.Application.Invitations.DTOs.Responses
 {
     public sealed record InvitationDetails(
         Guid Id,
-        Guid OwnerId,
-        string RecipientEmail,
         string Type,
         string Status,
-        Guid? TargetId,
+        string RecipientEmail,
         DateTime CreatedAt,
         DateTime? ExpiresAt,
+        DateTime? RespondedAt,
+        Guid? TargetId,
         string? Note);
 }

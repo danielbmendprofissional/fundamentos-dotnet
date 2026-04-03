@@ -15,7 +15,7 @@ namespace Onion.Infrastructure.Persistence.Accounts.Mappings
     {
         public void Configure(EntityTypeBuilder<AccountDetailsModel> builder)
         {
-            builder.ToTable("Account");
+            builder.ToTable("Accounts");
 
             builder.HasKey(p => p.Id);
 

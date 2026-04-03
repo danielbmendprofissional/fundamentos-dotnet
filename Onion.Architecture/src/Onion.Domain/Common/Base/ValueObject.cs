@@ -21,8 +21,10 @@ namespace Onion.Domain.Common.Base
         public override int GetHashCode()
         {
             return GetEqualityComponents()
-                .Select(x => x != null ? x.GetHashCode() : 0)
-                .Aggregate((x, y) => x ^ y);
+                .Aggregate(new HashCode(), (code, obj) => {
+                    code.Add(obj);
+                    return code;
+                }).ToHashCode();
         }
 
         public static bool operator ==(ValueObject a, ValueObject b)

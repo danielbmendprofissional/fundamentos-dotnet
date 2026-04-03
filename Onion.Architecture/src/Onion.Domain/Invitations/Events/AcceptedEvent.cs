@@ -11,7 +11,7 @@ namespace Onion.Domain.Invitations.Events
 
     public sealed record AcceptedEvent(
         Guid Id, 
-        Guid OwnerId, 
+        Guid AccountId, 
         InvitationType Type, 
         Guid? TargetId, 
         string RecipientEmail, 

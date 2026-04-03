@@ -8,7 +8,7 @@ namespace Onion.Domain.Invitations.Entities
 {
     public sealed class Invitation : AggregateRoot
     {
-        public Guid OwnerId { get; private set; }
+        public Guid AccountId { get; private set; }
         public InvitationType Type { get; private set; }
         public Guid? TargetId { get; private set; }
         public InvitationStatus Status { get; private set; }
@@ -18,23 +18,23 @@ namespace Onion.Domain.Invitations.Entities
         public DateTime? RespondedAt { get; private set; }
         public string? Note { get; private set; }
 
-        public static Invitation CreateForPartner(Guid ownerId, string recipientEmail, Guid partnerId, DateTime? expiresAt = null, string? note = null)
-        => new Invitation(ownerId, InvitationType.ToPartner, recipientEmail, partnerId, expiresAt, note);
+        public static Invitation CreateForPartner(Guid accountId, string recipientEmail, Guid partnerId, DateTime? expiresAt = null, string? note = null)
+        => new Invitation(accountId, InvitationType.ToPartner, recipientEmail, partnerId, expiresAt, note);
 
-        public static Invitation CreateForAppointment(Guid ownerId, string recipientEmail, Guid appointmentId, DateTime? expiresAt = null, string? note = null)
-            => new Invitation(ownerId, InvitationType.ToAppointment, recipientEmail, appointmentId, expiresAt, note);
+        public static Invitation CreateForAppointment(Guid accountId, string recipientEmail, Guid appointmentId, DateTime? expiresAt = null, string? note = null)
+            => new Invitation(accountId, InvitationType.ToAppointment, recipientEmail, appointmentId, expiresAt, note);
 
-        private Invitation(Guid ownerId, InvitationType type, string recipientEmail, Guid? targetId, DateTime? expiresAt, string? note)
+        private Invitation(Guid accountId, InvitationType type, string recipientEmail, Guid? targetId, DateTime? expiresAt, string? note)
         {
             Guard.AgainstNullOrWhiteSpace(recipientEmail, nameof(recipientEmail));
-            Guard.Against<DomainException>(ownerId == Guid.Empty, "Invalid owner id.", nameof(ownerId));
+            Guard.Against<DomainException>(accountId == Guid.Empty, "Invalid owner id.", nameof(accountId));
 
             if (type == InvitationType.ToPartner)
                 Guard.Against<DomainException>(targetId == null || targetId == Guid.Empty, "Partner invitation requires a Partner id.");
             if (type == InvitationType.ToAppointment)
                 Guard.Against<DomainException>(targetId == null || targetId == Guid.Empty, "Appointment invitation requires an Appointment id.");
 
-            OwnerId = ownerId;
+            AccountId = accountId;
             Type = type;
             TargetId = targetId;
             RecipientEmail = recipientEmail;

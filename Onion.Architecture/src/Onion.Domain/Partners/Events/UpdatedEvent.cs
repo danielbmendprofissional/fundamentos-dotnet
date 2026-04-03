@@ -8,7 +8,7 @@ namespace Onion.Domain.Partners.Events
 
     public sealed record UpdatedEvent(
         Guid PartnerId, 
-        Guid OwnerId, 
+        Guid AccountId, 
         string? NewName = null, 
         string? NewEmail = null) : DomainEvent;
 }

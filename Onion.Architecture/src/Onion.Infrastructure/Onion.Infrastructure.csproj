@@ -9,9 +9,6 @@
   <ItemGroup>
     <Folder Include="AntiCorruption\" />
     <Folder Include="Persistence\Accounts\IntegrationEventHandlers\" />
-    <Folder Include="Persistence\Appointments\" />
-    <Folder Include="Persistence\Invitations\" />
-    <Folder Include="Persistence\Partners\" />
   </ItemGroup>
 
   <ItemGroup>

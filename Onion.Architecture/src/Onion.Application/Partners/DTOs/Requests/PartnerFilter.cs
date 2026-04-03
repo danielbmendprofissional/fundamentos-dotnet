@@ -4,6 +4,7 @@ using System;
 namespace Onion.Application.Partners.DTOs.Requests
 {
     public sealed record PartnerFilter(
-        Guid? OwnerId,
-        string? Search) : Filter;
+        string? Name,
+        string? Email,
+        int? PartnerType) : Filter;
 }

@@ -8,8 +8,8 @@ namespace Onion.Infrastructure.Persistence.Accounts.QueryModels
 {
     public sealed class AccountSummaryModel
     {
-        public Guid Id { get; }
-        public string Name { get; } = string.Empty;
-        public string? PhotoUrl { get; }
+        public Guid Id { get; init; }
+        public string Name { get; init; } = string.Empty;
+        public string? PhotoUrl { get; init; }
     }
 }

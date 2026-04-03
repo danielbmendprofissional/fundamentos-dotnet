@@ -4,8 +4,8 @@ namespace Onion.Application.Partners.DTOs.Responses
 {
     public sealed record PartnerDetails(
         Guid Id,
-        string Name,
         string? FullName,
+        string Name,
         string Email,
         string PartnerType,
         string PartnerId,

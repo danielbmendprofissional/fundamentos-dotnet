@@ -15,7 +15,7 @@ namespace Onion.Domain.Appointments.Entities
 {
     public sealed class Appointment : AggregateRoot
     {
-        public Guid OwnerId { get; private set; }
+        public Guid AccountId { get; private set; }
         public string Name { get; private set; }
         public string? Description { get; private set; }
         public string? Image { get; private set; } 
@@ -31,7 +31,7 @@ namespace Onion.Domain.Appointments.Entities
         public IReadOnlyCollection<Participant> Participants => _participants.AsReadOnly();
 
         public static Appointment Create(
-            Guid ownerId,
+            Guid accountId,
             string name,
             AppointmentType appointmentType,
             DateOnly startDate,
@@ -39,10 +39,10 @@ namespace Onion.Domain.Appointments.Entities
             Address address,
             string? description = null,
             string? image = null)
-        => new(ownerId, name, appointmentType, startDate, endDate, address, description, image);
+        => new(accountId, name, appointmentType, startDate, endDate, address, description, image);
 
         private Appointment(
-            Guid ownerId,
+            Guid accountId,
             string name,
             AppointmentType appointmentType,
             DateOnly startDate,
@@ -51,10 +51,10 @@ namespace Onion.Domain.Appointments.Entities
             string? description,
             string? image)
         {
-            Guard.Against<DomainException>(ownerId == Guid.Empty, "Invalid owner id.", nameof(ownerId));
+            Guard.Against<DomainException>(accountId == Guid.Empty, "Invalid owner id.", nameof(accountId));
             Validate(name, appointmentType, startDate, endDate, address);
 
-            OwnerId = ownerId;
+            AccountId = accountId;
             Name = name;
             Description = description;
             Image = image;

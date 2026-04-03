@@ -16,14 +16,9 @@ namespace Onion.Infrastructure.Persistence.Accounts.Repositories
         }
 
         public async Task<Account?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            return await _context.Accounts
-                .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
-        }
+            => await _context.Accounts.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
 
         public async Task AddAsync(Account account, CancellationToken cancellationToken = default)
-        {
-            await _context.Accounts.AddAsync(account, cancellationToken);
-        }
+            => await _context.Accounts.AddAsync(account, cancellationToken);
     }
 }

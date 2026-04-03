@@ -14,15 +14,15 @@ namespace Onion.Infrastructure.Persistence.Accounts.Mappings
     {
         protected override void ConfigureMapping(EntityTypeBuilder<Account> builder)
         {
-            builder.ToTable("Account");
+            builder.ToTable("Accounts");
 
             builder.Property(p => p.Email)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(50);
 
             builder.Property(p => p.Name)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasMaxLength(100);
 
             builder.Property(p => p.PhotoUrl)
                 .HasMaxLength(500)

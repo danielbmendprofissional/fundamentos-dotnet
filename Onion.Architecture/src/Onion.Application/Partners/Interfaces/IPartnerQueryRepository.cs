@@ -8,10 +8,11 @@ namespace Onion.Application.Partners.Interfaces
 {
     public interface IPartnerQueryRepository
     {
-        Task<PartnerDetails> GetById(Guid id, CancellationToken cancellationToken = default);
+        Task<PartnerDetails?> GetDetailsAsync(Guid id, CancellationToken ct = default);
 
-        Task<PagedResult<PartnerSummary>> GetAsync(
-            PartnerFilter? filter,
-            CancellationToken cancellationToken = default);
+        Task<PagedResult<PartnerSummary>> GetFilteredListAsync(
+            Guid accountId,
+            PartnerFilter filter,
+            CancellationToken ct = default);
     }
 }
