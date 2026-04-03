@@ -32,7 +32,7 @@ namespace Onion.Domain.Partners.ValueObjects
         }
 
         public static FullName Create(string fullName)
-            => new FullName(fullName);
+            => new (fullName);
 
         public string ResumName => $"{Name.Split(' ').First()} {LastName}";
         public override string ToString() => FormatedFullName;

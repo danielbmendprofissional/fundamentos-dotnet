@@ -12,7 +12,7 @@ namespace Onion.Domain.Partners.Entities
         public string Name { get; private set; }
         public Email Email { get; private set; } 
         public PartnerType PartnerType { get; private set; }
-        public string PartnerId { get; private set; }
+        public string TypeId { get; private set; }
         public string? Image { get; private set; }
 
         private Partner(
@@ -20,21 +20,21 @@ namespace Onion.Domain.Partners.Entities
             string name,
             Email email,
             PartnerType partnerType,
-            string partnerId,
+            string typeId,
             string? image)
         {
             Guard.AgainstInvalidEnum<PartnerType>(partnerType, nameof(partnerType));
-            Guard.AgainstNullOrWhiteSpace(partnerId, nameof(partnerId));
+            Guard.AgainstNullOrWhiteSpace(typeId, nameof(typeId));
             Guard.AgainstNull(email, nameof(email));
             
             Validate(fullName, name);
-            ValidatePartnerId(partnerType, partnerId, email);
+            ValidateTypeId(partnerType, typeId, email);
 
             FullName = fullName;
             Name = name;
             Email = email;
             PartnerType = partnerType;
-            PartnerId = partnerId;
+            TypeId = typeId;
             Image = image;
         }
 
@@ -69,23 +69,23 @@ namespace Onion.Domain.Partners.Entities
             Guard.AgainstNullOrWhiteSpace(name, nameof(name));
         }
 
-        private void ValidatePartnerId(PartnerType partnerType, string partnerId, Email email)
+        private void ValidateTypeId(PartnerType partnerType, string typeId, Email email)
         {
-            Guard.AgainstNullOrWhiteSpace(partnerId, nameof(partnerId));
+            Guard.AgainstNullOrWhiteSpace(typeId, nameof(typeId));
 
             switch (partnerType)
             {
                 case PartnerType.Calendar:
-                    if (!Guid.TryParse(partnerId, out _))
-                        throw new DomainException("PartnerId for Calendar must be a valid GUID (reference to a user).");
+                    if (!Guid.TryParse(typeId, out _))
+                        throw new DomainException("TypeId for Calendar must be a valid GUID (reference to a user).");
                     break;
 
                 case PartnerType.Google:
                 case PartnerType.Microsoft:
                     if (email == null)
                         throw new DomainException("Email is required for Google/Microsoft partners.");
-                    if (!string.Equals(partnerId, email.Address, StringComparison.OrdinalIgnoreCase))
-                        throw new DomainException("PartnerId must match the email for Google/Microsoft partners.");
+                    if (!string.Equals(typeId, email.Address, StringComparison.OrdinalIgnoreCase))
+                        throw new DomainException("TypeId must match the email for Google/Microsoft partners.");
                     break;
 
                 default:

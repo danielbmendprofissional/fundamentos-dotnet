@@ -22,5 +22,8 @@ namespace Onion.Infrastructure.Persistence.Partners.Repositories
             => await _context.Partners.AddAsync(partner, ct);
 
         public void Update(Partner partner) => _context.Partners.Update(partner);
+
+        public async Task<bool> ExistsByPartnerIdAsync(string partnerId, CancellationToken ct = default)
+            => await _context.Partners.AnyAsync(x => x.TypeId == partnerId);
     }
 }

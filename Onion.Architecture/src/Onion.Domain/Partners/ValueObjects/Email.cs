@@ -9,7 +9,7 @@ namespace Onion.Domain.Partners.ValueObjects
     {
         public string Address { get; private set; }
 
-        public Email(string address)
+        private Email(string address)
         {
             Guard.AgainstNullOrWhiteSpace(address, nameof(address));
             try
@@ -23,6 +23,9 @@ namespace Onion.Domain.Partners.ValueObjects
 
             Address = address;
         }
+
+        public static Email Create(string address)
+            => new (address);
 
         public override string ToString() => Address;
     }

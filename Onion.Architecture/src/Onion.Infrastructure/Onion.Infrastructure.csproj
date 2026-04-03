@@ -17,6 +17,7 @@
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.25" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.25" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.25" />
+	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
   </ItemGroup>
 
   <ItemGroup>

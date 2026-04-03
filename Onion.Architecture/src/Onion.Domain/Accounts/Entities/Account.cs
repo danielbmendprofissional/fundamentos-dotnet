@@ -41,7 +41,7 @@ namespace Onion.Domain.Accounts.Entities
 
             Name = name;
             PhotoUrl = photoUrl;
-            SetDataAtualizacao();
+            SetUpdateDate();
         }
 
         public void UpdateEmailSnapshot(string email)
@@ -49,19 +49,19 @@ namespace Onion.Domain.Accounts.Entities
             Guard.AgainstNullOrWhiteSpace(email, nameof(email));
             
             Email = email;
-            SetDataAtualizacao();
+            SetUpdateDate();
         }
 
         public void Deactivate()
         {
             IsActive = false;
-            SetDataAtualizacao();
+            SetUpdateDate();
         }
 
         public void Activate()
         {
             IsActive = true;
-            SetDataAtualizacao();
+            SetUpdateDate();
         }
     }
 }

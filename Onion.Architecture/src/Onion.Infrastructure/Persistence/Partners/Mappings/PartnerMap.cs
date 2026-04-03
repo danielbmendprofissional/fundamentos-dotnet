@@ -31,7 +31,7 @@ namespace Onion.Infrastructure.Persistence.Partners.Mappings
 
             builder.Property(p => p.Name).IsRequired().HasMaxLength(100);
             builder.Property(p => p.PartnerType).HasConversion<int>().IsRequired();
-            builder.Property(p => p.PartnerId).IsRequired().HasMaxLength(150);
+            builder.Property(p => p.TypeId).IsRequired().HasMaxLength(150);
             builder.Property(p => p.Image).HasMaxLength(500);
 
             builder.Property<Guid>("AccountId").IsRequired();

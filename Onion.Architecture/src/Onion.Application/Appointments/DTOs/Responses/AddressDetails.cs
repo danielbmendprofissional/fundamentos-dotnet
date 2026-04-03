@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Onion.Application.Appointments.DTOs.Responses
 {
-    public sealed record AdressDetails(
+    public sealed record AddressDetails(
         Guid Id,
         string Street,
         string Number,

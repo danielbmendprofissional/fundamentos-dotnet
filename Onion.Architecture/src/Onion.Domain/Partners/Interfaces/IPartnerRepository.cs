@@ -10,5 +10,7 @@ namespace Onion.Domain.Partners.Interfaces
 
         Task AddAsync(Partner partner,
             CancellationToken cancellationToken = default);
+
+        Task<bool> ExistsByPartnerIdAsync(string partnerId, CancellationToken ct = default);
     }
 }
