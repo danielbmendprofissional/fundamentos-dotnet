@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
+using Onion.Application.Common.Base;
 using Onion.Application.Common.Exceptions;
 using Onion.Application.Common.Interfaces;
 using Onion.Application.Invitations.DTOs.Requests;
+using Onion.Application.Invitations.DTOs.Responses;
 using Onion.Application.Invitations.Extensions;
 using Onion.Application.Invitations.Interfaces;
 using System;
@@ -15,15 +17,18 @@ namespace Onion.Application.Invitations.Services
     public sealed class InvitationService : IInvitationService
     {
         private readonly IInvitationRepository _repository;
+        private readonly IInvitationQueryRepository _queryRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<CreateInvitationRequest> _createValidator;
 
         public InvitationService(
             IInvitationRepository repository,
+            IInvitationQueryRepository queryRepository,
             IUnitOfWork unitOfWork,
             IValidator<CreateInvitationRequest> createValidator)
         {
             _repository = repository;
+            _queryRepository = queryRepository;
             _unitOfWork = unitOfWork;
             _createValidator = createValidator;
         }
@@ -60,6 +65,31 @@ namespace Onion.Application.Invitations.Services
             invitation.Reject(request.Reason);
 
             await _unitOfWork.CommitAsync(ct);
+        }
+
+        public async Task CancelAsync(RespondInvitationRequest request, CancellationToken ct = default)
+        {
+            var invitation = await _repository.GetByIdAsync(request.Id, ct);
+            if (invitation is null)
+                throw new ApplicationValidationException(new[] { "Invitation not found." });
+
+            invitation.Cancel(request.Reason);
+
+            await _unitOfWork.CommitAsync(ct);
+        }
+
+        public async Task<InvitationDetails?> GetDetailsAsync(Guid id, CancellationToken ct = default)
+        {
+            var accountId = _userContext.GetAccountId();
+
+            return await _queryRepository.GetDetailsAsync(id, accountId, ct);
+        }
+
+        public async Task<PagedResult<InvitationSummary>> GetFilteredListAsync(InvitationFilter filter, CancellationToken ct = default)
+        {
+            var accountId = _userContext.GetAccountId();
+
+            return await _queryRepository.GetFilteredListAsync(accountId, filter, ct);
         }
     }
 }

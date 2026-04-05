@@ -72,6 +72,23 @@ namespace Onion.Infrastructure.Persistence.Appointments.Repositories
             return new PagedResult<AppointmentSummary>(items, total, filter.Page, filter.PageSize);
         }
 
+        public async Task<AddressDetails?> GetAddressDetailsAsync(Guid id, Guid accountId, CancellationToken ct)
+        {
+            return await _context.AddressDetails
+                .AsNoTracking()
+                .Where(a => a.AppointmentId == id)
+                .Select(a => new AddressDetails(
+                    a.AppointmentId,
+                    a.Street,
+                    a.Number,
+                    a.Complement,
+                    a.City,
+                    a.State,
+                    a.Country
+                ))
+                .FirstOrDefaultAsync(ct);
+        }
+
         public async Task<ParticipantDetails?> GetParticipantDetailsAsync(Guid participantId, CancellationToken cancellationToken = default)
         {
             return await _context.ParticipantDetails

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Onion.Application.Accounts.Extensions
 {
-    public static class AccountMapperExtensions
+    public static class AccountMappingExtensions
     {
         public static Account ToEntity(this CreateAccountRequest request)
         {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Onion.Application.Appointments.DTOs.Responses;
 using Onion.Infrastructure.Persistence.Accounts.Mappings;
 using Onion.Infrastructure.Persistence.Accounts.QueryModels;
 using Onion.Infrastructure.Persistence.Appointments.Mappings;
@@ -22,6 +23,7 @@ namespace Onion.Infrastructure.Persistence.Common.Context
 
         public DbSet<AppointmentDetailsModel> AppointmentDetails => Set<AppointmentDetailsModel>();
         public DbSet<AppointmentSummaryModel> AppointmentSummaries => Set<AppointmentSummaryModel>();
+        public DbSet<AddressDetailsModel> AddressDetails => Set<AddressDetailsModel>();
         public DbSet<AppointmentDateDetailsModel> AppointmentDateDetails => Set<AppointmentDateDetailsModel>();
         public DbSet<AppointmentDateSummaryModel> AppointmentDateSummaries => Set<AppointmentDateSummaryModel>();
         public DbSet<ParticipantDetailsModel> ParticipantDetails => Set<ParticipantDetailsModel>();
@@ -43,6 +45,7 @@ namespace Onion.Infrastructure.Persistence.Common.Context
         
             modelBuilder.ApplyConfiguration(new AppointmentDetailsMap());
             modelBuilder.ApplyConfiguration(new AppointmentSummaryMap());
+            modelBuilder.ApplyConfiguration(new AddressDetailsMap());
             modelBuilder.ApplyConfiguration(new AppointmentDateDetailsMap());
             modelBuilder.ApplyConfiguration(new AppointmentDateSummaryMap());
             modelBuilder.ApplyConfiguration(new ParticipantDetailsMap());

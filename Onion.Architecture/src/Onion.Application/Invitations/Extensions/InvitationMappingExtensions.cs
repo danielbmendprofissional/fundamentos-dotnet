@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Onion.Application.Invitations.Extensions
 {
-    public static class InvitationMapperExtensions
+    public static class InvitationMappingExtensions
     {
         public static Invitation ToEntity(this CreateInvitationRequest request)
         {

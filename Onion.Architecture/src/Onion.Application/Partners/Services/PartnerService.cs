@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
+using Onion.Application.Common.Base;
 using Onion.Application.Common.Exceptions;
 using Onion.Application.Common.Interfaces;
 using Onion.Application.Partners.DTOs.Requests;
+using Onion.Application.Partners.DTOs.Responses;
 using Onion.Application.Partners.Extensions;
 using Onion.Application.Partners.Interfaces;
 using Onion.Domain.Partners.Interfaces;
@@ -17,15 +19,18 @@ namespace Onion.Application.Partners.Services
     public sealed class PartnerService : IPartnerService
     {
         private readonly IPartnerRepository _repository;
+        private readonly IPartnerQueryRepository _queryRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<CreatePartnerRequest> _createValidator;
 
         public PartnerService(
             IPartnerRepository repository,
+            IPartnerQueryRepository queryRepository,
             IUnitOfWork unitOfWork,
             IValidator<CreatePartnerRequest> createValidator)
         {
             _repository = repository;
+            _queryRepository = queryRepository;
             _unitOfWork = unitOfWork;
             _createValidator = createValidator;
         }
@@ -55,6 +60,20 @@ namespace Onion.Application.Partners.Services
             );
 
             await _unitOfWork.CommitAsync(ct);
+        }
+
+        public async Task<PartnerDetails?> GetDetailsAsync(Guid id, CancellationToken ct = default)
+        {
+            var accountId = _userContext.GetAccountId();
+
+            return await _queryRepository.GetDetailsAsync(id, accountId, ct);
+        }
+
+        public async Task<PagedResult<PartnerSummary>> GetFilteredListAsync(PartnerFilter filter, CancellationToken ct = default)
+        {
+            var accountId = _userContext.GetAccountId();
+
+            return await _queryRepository.GetFilteredListAsync(accountId, filter, ct);
         }
     }
 }

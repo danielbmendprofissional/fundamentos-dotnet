@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Onion.Application.Accounts.DTOs.Requests;
+using Onion.Application.Accounts.DTOs.Responses;
 using Onion.Application.Accounts.Extensions;
 using Onion.Application.Accounts.Interfaces;
 using Onion.Application.Common.Exceptions;
@@ -18,15 +19,18 @@ namespace Onion.Application.Accounts.Services
     public sealed class AccountService : IAccountService
     {
         private readonly IAccountRepository _repository;
+        private readonly IAccountQueryRepository _queryRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<CreateAccountRequest> _createValidator;
 
         public AccountService(
             IAccountRepository repository, 
+            IAccountQueryRepository queryRepository,
             IUnitOfWork unitOfWork,
             IValidator<CreateAccountRequest> createValidator)
         {
             _repository = repository;
+            _queryRepository = queryRepository;
             _unitOfWork = unitOfWork;
             _createValidator = createValidator;
         }
@@ -39,7 +43,6 @@ namespace Onion.Application.Accounts.Services
             {
                 var errors = validationResult.Errors.Select(x => x.ErrorMessage);
 
-                //result pattern vai substituir essa bomba.
                 throw new ApplicationValidationException(errors);
             }
 
@@ -49,8 +52,9 @@ namespace Onion.Application.Accounts.Services
             await _unitOfWork.CommitAsync(ct);
         }
 
-        public async Task UpdateProfileAsync(Guid id, UpdateProfileRequest request, CancellationToken ct = default)
+        public async Task UpdateProfileAsync(UpdateProfileRequest request, CancellationToken ct = default)
         {
+            //usuairoLogadoID
             var account = await _repository.GetByIdAsync(id, ct);
 
             if (account is null)
@@ -59,6 +63,20 @@ namespace Onion.Application.Accounts.Services
             account.UpdateProfile(request.Name, request.PhotoUrl);
 
             await _unitOfWork.CommitAsync(ct);
+        }
+
+        public async Task<AccountSummary?> GetSummaryAsync(CancellationToken ct = default)
+        {
+            var accountId = _userContext.GetAccountId();
+
+            return await _queryRepository.GetDetails(accountId, ct);
+        }
+
+        public async Task<AccountDetails?> GetDetailsAsync(CancellationToken ct = default)
+        {
+            var accountId = _userContext.GetAccountId();
+
+            return await _queryRepository.GetDetails(accountId, ct);
         }
     }
 }

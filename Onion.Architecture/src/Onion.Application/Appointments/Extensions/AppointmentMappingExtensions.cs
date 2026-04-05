@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Onion.Application.Appointments.Extensions
 {
-    public static class AppointmentMappersExtensions
+    public static class AppointmentMappingExtensions
     {
         public static Appointment ToEntity(this CreateAppointmentRequest request)
             => Appointment.Create(

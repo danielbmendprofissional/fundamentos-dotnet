@@ -14,4 +14,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Onion.Application\Onion.Application.csproj" />
+    <ProjectReference Include="..\Onion.Infrastructure\Onion.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

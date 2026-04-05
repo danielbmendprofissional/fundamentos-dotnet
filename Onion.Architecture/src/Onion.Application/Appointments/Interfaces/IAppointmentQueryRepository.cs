@@ -17,5 +17,22 @@ namespace Onion.Application.Appointments.Interfaces
             Guid accountId, 
             AppointmentFilter filter, 
             CancellationToken cancellationToken = default);
+
+        Task<AddressDetails?> GetAddressDetailsAsync(
+            Guid id, 
+            Guid accountId, 
+            CancellationToken ct);
+
+        Task<AppointmentDateDetails?> GetAppointmentDateDetailsAsync(
+            Guid id, 
+            Guid dateId, 
+            Guid accountId, 
+            CancellationToken ct);
+
+        Task<ParticipantDetails?> GetParticipantDetailsAsync(
+            Guid id, 
+            Guid participantId, 
+            Guid accountId, 
+            CancellationToken ct);
     }
 }

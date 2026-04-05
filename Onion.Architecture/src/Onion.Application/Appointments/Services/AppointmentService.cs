@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using Onion.Application.Appointments.DTOs.Requests;
+using Onion.Application.Appointments.DTOs.Responses;
 using Onion.Application.Appointments.Extensions;
 using Onion.Application.Appointments.Interfaces;
+using Onion.Application.Common.Base;
 using Onion.Application.Common.Exceptions;
 using Onion.Application.Common.Interfaces;
 using Onion.Domain.Appointments.Entities;
@@ -18,15 +20,18 @@ namespace Onion.Application.Appointments.Services
     public sealed class AppointmentService : IAppointmentService
     {
         private readonly IAppointmentRepository _repository;
+        private readonly IAppointmentQueryRepository _queryRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<CreateAppointmentRequest> _createValidator;
 
         public AppointmentService(
             IAppointmentRepository repository,
+            IAppointmentQueryRepository queryRepository,
             IUnitOfWork unitOfWork,
             IValidator<CreateAppointmentRequest> createValidator)
         {
             _repository = repository;
+            _queryRepository = queryRepository;
             _unitOfWork = unitOfWork;
             _createValidator = createValidator;
         }
@@ -65,6 +70,36 @@ namespace Onion.Application.Appointments.Services
                 request.Image);
 
             await _unitOfWork.CommitAsync(ct);
+        }
+
+        public async Task<PagedResult<AppointmentSummary>> GetFilteredListAsync(AppointmentFilter filter, CancellationToken ct = default)
+        {
+            var accountId = _userContext.GetAccountId();
+            return await _queryRepository.GetFilteredListAsync(accountId, filter, ct);
+        }
+
+        public async Task<AppointmentDetails?> GetDetailsAsync(Guid id, CancellationToken ct = default)
+        {
+            var accountId = _userContext.GetAccountId();
+            return await _queryRepository.GetDetailsAsync(id, accountId, ct);
+        }
+
+        public async Task<AddressDetails?> GetAddressDetailsAsync(Guid id, CancellationToken ct = default)
+        {
+            var accountId = _userContext.GetAccountId();
+            return await _queryRepository.GetAddressDetailsAsync(id, accountId, ct);
+        }
+
+        public async Task<AppointmentDateDetails?> GetAppointmentDateDetailsAsync(Guid id, Guid appointmentDateId, CancellationToken ct = default)
+        {
+            var accountId = _userContext.GetAccountId();
+            return await _queryRepository.GetDateDetailsAsync(id, appointmentDateId, accountId, ct);
+        }
+
+        public async Task<ParticipantDetails?> GetParticipantDetailsAsync(Guid id, Guid participantId, CancellationToken ct = default)
+        {
+            var accountId = _userContext.GetAccountId();
+            return await _queryRepository.GetParticipantDetailsAsync(id, participantId, accountId, ct);
         }
     }
 }
