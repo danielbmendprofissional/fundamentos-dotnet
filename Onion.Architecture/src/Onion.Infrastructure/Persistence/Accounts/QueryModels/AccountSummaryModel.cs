@@ -9,7 +9,7 @@ namespace Onion.Infrastructure.Persistence.Accounts.QueryModels
     public sealed class AccountSummaryModel
     {
         public Guid Id { get; init; }
-        public string Name { get; init; } = string.Empty;
+        public string FormatedFullName { get; init; } = string.Empty;
         public string? PhotoUrl { get; init; }
     }
 }

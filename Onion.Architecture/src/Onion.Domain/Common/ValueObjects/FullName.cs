@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Onion.Domain.Partners.ValueObjects
+namespace Onion.Domain.Common.ValueObjects
 {
     public sealed class FullName : ValueObject
     {

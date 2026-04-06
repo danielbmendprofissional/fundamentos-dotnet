@@ -3,7 +3,7 @@ using System.Net.Mail;
 using Onion.Domain.Common.Validation;
 using Onion.Domain.Common.Exceptions;
 
-namespace Onion.Domain.Partners.ValueObjects
+namespace Onion.Domain.Common.ValueObjects
 {
     public sealed class Email
     {

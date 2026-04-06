@@ -1,8 +1,8 @@
 ﻿using Onion.Domain.Common.Base;
 using Onion.Domain.Common.Validation;
 using Onion.Domain.Partners.Enums;
-using Onion.Domain.Partners.ValueObjects;
 using Onion.Domain.Common.Exceptions;
+using Onion.Domain.Common.ValueObjects;
 
 namespace Onion.Domain.Partners.Entities
 {

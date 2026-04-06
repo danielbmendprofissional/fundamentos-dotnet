@@ -1,5 +1,6 @@
 ﻿using Onion.API.Common;
 using Onion.API.Partners.Models;
+using Onion.Application.Common.DTOs.Requests;
 using Onion.Application.Partners.DTOs.Requests;
 
 namespace Onion.API.Partners.Extensions
@@ -8,7 +9,7 @@ namespace Onion.API.Partners.Extensions
     {
         public static CreatePartnerRequest ToRequest(this CreatePartnerViewModel viewModel)
             => new(
-                viewModel.FullName,
+                new FullNameRequest(viewModel.FullName),
                 viewModel.Name,
                 new EmailRequest(viewModel.Email),
                 viewModel.PartnerType,

@@ -16,20 +16,26 @@ namespace Onion.Application.Invitations.Services
 {
     public sealed class InvitationService : IInvitationService
     {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserProvider _userProvider;
+
         private readonly IInvitationRepository _repository;
         private readonly IInvitationQueryRepository _queryRepository;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<CreateInvitationRequest> _createValidator;
 
         public InvitationService(
+            IUnitOfWork unitOfWork,
+            IUserProvider userProvider,
+
             IInvitationRepository repository,
             IInvitationQueryRepository queryRepository,
-            IUnitOfWork unitOfWork,
             IValidator<CreateInvitationRequest> createValidator)
         {
+            _unitOfWork = unitOfWork;
+            _userProvider = userProvider;
+
             _repository = repository;
             _queryRepository = queryRepository;
-            _unitOfWork = unitOfWork;
             _createValidator = createValidator;
         }
 
@@ -42,7 +48,7 @@ namespace Onion.Application.Invitations.Services
             var invitation = request.ToEntity();
 
             await _repository.AddAsync(invitation, ct);
-            await _unitOfWork.CommitAsync(ct);
+            await _unitOfWork.SaveChangesAsync(ct);
         }
 
         public async Task AcceptAsync(Guid id, CancellationToken ct = default)
@@ -53,7 +59,7 @@ namespace Onion.Application.Invitations.Services
 
             invitation.Accept();
 
-            await _unitOfWork.CommitAsync(ct);
+            await _unitOfWork.SaveChangesAsync(ct);
         }
 
         public async Task RejectAsync(RespondInvitationRequest request, CancellationToken ct = default)
@@ -64,7 +70,7 @@ namespace Onion.Application.Invitations.Services
 
             invitation.Reject(request.Reason);
 
-            await _unitOfWork.CommitAsync(ct);
+            await _unitOfWork.SaveChangesAsync(ct);
         }
 
         public async Task CancelAsync(RespondInvitationRequest request, CancellationToken ct = default)
@@ -75,19 +81,19 @@ namespace Onion.Application.Invitations.Services
 
             invitation.Cancel(request.Reason);
 
-            await _unitOfWork.CommitAsync(ct);
+            await _unitOfWork.SaveChangesAsync(ct);
         }
 
         public async Task<InvitationDetails?> GetDetailsAsync(Guid id, CancellationToken ct = default)
         {
-            var accountId = _userContext.GetAccountId();
+            var accountId = _userProvider.GetUserId();
 
             return await _queryRepository.GetDetailsAsync(id, accountId, ct);
         }
 
         public async Task<PagedResult<InvitationSummary>> GetFilteredListAsync(InvitationFilter filter, CancellationToken ct = default)
         {
-            var accountId = _userContext.GetAccountId();
+            var accountId = _userProvider.GetUserId();
 
             return await _queryRepository.GetFilteredListAsync(accountId, filter, ct);
         }

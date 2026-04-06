@@ -6,8 +6,8 @@ using Onion.Application.Partners.DTOs.Requests;
 using Onion.Application.Partners.DTOs.Responses;
 using Onion.Application.Partners.Extensions;
 using Onion.Application.Partners.Interfaces;
+using Onion.Domain.Common.ValueObjects;
 using Onion.Domain.Partners.Interfaces;
-using Onion.Domain.Partners.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,7 +44,7 @@ namespace Onion.Application.Partners.Services
             var partner = request.ToEntity();
 
             await _repository.AddAsync(partner, ct);
-            await _unitOfWork.CommitAsync(ct);
+            await _unitOfWork.SaveChangesAsync(ct);
         }
 
         public async Task UpdateAsync(UpdatePartnerRequest request, CancellationToken ct = default)
@@ -59,7 +59,7 @@ namespace Onion.Application.Partners.Services
                 request.Image
             );
 
-            await _unitOfWork.CommitAsync(ct);
+            await _unitOfWork.SaveChangesAsync(ct);
         }
 
         public async Task<PartnerDetails?> GetDetailsAsync(Guid id, CancellationToken ct = default)

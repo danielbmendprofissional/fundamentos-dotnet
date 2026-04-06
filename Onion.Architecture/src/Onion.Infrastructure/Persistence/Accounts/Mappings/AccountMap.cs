@@ -16,13 +16,18 @@ namespace Onion.Infrastructure.Persistence.Accounts.Mappings
         {
             builder.ToTable("Accounts");
 
-            builder.Property(p => p.Email)
-                .IsRequired()
-                .HasMaxLength(50);
+            builder.OwnsOne(p => p.FullName, fn =>
+            {
+                fn.Property(f => f.Name).HasColumnName("FirstName").IsRequired().HasMaxLength(100);
+                fn.Property(f => f.LastName).HasColumnName("LastName").IsRequired().HasMaxLength(100);
+                fn.Property(f => f.FormatedFullName).HasColumnName("FullName").IsRequired().HasMaxLength(200);
+                fn.Property(f => f.ResumName).HasColumnName("ResumName").IsRequired().HasMaxLength(100);
+            });
 
-            builder.Property(p => p.Name)
-                .IsRequired()
-                .HasMaxLength(100);
+            builder.OwnsOne(p => p.Email, e =>
+            {
+                e.Property(a => a.Address).HasColumnName("Email").IsRequired().HasMaxLength(150);
+            });
 
             builder.Property(p => p.PhotoUrl)
                 .HasMaxLength(500)

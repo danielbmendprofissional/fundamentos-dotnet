@@ -8,6 +8,9 @@ namespace Onion.Application.Common.Interfaces
 {
     public interface IUnitOfWork
     {
-        Task<bool> CommitAsync(CancellationToken ct = default);
+        Task<bool> SaveChangesAsync(CancellationToken ct = default);
+        Task BeginTransactionAsync();
+        Task CommitAsync(CancellationToken ct = default);
+        Task RollbackAsync();
     }
 }

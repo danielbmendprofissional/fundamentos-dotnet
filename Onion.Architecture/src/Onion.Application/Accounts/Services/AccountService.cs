@@ -3,36 +3,46 @@ using Onion.Application.Accounts.DTOs.Requests;
 using Onion.Application.Accounts.DTOs.Responses;
 using Onion.Application.Accounts.Extensions;
 using Onion.Application.Accounts.Interfaces;
+using Onion.Application.Common.Base;
+using Onion.Application.Common.DTOs.Result;
 using Onion.Application.Common.Exceptions;
+using Onion.Application.Common.Extensions;
 using Onion.Application.Common.Interfaces;
-using Onion.Domain.Accounts.Entities;
 using Onion.Domain.Accounts.Interfaces;
-using Onion.Domain.Common.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Authentication;
+using System.Security.Claims;
 
 namespace Onion.Application.Accounts.Services
 {
     public sealed class AccountService : IAccountService
     {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserProvider _userProvider;
+
         private readonly IAccountRepository _repository;
         private readonly IAccountQueryRepository _queryRepository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IIdentityService _identityService;
+        private readonly ITokenService _tokenService;
         private readonly IValidator<CreateAccountRequest> _createValidator;
 
         public AccountService(
+            IUnitOfWork unitOfWork,
+            IUserProvider userProvider,
+        
             IAccountRepository repository, 
             IAccountQueryRepository queryRepository,
-            IUnitOfWork unitOfWork,
+            IIdentityService identityService,
+            ITokenService tokenService,
             IValidator<CreateAccountRequest> createValidator)
         {
+            _unitOfWork = unitOfWork;
+            _userProvider = userProvider;
+
             _repository = repository;
             _queryRepository = queryRepository;
-            _unitOfWork = unitOfWork;
+            _identityService = identityService;
             _createValidator = createValidator;
+            _tokenService = tokenService;
         }
 
         public async Task CreateAsync(CreateAccountRequest request, CancellationToken ct = default)
@@ -45,38 +55,91 @@ namespace Onion.Application.Accounts.Services
 
                 throw new ApplicationValidationException(errors);
             }
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var (succeeded, userId, erros) = await _identityService.RegisterAsync(request.Email.Address, request.Password);
 
-            var account = request.ToEntity(); 
+                if (!succeeded) throw new Exception("Falha ao criar identidade.");
 
-            await _repository.AddAsync(account, ct);
-            await _unitOfWork.CommitAsync(ct);
+                var account = request.ToEntity(userId);
+
+                await _repository.AddAsync(account, ct);
+                await _unitOfWork.CommitAsync(ct);
+            }
+            catch
+            {
+                await _unitOfWork.RollbackAsync();
+                throw;
+            }
+
+        }
+
+        public async Task<AccountSummaryResponse?> GetSummaryAsync(CancellationToken ct = default)
+        {
+            var accountId = _userProvider.GetUserId();
+
+            return await _queryRepository.GetSummary(accountId, ct);
+        }
+
+        public async Task<AccountDetailsResponse?> GetDetailsAsync(CancellationToken ct = default)
+        {
+            var accountId = _userProvider.GetUserId();
+
+            return await _queryRepository.GetDetails(accountId, ct);
         }
 
         public async Task UpdateProfileAsync(UpdateProfileRequest request, CancellationToken ct = default)
         {
-            //usuairoLogadoID
-            var account = await _repository.GetByIdAsync(id, ct);
+            var accountId = _userProvider.GetUserId();
+
+            var account = await _repository.GetByIdAsync(accountId, ct);
 
             if (account is null)
                 throw new Exception("Account not found");
 
-            account.UpdateProfile(request.Name, request.PhotoUrl);
+            account.UpdateProfile(request.FullName.ToValueObject(), request.PhotoUrl);
 
-            await _unitOfWork.CommitAsync(ct);
+            await _unitOfWork.SaveChangesAsync(ct);
         }
 
-        public async Task<AccountSummary?> GetSummaryAsync(CancellationToken ct = default)
+        public async Task<LoginResponse> LoginAsync(LoginRequest request)
         {
-            var accountId = _userContext.GetAccountId();
+            var result = await _identityService.LoginAsync(request.Email, request.Password, request.RememberMe);
 
-            return await _queryRepository.GetDetails(accountId, ct);
+            if (result.RequiresTwoFactor) return new LoginResponse { RequiresTwoFactor = true };
+            if (!result.Succeeded) throw new Exception(result.Errors?.FirstOrDefault());
+
+            var claims = await GenerateClaimsAsync(result.User!);
+
+            var accessToken = _tokenService.GenerateAccessToken(claims);
+            var refreshToken = _tokenService.GenerateRefreshToken();
+
+            return new LoginResponse(accessToken, refreshToken);
         }
 
-        public async Task<AccountDetails?> GetDetailsAsync(CancellationToken ct = default)
+        public async Task LogoutAsync()
         {
-            var accountId = _userContext.GetAccountId();
+            var userId = _userProvider.GetUserId();
+            if (userId != Guid.Empty)
+            {
+                await _identityService.LogoutAsync(userId);
+            }
+        }
 
-            return await _queryRepository.GetDetails(accountId, ct);
+        private async Task<IEnumerable<Claim>> GenerateClaimsAsync(UserResult user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email!),
+                new Claim("TokenVersion", user.TokenVersion.ToString())
+            };
+
+            var roles = await _identityService.GetUserRolesAsync(user.Id);
+            claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
+
+            return claims;
         }
     }
 }

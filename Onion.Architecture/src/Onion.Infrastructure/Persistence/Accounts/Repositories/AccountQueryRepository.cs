@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Onion.Application.Accounts.DTOs.Responses;
 using Onion.Application.Accounts.Interfaces;
+using Onion.Domain.Accounts.Entities;
 using Onion.Infrastructure.Persistence.Common.Context;
 using System;
 using System.Collections.Generic;
@@ -19,16 +20,14 @@ namespace Onion.Infrastructure.Persistence.Accounts.Repositories
             _context = context;
         }
 
-        public async Task<AccountDetails?> GetDetails(CancellationToken cancellationToken = default)
+        public async Task<AccountDetailsResponse?> GetDetails(Guid accountId, CancellationToken cancellationToken = default)
         {
-            //wait auth user
-
             return await _context.AccountDetails
                 .AsNoTracking()
-                .Where(x => x.Id == Guid.Empty)
-                .Select(x => new AccountDetails(
+                .Where(x => x.Id == accountId)
+                .Select(x => new AccountDetailsResponse(
                     x.Email,
-                    x.Name,
+                    x.FormatedFullName,
                     x.PhotoUrl,
                     x.IsActive,
                     x.CreatedAt
@@ -37,15 +36,13 @@ namespace Onion.Infrastructure.Persistence.Accounts.Repositories
                             
         }
 
-        public async Task<AccountSummary?> GetSummary(CancellationToken cancellationToken = default)
+        public async Task<AccountSummaryResponse?> GetSummary(Guid accountId, CancellationToken cancellationToken = default)
         {
-            //wait auth user
-
             return await _context.AccountDetails
                 .AsNoTracking()
-                .Where(x => x.Id == Guid.Empty)
-                .Select(x => new AccountSummary(
-                    x.Name,
+                .Where(x => x.Id == accountId)
+                .Select(x => new AccountSummaryResponse(
+                    x.FormatedFullName,
                     x.PhotoUrl
                     ))
                 .SingleOrDefaultAsync(cancellationToken);

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Onion.Application.Partners.DTOs.Requests
+namespace Onion.Application.Common.DTOs.Requests
 {
-    public sealed record EmailRequest(
-        string Address);
+    public sealed record FullNameRequest(
+        string Value);
 }

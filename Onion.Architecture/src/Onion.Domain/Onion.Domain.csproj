@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="Partners\Events\" />
+    <Folder Include="Partners\ValueObjects\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,13 +2,14 @@
 using Onion.Domain.Common.Base;
 using Onion.Domain.Common.Validation;
 using Onion.Domain.Common.Exceptions;
+using Onion.Domain.Common.ValueObjects;
 
 namespace Onion.Domain.Accounts.Entities
 {
     public sealed class Account : AggregateRoot
     {
-        public string Email { get; private set; } 
-        public string Name { get; private set; }
+        public Email Email { get; private set; } 
+        public FullName FullName { get; private set; }
         public string? PhotoUrl { get; private set; }
         public bool IsActive { get; private set; }
         public DateTime CreatedAt { get; private set; }
@@ -16,38 +17,38 @@ namespace Onion.Domain.Accounts.Entities
 
         public static Account Create(
             Guid id, 
-            string email, 
-            string name, 
+            Email email, 
+            FullName fullName, 
             string? photoUrl = null)
-        => new(id, email, name, photoUrl);
+        => new(id, email, fullName, photoUrl);
 
-        private Account(Guid id, string email, string name, string? photoUrl = null) : base(id)
+        private Account(Guid id, Email email, FullName fullName, string? photoUrl = null) : base(id)
         {
             Guard.Against<DomainException>(id == Guid.Empty, "Invalid id.", nameof(id));
-            Guard.AgainstNullOrWhiteSpace(email, nameof(email));
-            Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+            Guard.AgainstNull(email, nameof(email));
+            Guard.AgainstNull(fullName, nameof(fullName));
 
             Id = id;
             Email = email;
-            Name = name;
+            FullName = fullName;
             PhotoUrl = photoUrl;
             IsActive = true;
             CreatedAt = DateTime.UtcNow;
         }
 
-        public void UpdateProfile(string name, string? photoUrl)
+        public void UpdateProfile(FullName fullName, string? photoUrl)
         {
-            Guard.AgainstNullOrWhiteSpace(name, nameof(name));
+            Guard.AgainstNull(fullName, nameof(fullName));
 
-            Name = name;
+            FullName = fullName;
             PhotoUrl = photoUrl;
             SetUpdateDate();
         }
 
-        public void UpdateEmailSnapshot(string email)
+        public void UpdateEmailSnapshot(Email email)
         {
-            Guard.AgainstNullOrWhiteSpace(email, nameof(email));
-            
+            Guard.AgainstNull(email, nameof(email));
+
             Email = email;
             SetUpdateDate();
         }

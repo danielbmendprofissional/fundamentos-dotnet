@@ -20,7 +20,7 @@ namespace Onion.Infrastructure.Persistence.Accounts.Mappings
             builder.HasKey(p => p.Id);
 
             builder.Property(p => p.Email);
-            builder.Property(p => p.Name);
+            builder.Property(p => p.FormatedFullName).HasColumnName("FullName");
             builder.Property(p => p.PhotoUrl);
             builder.Property(p => p.IsActive);
             builder.Property(p => p.CreatedAt);

@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Onion.Application.Accounts.DTOs.Responses
 {
-    public sealed record AccountSummary(
+    public sealed record AccountDetailsResponse(
+        string Email,
         string Name,
-        string? PhotoUrl);
+        string? PhotoUrl,
+        bool IsActive,
+        DateTime CreatedAt
+        );
 }

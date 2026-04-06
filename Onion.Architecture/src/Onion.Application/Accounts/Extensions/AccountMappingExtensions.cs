@@ -1,4 +1,5 @@
 ﻿using Onion.Application.Accounts.DTOs.Requests;
+using Onion.Application.Common.Extensions;
 using Onion.Domain.Accounts.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,14 @@ namespace Onion.Application.Accounts.Extensions
 {
     public static class AccountMappingExtensions
     {
-        public static Account ToEntity(this CreateAccountRequest request)
+        public static Account ToEntity(this CreateAccountRequest request, Guid id)
         {
             return Account.Create(
-                request.Id,
-                request.Email,
-                request.Name,
+                id,
+                request.Email.ToValueObject(),
+                request.FullName.ToValueObject(),
                 request.PhotoUrl
             );
         }
-
-        // Podemos ter mappers para transformar a entidade no DTO de resposta se necessário
     }
 }

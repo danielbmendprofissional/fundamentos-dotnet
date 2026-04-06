@@ -10,7 +10,7 @@ namespace Onion.Infrastructure.Persistence.Accounts.QueryModels
     {
         public Guid Id { get; init; }
         public string Email { get; init; } = string.Empty;
-        public string Name { get; init; } = string.Empty;
+        public string FormatedFullName { get; init; } = string.Empty;
         public string? PhotoUrl { get; init; }
         public bool IsActive { get; init; }
         public DateTime CreatedAt { get; init; }

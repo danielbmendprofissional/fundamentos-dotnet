@@ -9,7 +9,7 @@ namespace Onion.Application.Accounts.Interfaces
 {
     public interface IAccountQueryRepository
     {
-        Task<AccountDetails?> GetDetails(CancellationToken cancellationToken = default);
-        Task<AccountSummary?> GetSummary(CancellationToken cancellationToken = default);
+        Task<AccountDetailsResponse?> GetDetails(Guid accountId, CancellationToken cancellationToken = default);
+        Task<AccountSummaryResponse?> GetSummary(Guid accountId, CancellationToken cancellationToken = default);
     }
 }
