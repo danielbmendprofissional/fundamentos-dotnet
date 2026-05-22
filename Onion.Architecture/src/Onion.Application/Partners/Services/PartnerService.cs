@@ -64,14 +64,16 @@ namespace Onion.Application.Partners.Services
 
         public async Task<PartnerDetails?> GetDetailsAsync(Guid id, CancellationToken ct = default)
         {
-            var accountId = _userContext.GetAccountId();
+            // TODO: Implementar com IUserProvider após integração de Identity
+            var accountId = Guid.Empty;
 
             return await _queryRepository.GetDetailsAsync(id, accountId, ct);
         }
 
         public async Task<PagedResult<PartnerSummary>> GetFilteredListAsync(PartnerFilter filter, CancellationToken ct = default)
         {
-            var accountId = _userContext.GetAccountId();
+            // TODO: Implementar com IUserProvider após integração de Identity
+            var accountId = Guid.Empty;
 
             return await _queryRepository.GetFilteredListAsync(accountId, filter, ct);
         }

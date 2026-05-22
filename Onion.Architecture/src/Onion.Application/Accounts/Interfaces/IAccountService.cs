@@ -14,7 +14,7 @@ namespace Onion.Application.Accounts.Interfaces
         Task<AccountSummaryResponse?> GetSummaryAsync(CancellationToken ct = default);
         Task<AccountDetailsResponse?> GetDetailsAsync(CancellationToken ct = default);
         Task UpdateProfileAsync(UpdateProfileRequest request, CancellationToken ct = default);
-        Task<LoginResponse> LoginAsync(LoginRequest request);
-        Task LogoutAsync();
+        Task<LoginResponse> LoginAsync(LoginRequest request, CancellationToken ct = default);
+        Task LogoutAsync(CancellationToken ct = default);
     }
 }

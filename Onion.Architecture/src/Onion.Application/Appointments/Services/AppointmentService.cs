@@ -19,8 +19,8 @@ namespace Onion.Application.Appointments.Services
 {
     public sealed class AppointmentService : IAppointmentService
     {
-        protected readonly IUnitOfWork _unitOfWork;
-        protected readonly IUserProvider _userProvider;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserProvider _userProvider;
 
         private readonly IAppointmentRepository _repository;
         private readonly IAppointmentQueryRepository _queryRepository;

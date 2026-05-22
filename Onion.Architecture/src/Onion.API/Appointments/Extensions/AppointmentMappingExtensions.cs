@@ -7,27 +7,35 @@ namespace Onion.API.Appointments.Extensions
     public static class AppointmentMappingExtensions
     {
         public static CreateAppointmentRequest ToRequest(this CreateAppointmentViewModel viewModel)
-            => new(
+        {
+            ArgumentNullException.ThrowIfNull(viewModel.Address);
+
+            return new(
                 viewModel.Name,
                 viewModel.Description,
                 viewModel.Image,
                 viewModel.AppointmentType,
                 viewModel.StartDate,
                 viewModel.EndDate,
-                viewModel.Address?.ToRequest(),
+                viewModel.Address.ToRequest(),
                 viewModel.Dates.Select(p => p.ToRequest()).ToList(),
                 viewModel.Participants.Select(p => p.ToRequest()).ToList());
+        }
 
         public static UpdateAppointmentRequest ToRequest(this UpdateAppointmentViewModel viewModel, Guid id)
-            => new(
+        {
+            ArgumentNullException.ThrowIfNull(viewModel.Address);
+
+            return new(
                 id,
                 viewModel.Name,
                 viewModel.AppointmentType,
                 viewModel.StartDate,
                 viewModel.EndDate,
-                viewModel.Address?.ToRequest(),
+                viewModel.Address.ToRequest(),
                 viewModel.Image,
                 viewModel.Description);
+        }
 
         public static AppointmentFilter ToRequest(this AppointmentFilterViewModel viewModel)
             => new(

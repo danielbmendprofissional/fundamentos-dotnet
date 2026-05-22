@@ -36,6 +36,23 @@ namespace Onion.Infrastructure.Persistence.Partners.Repositories
                 .SingleOrDefaultAsync(ct);
         }
 
+        public async Task<PartnerDetails?> GetDetailsAsync(Guid id, Guid accountId, CancellationToken ct = default)
+        {
+            return await _context.PartnerDetails
+                .AsNoTracking()
+                .Where(x => x.Id == id)
+                .Select(x => new PartnerDetails(
+                    x.Id,
+                    x.FormatedFullName,
+                    x.Name,
+                    x.EmailAddress,
+                    ((PartnerType)x.PartnerType).ToString(),
+                    x.PartnerId,
+                    x.Image
+                ))
+                .SingleOrDefaultAsync(ct);
+        }
+
         public async Task<PagedResult<PartnerSummary>> GetFilteredListAsync(
             Guid accountId, 
             PartnerFilter filter, 

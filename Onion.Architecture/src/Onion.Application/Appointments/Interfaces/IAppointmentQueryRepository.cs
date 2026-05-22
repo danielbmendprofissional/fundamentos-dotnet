@@ -11,7 +11,7 @@ namespace Onion.Application.Appointments.Interfaces
 {
     public interface IAppointmentQueryRepository
     {
-        Task<AppointmentDetails?> GetDetailsAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<AppointmentDetails?> GetDetailsAsync(Guid id, Guid accountId, CancellationToken cancellationToken = default);
 
         Task<PagedResult<AppointmentSummary>> GetFilteredListAsync(
             Guid accountId, 

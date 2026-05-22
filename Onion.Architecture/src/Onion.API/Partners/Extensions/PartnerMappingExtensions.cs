@@ -32,6 +32,5 @@ namespace Onion.API.Partners.Extensions
                 viewModel.Name,
                 viewModel.Email,
                 viewModel.PartnerType);
-        }
     }
 }

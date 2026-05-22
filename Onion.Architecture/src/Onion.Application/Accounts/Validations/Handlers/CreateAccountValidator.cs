@@ -19,9 +19,6 @@ namespace Onion.Application.Accounts.Validations.Handlers
             RequiredRule(x => x.Email);
             RequiredRule(x => x.FullName);
             RuleFor(x => x.Email.Address).EmailAddress();
-
-            RuleFor(x => new AccountIdDTO(x.Id))
-                .SetValidator(new AccountMustNotExistValidator(repository));
         }
     }
 }

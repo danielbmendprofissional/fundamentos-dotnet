@@ -4,13 +4,10 @@ using Onion.Application.Accounts.DTOs.Responses;
 using Onion.Application.Accounts.Extensions;
 using Onion.Application.Accounts.Interfaces;
 using Onion.Application.Common.Base;
-using Onion.Application.Common.DTOs.Result;
 using Onion.Application.Common.Exceptions;
 using Onion.Application.Common.Extensions;
 using Onion.Application.Common.Interfaces;
 using Onion.Domain.Accounts.Interfaces;
-using System.Security.Authentication;
-using System.Security.Claims;
 
 namespace Onion.Application.Accounts.Services
 {
@@ -21,8 +18,6 @@ namespace Onion.Application.Accounts.Services
 
         private readonly IAccountRepository _repository;
         private readonly IAccountQueryRepository _queryRepository;
-        private readonly IIdentityService _identityService;
-        private readonly ITokenService _tokenService;
         private readonly IValidator<CreateAccountRequest> _createValidator;
 
         public AccountService(
@@ -31,8 +26,6 @@ namespace Onion.Application.Accounts.Services
         
             IAccountRepository repository, 
             IAccountQueryRepository queryRepository,
-            IIdentityService identityService,
-            ITokenService tokenService,
             IValidator<CreateAccountRequest> createValidator)
         {
             _unitOfWork = unitOfWork;
@@ -40,9 +33,7 @@ namespace Onion.Application.Accounts.Services
 
             _repository = repository;
             _queryRepository = queryRepository;
-            _identityService = identityService;
             _createValidator = createValidator;
-            _tokenService = tokenService;
         }
 
         public async Task CreateAsync(CreateAccountRequest request, CancellationToken ct = default)
@@ -52,18 +43,18 @@ namespace Onion.Application.Accounts.Services
             if (!validationResult.IsValid)
             {
                 var errors = validationResult.Errors.Select(x => x.ErrorMessage);
-
                 throw new ApplicationValidationException(errors);
             }
+
             await _unitOfWork.BeginTransactionAsync();
             try
             {
-                var (succeeded, userId, erros) = await _identityService.RegisterAsync(request.Email.Address, request.Password);
+                // TODO: Integrar com IIdentityClient (será implementado via padrão HttpClient)
+                // 1. Chamar IIdentityClient.RegisterAsync(email, password)
+                // 2. Obter userId da resposta
+                // 3. Criar account local com os dados retornados
 
-                if (!succeeded) throw new Exception("Falha ao criar identidade.");
-
-                var account = request.ToEntity(userId);
-
+                var account = request.ToEntity(Guid.NewGuid());
                 await _repository.AddAsync(account, ct);
                 await _unitOfWork.CommitAsync(ct);
             }
@@ -72,7 +63,6 @@ namespace Onion.Application.Accounts.Services
                 await _unitOfWork.RollbackAsync();
                 throw;
             }
-
         }
 
         public async Task<AccountSummaryResponse?> GetSummaryAsync(CancellationToken ct = default)
@@ -103,43 +93,22 @@ namespace Onion.Application.Accounts.Services
             await _unitOfWork.SaveChangesAsync(ct);
         }
 
-        public async Task<LoginResponse> LoginAsync(LoginRequest request)
+        public async Task<LoginResponse> LoginAsync(LoginRequest request, CancellationToken ct = default)
         {
-            var result = await _identityService.LoginAsync(request.Email, request.Password, request.RememberMe);
+            // TODO: Integrar com IIdentityClient
+            // 1. Chamar IIdentityClient.LoginAsync(email, password)
+            // 2. Retornar token(s) diretamente da API de Identity
 
-            if (result.RequiresTwoFactor) return new LoginResponse { RequiresTwoFactor = true };
-            if (!result.Succeeded) throw new Exception(result.Errors?.FirstOrDefault());
-
-            var claims = await GenerateClaimsAsync(result.User!);
-
-            var accessToken = _tokenService.GenerateAccessToken(claims);
-            var refreshToken = _tokenService.GenerateRefreshToken();
-
-            return new LoginResponse(accessToken, refreshToken);
+            throw new NotImplementedException("Aguardando implementação de IIdentityClient");
         }
 
-        public async Task LogoutAsync()
+        public async Task LogoutAsync(CancellationToken ct = default)
         {
-            var userId = _userProvider.GetUserId();
-            if (userId != Guid.Empty)
-            {
-                await _identityService.LogoutAsync(userId);
-            }
-        }
+            // TODO: Integrar com IIdentityClient
+            // 1. Obter userId do IUserProvider
+            // 2. Chamar IIdentityClient.LogoutAsync(userId)
 
-        private async Task<IEnumerable<Claim>> GenerateClaimsAsync(UserResult user)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email!),
-                new Claim("TokenVersion", user.TokenVersion.ToString())
-            };
-
-            var roles = await _identityService.GetUserRolesAsync(user.Id);
-            claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
-
-            return claims;
+              throw new NotImplementedException("Aguardando implementação de IIdentityClient");
         }
     }
 }

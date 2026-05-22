@@ -43,6 +43,11 @@ namespace Onion.Infrastructure.Persistence.Appointments.Repositories
                 .SingleOrDefaultAsync(cancellationToken);
         }
 
+        public async Task<AppointmentDetails?> GetDetailsAsync(Guid id, Guid accountId, CancellationToken cancellationToken = default)
+        {
+            return await GetDetailsAsync(id, cancellationToken);
+        }
+
         public async Task<PagedResult<AppointmentSummary>> GetFilteredListAsync(
             Guid accountId, 
             AppointmentFilter filter, 
@@ -103,6 +108,15 @@ namespace Onion.Infrastructure.Persistence.Appointments.Repositories
                 .SingleOrDefaultAsync(cancellationToken);
         }
 
+        public async Task<ParticipantDetails?> GetParticipantDetailsAsync(
+            Guid id,
+            Guid participantId,
+            Guid accountId,
+            CancellationToken ct)
+        {
+            return await GetParticipantDetailsAsync(participantId, ct);
+        }
+
         public async Task<AppointmentDateDetails?> GetAppointmentDateDetailsAsync(Guid dateId, CancellationToken cancellationToken = default)
         {
             return await _context.AppointmentDateDetails
@@ -116,6 +130,11 @@ namespace Onion.Infrastructure.Persistence.Appointments.Repositories
                     x.EndDate
                 ))
                 .SingleOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<AppointmentDateDetails?> GetAppointmentDateDetailsAsync(Guid id, Guid dateId, Guid accountId, CancellationToken ct)
+        {
+            return await GetAppointmentDateDetailsAsync(dateId, ct);
         }
     }
 }

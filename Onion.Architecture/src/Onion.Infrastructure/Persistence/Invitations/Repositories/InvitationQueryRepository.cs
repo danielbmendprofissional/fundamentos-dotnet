@@ -39,6 +39,11 @@ namespace Onion.Infrastructure.Persistence.Invitations.Repositories
                 .SingleOrDefaultAsync(ct);
         }
 
+        public async Task<InvitationDetails?> GetDetailsAsync(Guid id, Guid accountId, CancellationToken ct = default)
+        {
+            return await GetDetailsAsync(id, ct);
+        }
+
         public async Task<PagedResult<InvitationSummary>> GetFilteredListAsync(
             Guid accountId, 
             InvitationFilter filter, 

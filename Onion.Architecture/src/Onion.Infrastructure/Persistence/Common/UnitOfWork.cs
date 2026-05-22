@@ -13,18 +13,17 @@ namespace Onion.Infrastructure.Persistence.Common
     public sealed class UnitOfWork : IUnitOfWork
     {
         private readonly CalendarContext _context;
-        private readonly CalendarUserContext _userContext;
         private IDbContextTransaction? _currentTransaction;
 
-        public UnitOfWork(CalendarContext context, CalendarUserContext userContext)
+        public UnitOfWork(CalendarContext context)
         {
             _context = context;
-            _userContext = userContext;
         }
 
-        public async Task<int> SaveChangesAsync(CancellationToken ct = default)
+        public async Task<bool> SaveChangesAsync(CancellationToken ct = default)
         {
-            return await _context.SaveChangesAsync(ct);
+            var affectedRows = await _context.SaveChangesAsync(ct);
+            return affectedRows > 0;
         }
 
         public async Task BeginTransactionAsync()
@@ -32,8 +31,6 @@ namespace Onion.Infrastructure.Persistence.Common
             if (_currentTransaction != null) return;
 
             _currentTransaction = await _context.Database.BeginTransactionAsync();
-
-            await _userContext.Database.UseTransactionAsync(_currentTransaction.GetDbTransaction());
         }
 
         public async Task CommitAsync(CancellationToken ct = default)
@@ -41,7 +38,6 @@ namespace Onion.Infrastructure.Persistence.Common
             try
             {
                 await _context.SaveChangesAsync(ct);
-                await _userContext.SaveChangesAsync(ct);
 
                 if (_currentTransaction != null)
                     await _currentTransaction.CommitAsync(ct);
