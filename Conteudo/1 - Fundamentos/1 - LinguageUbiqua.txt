@@ -1,0 +1,22 @@
+﻿========================== FUNDAMENTOS ==========================
+
+==========================
+LINGUAGEM UBÍQUA:
+
+	- também conhecida como linguagem onipresente é um termo usao para descrever uma linguagem compartilhada pelo time.
+	- por todo o projeto classes, objetos, documentação, conversas, fluxos, etc. Preciso me atentar para que as nomenclaturas estejam 
+	alinhadas a linguagem falada pelo time e manter o padrão.
+	- Se o time fala, o código fala igual. Se o código fala, o time fala igual.
+
+	EXEMPLO CORRETO:
+	"Quando o usuário aceita o termo, ele passa para vigente".
+	-- service
+	public void Aceitar()
+	{
+		termo.MarcarComoVigente();
+	}
+	-- entidade domínio (Termo)
+	public void MarcarComoVigente
+	{
+		Situacao = SituacaoTermo.Vigente;
+	}

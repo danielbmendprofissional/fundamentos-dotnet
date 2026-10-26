@@ -1,0 +1,46 @@
+﻿========================== FUNDAMENTOS ==========================
+
+==========================
+ENTIDADES:
+
+	- Objeto definido por sua identidade, com valor único.
+	- Não é definida pelos seus atributos, que podem ser atualizados sem perda de identidade.
+	- Identificadas geralmente através de substantivos contidos nas descrições de casos de uso.
+	- Analisar sempre o caso de uso para saber se vira uma entidade, agregate ou value object.
+	- chave (id, guid, valueObject(cpf)).
+	- entidade sempre tem comportamento -> se não vira DTO.
+
+	EXEMPLO CORRETO:
+
+public class Pessoa (Substantivo)
+{
+    public Guid Id { get; private set; } (Identificador técnico)
+    public Cpf Cpf { get; private set; } (Identidade (nesse caso) -> valueObject)
+    public string Nome { get; private set; }
+
+    protected Pessoa() { }
+
+    public Pessoa(Cpf cpf, string nome)
+    {
+        Id = Guid.NewGuid();
+        Cpf = cpf;
+        AlterarNome(nome);
+    }
+
+    public void AlterarNome(string nome)
+    {
+        if (string.IsNullOrWhiteSpace(nome))
+            throw new DomainException("Nome inválido");
+
+        Nome = nome;
+    }
+}
+
+| Substantivo | Pode ser                 |
+| ----------- | ------------------------ |
+| Pessoa      | Entidade                 |
+| Endereço    | Value Object             |
+| Vigência    | Value Object ou Entidade |
+| Aceite      | Entidade                 |
+| CPF         | Value Object             |
+| Status      | Enum                     |

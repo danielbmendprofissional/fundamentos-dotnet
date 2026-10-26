@@ -1,0 +1,35 @@
+﻿========================== PASSOS ==========================
+
+==========================
+CONTEXT MAP
+
+É uma representação explícita dos Bounded Contexts de um domínio e das relações que existem entre eles.
+Ele mostra como diferentes partes de um sistema interagem, incluindo integrações, dependências e formas
+de comunicação.
+
+Ele torna explícito onde cada modelo de domínio é válido e como os diferentes contextos interagem entre
+si.
+
+Seu principal objetivo é tornar explícita a maneira como as equipes e o código interagem, revelando a 
+realidade de integração e dinâmicas de poder entre elas.
+
+==========================
+CENÁRIO DE PERIGO
+
+Nós temos PEDIDO, dentro dele temos ItemPedido que pega Nome e Preço do PRODUTO de CATALOGO (outro context)
+e também temos EndereçoEntrega que pega o Endereço do ENDEREÇO de CLIENTE (outro context).
+
+Eu usando via acoplamento, se por algum motivo um desses contextos mudar alguma regra/propriedade o meu PE-
+DIDO pode quebrar.
+
+O ideal é mapear os contextos e utilizar referência (identificador técnico), copia ou snapshot.
+
+==========================
+PADRÕES DE RELACIONAMENTO
+	TERMOS USADOS
+
+Upstream/Downstream: Descrevem a direção da dependência.
+
+	- Quem fornece uma linguagem/contrato é UPSTREAM.
+	- Quem consome uma linguagem/contrato é DOWNSTREAM.
+	- Mudanças na UPSTREAM afetar a DOWNSTREAM.

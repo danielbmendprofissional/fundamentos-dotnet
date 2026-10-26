@@ -1,0 +1,115 @@
+﻿========================== PASSOS ==========================
+
+==========================
+PADRÕES DE RELACIONAMENTO
+
+
+==========================
+1 - CUSTOMER-SUPPLIER: 
+
+Define um relacionamento de colaboração explicita. O BC DOWNSTREAM, precisa de algo e negocia com o BC UPSTREAM,
+que se compromete e atender essa necessidade. É uma relação de dependência saudável e gerenciada.
+
+	- Exemplo:
+		O time de PEDIDO (DOWN) precisa de informações dos produtos de CATÁLOGO (UP). Em vez de aceitar o modelo
+		de catálogo inteiro, negocia com o time de catálogo para que forneçam um endpoint que expõe apenas os da-
+		dos necessários.
+
+		Garantidno que as necessidades do domínio principal sejam priorizadas.
+
+==========================
+2 - ANTI-CORRUPTION LAYER: 
+
+Uma camada de tradução que protege um Contexto das peculiaridades de outro, convertendo dados ou modelos entre eles.
+Ideal para sistemas legados ou externos.
+
+	- Exemplo:
+		O Gateway de Pagamento é um sistema externo que não controlamos. Ele tem um modelo de dados próprio, com
+		termos como "Transaction ID", "auth code", coisas que não precisamos/controlamos.
+
+		Para não poluir nosso modelo de domínio de PEDIDO, criamos uma ACL que traduz esses conceitos para os nossos
+		próprios como Pagamento e StatusPagamento, isso nos permite trocar o Gateway no futuro sem precisar refatorar
+		todo o BC de PEDIDO.
+
+==========================
+3 - CONFORMIST: 
+
+Neste padrão, o BC DOWNSTREAM decide aceitar o modelo de dados e a Linguagem Ubíqua do BC UPSTREAM, sem negociação. 
+Isso ocorre quando o BC UPSTREAM é um sistema muito grande e dominante e é mais simples para o DOWNSTREAM se adap-
+tar.
+
+	- Exemplo: 
+		O time de PEDIDOS precisa verificar a disponibilidade de um produto e utiliza um sistema de ERP para geren-
+		ciar estoque. Esse sistema sendo um legado complexo, expõe seus dados em um formato que o time de Pedidos
+		não consegue altear.
+
+		Neste cenário, a equipe de PEDIDOS se torna CONFORMISTA, aceitar o modelo do ERP e adapta a própria logistica
+		para consumir os dados do estoque como eles são.
+
+==========================
+4 - SHARED KERNEL: 
+
+Uma pequena parte do modelo é compartilhada entre dois ou mais BCs. Ambos precisam concordar em não modificar nada
+nesse núcleo sem consultar um ao outro... PERIGOSO.
+
+	- Exemplo:
+		Tanto o time de CLIENTE quanto o time de PEDIDO precisa validar documentos... Um no cadastro e outro na emi-
+		ssão de nota fiscal, mas ambos o mesmo documento e validação.
+
+		Sendo assim, se cria um Shared Kernel uma classe DOCUMENTO com as mesmas validações e regras, CPF e CNPJ herdam
+		essa base e sempre que CLIENTE ou PEDIDO forem passar um CPF/CNPJ ocorrerá a validação.
+		
+==========================
+5 - OPEN HOST SERVICE:
+
+É um BC UPSTREAM que decidi se comunicar com muitos outros BCs DOWNSRTEAM, ele vai "compartilhar" um modelo tratado do
+seu domínio, sem expo-lo, por meio de um protocolo de comunicação (API REST for example), bem documentado e público.
+
+	- Exemplo: O BC de CATÁLOGO é a fonte sobre todos os produtos da nossa empresa. Ele serve PEDIDOS, mas pode servir
+	outros sistemas, como ESTOQUE, MARKETING, etc.
+
+	Para não precisar ficar negociando com varias partes, CATALOGO implementa o OHS e cria uma única API pública e bem
+	documentada que permite a todos os outros consultarem suas informações.
+
+==========================
+5 - PUBLISHED LANGUAGE:
+
+É uma estratégia onde um BC UPSTREAM se compromete a expor um formato de dados/ protocolo de comunicação estável e bem
+documentado para que outros BCs DOWNSTREAM possam consumir com confiança sem precisar saber do domínio interno, somen-
+te o necessário.
+
+	- Exemplo: O BC de CLIENTE decide publicar o endpoint POST api/cliente sendo que internamente no domínio cliente 
+	possui N propriedades e está agregado com N entidades com N propriedades e N regras de negócio/validação/domínio.
+
+	Porém com a PUBLISHED LANGUAGE utilizando CONTRATOS (DTO for example) o BC UPSTREAM vai no DTOResponse apresentar
+	somente os dados necessários.
+
+Não é somente para "esconder" e não é somente "DTO", is just an example.
+É sobre desacoplar, DOWNSTREAM não depende de aggregates, regras internas, etc... Somente da estrutua publicada.
+
+==========================
+6 - SEPARATE WAYS:
+
+É uma decisão estratégica de DDD onde dois Bounded Contexts optam conscientemente por não se integrar, mantendo modelos, 
+dados e evoluções completamente independentes. Essa decisão é tomada quando:
+
+	- os BCs resolvem problemas distintos
+	- não há necessidade real de troca de informações
+	- ou o custo, complexidade e acoplamento da integração não compensam o benefício
+
+Mesmo que os BCs possuam conceitos com nomes semelhantes, cada um mantém sua própria linguagem, regras e modelo, sem 
+dependência entre si.
+
+Separate Ways não é ausência temporária de integração, mas uma escolha arquitetural explícita.
+
+==========================
+7 - PARTNERSHIP:
+
+É um padrão de relacionamento onde dois Bounded Contexts estabelecem uma parceria estratégica, assumindo responsabilidade 
+conjunta pela integração e evolução dos contratos entre eles.
+
+Nenhum dos lados atua como fornecedor dominante. As decisões sobre mudanças, versões e regras de comunicação são negociadas
+e coordenadas, exigindo alinhamento frequente entre os times.
+
+Esse padrão é indicado quando a colaboração entre os BCs é crítica para o negócio, e a evolução independente não é viável 
+sem impacto direto no outro.

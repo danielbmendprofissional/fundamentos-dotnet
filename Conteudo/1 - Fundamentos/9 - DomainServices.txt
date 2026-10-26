@@ -1,0 +1,18 @@
+﻿========================== FUNDAMENTOS ==========================
+
+==========================
+DOMAIN SERVICES:
+
+Encapsula regras de negócio ou transversais que pertecem ao mesmo CONTEXTO, mas não naturalmente 
+a um aggragate ou ValueObject desse contexto.
+
+SÃO STATELESS (Não guardam valor, não guarda propriedade, ele apenas RECEBE, faz as operações e depois RETORNA).
+
+Geralmente aplicados em políticas de negócio (Calculo de frete, disponibilidade de produto, politicas).
+
+NÃO ACESSA INFRA DIRETO, preferência não usar, mas caso precise somente por ABSTRAÇÕES.
+
+SÃO CONSUMIDOS NA APPLICATION LAYER.
+
+EXEMPLO
+	-> Pedidos IniciarPagamentoCommandHandler

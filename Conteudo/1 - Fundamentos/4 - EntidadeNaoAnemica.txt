@@ -1,0 +1,13 @@
+﻿	- Validações de domínio inváriantes (CPF não pode ser null, mas nome não precisa verificar se ele pode ser null).
+
+	1- Identifique candidatos a Value Object: Ask "This data has his own rules ou representa um conceito do domínio?"
+		- Se sim -> ele deve ser um VO (CEP, CPF, EMAIL, VALOR, QUANTIDADE, ENDEREÇO).
+
+	2- Create Value Objects imutáveis and robustos: Substitua the primitives by imútaveis classes or use records (sealed/record).
+		- Validate the invariantes de negócio on constructor. That, the invalid data not going to exist at the system.
+
+	3- Use enums to conceitos de estado fixo: When the concept was limited by a conjunto de possible values.
+		- Use enum. Example (StatusPedido -> Create, Paied, Canceled).
+
+	4- Encapsulate the Beahavior on Entity: avoid using "public set;" Expose clear methods que expressem domain actions:
+		- AdicionarItem(produto, quantidade), ConfirmarPagamento(), etc.
