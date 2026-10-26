@@ -1,0 +1,19 @@
+========================== FUNDAMENTOS ==========================
+
+==========================
+ARRAY:
+	- É uma coleção, com tamanho fixo, OU ele cria reservadno posições ou já cria com todos os valores, exemplo em: Controllers/Arrays
+	- Não da pra add novos itens só substituir um novo existente
+	- para aumentar o tamanho só resize
+	- Usado para situações especificas, maioria de um processo em .net não usa isso pois não é dinamico.
+
+LISTA:
+	- É um "array melhorado" ele agora é dinamico, consigo adicionar, remover, pegar o count, etc...
+	- não preciso setar tamanho, posso ir aumentando e diminuindo a vontade
+
+MATRIZ:
+	- É literalmente uma grade de linhas e colunas, serve para dados que preciso de duas coordenadas para dizer "linha x coluna y"
+	- Usada para mapa de assentos (fileira, cadeira), excel, algoritmos e IA
+	- Não uso muito
+
+DICIONARIO:

@@ -1,0 +1,63 @@
+========================== FUNDAMENTOS ==========================
+
+==========================
+COMPILE TIME:
+	- É o momento em que o arquivo estatico do código (.cs) é analisado, é feita uma ánalise e validação
+	por sintaxe, semantica, etc... e depois transforma em instruções de linguagem CIL (Common Intermediate Language) ou IL
+	gerando um arquivo .dll ou .exe
+
+	- Sobre a validação, ele vai só ver se respeita a gramática do C#, se as atribuições das variaveis, retorno de métodos e
+	parametros respeitam os tipos declarados.
+	- Verifica namespaces, calsses, interfaces e métodos estão acessiveis.
+
+	- Em resumo é aquele esquema que a própria IDE ja valida enquanto voce digita o código (Roslyn validando em segundo plano)
+	e quando roda um build.
+
+
+==========================
+RUNTIME:
+	- Momento em que a aplicação está rodando na máquina, ela é feita diretamente pelo SO, gerenciada pelo CLR que é o ambiente
+	de execução do .NT
+
+	- O CLR carrega os assemblies (.dll, .exe) na memória RAM.
+	- Compilação JIT (Just in Time) dos metodos desses assemblies, porque o processador não entende CIL, ai transforma em x64, ARM
+	- Gerenciamento de memória (Garbage Collection) - Alocação de objetos no Heap gerenciado e limpeza dessa memória
+	- Tratamento de exceções
+	- Validação em tempo real de acessos a memória e Reflection
+
+
+==========================
+GARBAGE COLLECTION:
+	- É o coletor de lixo automatico do CLR, ele que gerencia a memória no Heap (liberação ou alocação de memória)
+
+	- 
+
+==========================
+REFLECTION:
+	- ???
+
+
+==========================
+IN MEMORY:
+	- Refere-se a qualquer operação, alocação ou leitura de dados que ocorra estritamente na memória RAM enquanto a aplicação está
+	em runtime.
+
+	- Operar em memória é não depender de leitura/escrita de HDs, redes ou banco de dados.
+
+	- Altissima velocidade e volatil, pois se a aplicação para os dados na memória são perdidos.
+
+	- heap x stack ????
+
+	- ???
+
+
+==========================
+EM PROCESSAMENTO (CPU X I/O):
+	- A aplicação se divide em duas categorias de consumo de hardware, CPU-Bound (em processamento ativo) e I/O-Bound (em espera de input e outpu).
+
+	- CPU BOUND: Tarefas em que a execução depende exclusivamente do poder de calculo e ciclos do processador.
+		- Calculos matematicos, ordenação de coleções em memória, criptografia, compactação de arquivos, imagens.
+		- A thread alocada para a tarefa fica a 100% de uso
+		- Solução para não travar a thread é usar paralelismo (Task,Run() e Parallel.ForEach()).
+	
+	- I/O BOUND: 
