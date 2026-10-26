@@ -1,6 +1,6 @@
 ========================== FUNDAMENTOS ==========================
 
-==========================
+========================== COLLECTIONS
 ARRAY:
 	- É uma coleção, com tamanho fixo, OU ele cria reservadno posições ou já cria com todos os valores, exemplo em: Controllers/Arrays
 	- Não da pra add novos itens só substituir um novo existente
@@ -17,3 +17,33 @@ MATRIZ:
 	- Não uso muito
 
 DICIONARIO:
+	- guarda por pares <key, value>, então dentro da coleção fica por exemplo 22-daniel 23-carolina, 82-lidia
+	- ele não percorre nada, ele é O(1), enquanto lista seria O(n)
+	- ocupa espaço na memória, porém ganha mais velocidade
+	- pode adicionar, remover, obter normalmente, mas tudo pela key
+	- listar todos de uma vez cairia no foreach O(n), não faria sentido usar um dicionario para esse proposito
+
+HASHSET:
+	- Funciona igual o dicionario, porém sem o valor, ele literalmente salva na coleção as keys
+	- quando for buscar, ele busca pela key procurando obter a key
+	- os dados são organizados pela key 0(1)
+	- é como uma lista de convidados e ele só quer saber se o convidado está na lista.
+
+PILHA:
+	- Esse é o mais simples, é uma coleção (Stack<T>) que vai empilhando recursos, o último que entra é o primeiro que sai
+	- Adiciona no topo, tira do topo e devolve, visualiza otopo, tudo O(1)
+	- Não existe indice para pegar um dos recursos da pilha e foreache percore do topo até a base
+	- É tipo o ctrl Z ou o voltar do navegador
+
+FILAS:
+	- Fila seria o Queue<T> ao contratio do pilha, o primeiro que entra é o primeiro que sai, segue ordem de chegada.
+	- Joga para o fim da fila, Pega o primeiro da fila e devolve, olha o primeio da fila, tudo O(1)
+	- Tipo o rabbitMQ, mensagem que chegou primeiro é processada primeiro
+
+COLECOES ORDENADAS:
+	- Literalmente lista, hash, dicionario, porém ja ordenados automaticamente
+	- dicionario ordena numero ou alfabeto e por ai vai
+	- tem um custo de memoria e na hora de buscar ele vira O(log n), porém para alguns casos serve como rankind, linha do tempo, relatório
+
+ÁRVORES:
+	- Estrutura hierarquica como se fosse uma pasta com varias subpastas e cada uma dessas subpastas possue outras subpastas

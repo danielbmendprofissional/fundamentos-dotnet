@@ -8,6 +8,10 @@
 
   <ItemGroup>
     <Folder Include="cSharp\" />
+    <Folder Include="angular\" />
+    <Folder Include="devops\" />
+    <Folder Include="architecture\" />
+    <Folder Include="ai\" />
   </ItemGroup>
 
 </Project>
