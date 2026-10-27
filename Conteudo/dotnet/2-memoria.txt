@@ -1,0 +1,10 @@
+========================== FUNDAMENTOS ==========================
+
+========================== MEMORY
+DADOS EM MEMÓRIA:
+	- São dados que ficam na RAM do processo da aplicação, sem banco de dados ou consulta externa
+	- Rápido, não há ida ao banco nem a rede
+	- Volátil, reiniciou a aplicação perdeu tudo
+	- Compartilhado entre requisições, se voce tem um nó de API publicado toda requisição para esse nó terá acesso ao que estiver na memória
+	- Não compartilhado entre instâncias, se eu tenho 2 nós de API publicados, cada um terá sua memória
+	- Muito usado em cache

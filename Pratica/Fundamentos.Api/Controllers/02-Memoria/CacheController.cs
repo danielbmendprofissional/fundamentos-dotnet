@@ -4,7 +4,7 @@ namespace Fundamentos.Api.Controllers;
 
 /// <summary>IMemoryCache: guardar resultados caros.</summary>
 [Route("api/memoria/cache")]
-[Tags("02.03 - Cache em memória")]
+[Tags("02.02 - Cache em memória")]
 public class CacheController : EstudoControllerBase
 {
     /// <summary>GetOrCreate.</summary>

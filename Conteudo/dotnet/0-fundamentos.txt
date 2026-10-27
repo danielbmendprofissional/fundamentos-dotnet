@@ -1,6 +1,19 @@
 ========================== FUNDAMENTOS ==========================
 
+EXECUÇÃO
 ==========================
+Resumo de uma aplicação é o seguinte o SO controla tudo, porém no inicio toda a aplicação está no DISCO (SSD), ai ao iniciar o SO vai gerenciando todo o processo, ele vai e coloca
+alguns arquivos necessarios na RAM para a CPU rodar, ai a CPU vai rodando.
+
+Inclusive você fazer uma consulta de dados no banco é mais lento que em memória (direto na ram), porém o processo de consutla de bnaco de dados passa pela RAM em algum momento,
+a lentidão é que além da RAM ele precisa chegar no disco do banco e a rede.
+
+Dentro da RAM estão os processos (N), cada processo tem N threads necessarias para executar linhas de comando e cada thread tem 1 STACK (guarda variaveis, referencias e chamadas de métodos) e
+cada processo tem o mesmo HEAP que seria o estoque de recursos em memória tipo uma lista<> que o GC gerencia...
+
+O SO define o processo e a CPU que realiza o processamento desses processos com as threads da RAM.
+
+
 COMPILE TIME:
 	- É o momento em que o arquivo estatico do código (.cs) é analisado, é feita uma ánalise e validação
 	por sintaxe, semantica, etc... e depois transforma em instruções de linguagem CIL (Common Intermediate Language) ou IL
@@ -13,8 +26,6 @@ COMPILE TIME:
 	- Em resumo é aquele esquema que a própria IDE ja valida enquanto voce digita o código (Roslyn validando em segundo plano)
 	e quando roda um build.
 
-
-==========================
 RUNTIME:
 	- Momento em que a aplicação está rodando na máquina, ela é feita diretamente pelo SO, gerenciada pelo CLR que é o ambiente
 	de execução do .NT
@@ -26,18 +37,17 @@ RUNTIME:
 	- Validação em tempo real de acessos a memória e Reflection
 
 
-==========================
 GARBAGE COLLECTION:
 	- É o coletor de lixo automatico do CLR, ele que gerencia a memória no Heap (liberação ou alocação de memória)
-
-	- 
-
-==========================
-REFLECTION:
-	- ???
+	- eu vou lá, crio um new alguma coisa ou sei la e em algum momento o GC identifica que morreu e limpa
 
 
-==========================
+DISPOSE:
+	- O GC cuida da memória, mas coisas fora do heap ele nao fecha como arquivo aberto, conexão com banco, socket de rede
+	- Você precisa chamar o dispose() para que ele libere o recurso na hora
+	- talvez quando eu for manipular um arquivo eu use isso, mas hoje em dia ja ta tudo embutido em metodos e pacotes
+
+
 IN MEMORY:
 	- Refere-se a qualquer operação, alocação ou leitura de dados que ocorra estritamente na memória RAM enquanto a aplicação está
 	em runtime.
@@ -46,12 +56,7 @@ IN MEMORY:
 
 	- Altissima velocidade e volatil, pois se a aplicação para os dados na memória são perdidos.
 
-	- heap x stack ????
 
-	- ???
-
-
-==========================
 EM PROCESSAMENTO (CPU X I/O):
 	- A aplicação se divide em duas categorias de consumo de hardware, CPU-Bound (em processamento ativo) e I/O-Bound (em espera de input e outpu).
 

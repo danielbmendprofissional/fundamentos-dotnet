@@ -47,3 +47,17 @@ COLECOES ORDENADAS:
 
 ÁRVORES:
 	- Estrutura hierarquica como se fosse uma pasta com varias subpastas e cada uma dessas subpastas possue outras subpastas
+
+INTERFACES:
+	- IEnumerable<T>                    percorrer (foreach)
+		 ├─ ICollection<T>              + Count, Add, Remove, Contains, Clear
+		 │   └─ IList<T>                + [i], Insert, RemoveAt, IndexOf
+		 └─ IReadOnlyCollection<T>      + Count (sem alterar nada)
+			 └─ IReadOnlyList<T>        + [i] (sem alterar nada)
+	- Isso é mais para dar flexibilidade e proteção, por exemplo definir como IReadOnly ele não consegue operar nela, ou um IEnumerable pode ser
+	list, dictionary, por ai
+	- Expor o contrato IEnumerable ao inves da implementação Enumerable
+
+LINQ:
+	- É uma forma de consultar coleções de forma declarativa, sem escrever foreach, if,  etc
+	- É lazy load
