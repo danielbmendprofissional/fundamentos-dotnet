@@ -8,3 +8,28 @@ DADOS EM MEMÓRIA:
 	- Compartilhado entre requisições, se voce tem um nó de API publicado toda requisição para esse nó terá acesso ao que estiver na memória
 	- Não compartilhado entre instâncias, se eu tenho 2 nós de API publicados, cada um terá sua memória
 	- Muito usado em cache
+
+CACHE EM MEMÓRIA:
+	- literalmente cache porém em memória, direto na aplicação, sem usar redis nem nada, se a aplicação cair = cache zera
+
+CONSUMO EM MEMÓRIA:
+	- É decidir quanto dado eu trago para a RAM e por quanto tempo mantenho ele vivo
+	- Tudo que chega na RAM vira objeto no heap, e isso custa:
+		- Memória: o que fica vivo ocupa heap (lista grande cai no LOH)
+		- Tempo: alocar objetos e o GC recolher
+		- Risco: OutOfMemoryException ou a aplicação engasgando
+
+	- 3 perguntas para decidir:
+		- Quanto eu trago? a tabela inteira (pior) -> uma página -> só as colunas que preciso (melhor)
+		- Quanto mantenho vivo ao mesmo tempo? tudo numa lista com ToList() (pior) -> um item por vez, em streaming (melhor)
+		- Onde o filtro roda? no C#, depois de trazer tudo (pior) -> no banco, antes de trazer (melhor)
+
+	- Regra de bolso: filtre, projete e pagine no banco; processe em fluxo; materialize só o que precisa
+
+	PERGUNTAS:
+	1. Por que o fluxo e o carregar tudo alocaram quase o mesmo, mas o fluxo reteve quase nada?
+		R:
+	2. O que muda no resultado e no custo se o ToList() vier antes do Where numa consulta do EF?
+		R:
+	3. Por que um teste contra o provider InMemory pode passar e a produção falhar?
+		R:

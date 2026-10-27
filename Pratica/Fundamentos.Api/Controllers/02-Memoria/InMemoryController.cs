@@ -5,25 +5,20 @@ namespace Fundamentos.Api.Controllers;
 /// <summary>Estado mantido em memória no processo, sem banco.</summary>
 [Route("api/memoria/in-memory")]
 [Tags("02.01 - Dados em memória")]
-public class InMemoryController : EstudoControllerBase
+public class InMemoryController(ISocioRepository repositorio) : EstudoControllerBase
 {
-    /// <summary>CRUD sobre uma List estática: listar.</summary>
     [HttpGet]
-    public IActionResult Listar() => NaoImplementado();
+    public IActionResult Listar()
+    {
+        var socios = repositorio.Listar();
+        return Ok(new { total = socios.Count, socios });
+    }
 
-    /// <summary>CRUD em memória: criar.</summary>
     [HttpPost]
-    public IActionResult Criar() => NaoImplementado();
+    public IActionResult Criar([FromBody] CriarSocioRequest request) =>
+        StatusCode(StatusCodes.Status201Created, repositorio.Adicionar(request.Nome));
 
-    /// <summary>CRUD em memória: remover por id.</summary>
     [HttpDelete("{id}")]
-    public IActionResult Remover() => NaoImplementado();
-
-    /// <summary>O que acontece com o estado quando a aplicação reinicia? E com vários usuários?</summary>
-    [HttpGet("ciclo-de-vida")]
-    public IActionResult CicloDeVida() => NaoImplementado();
-
-    /// <summary>Tempo de vida de serviços na injeção de dependência.</summary>
-    [HttpGet("singleton-scoped-transient")]
-    public IActionResult SingletonScopedTransient() => NaoImplementado();
+    public IActionResult Remover(int id) =>
+        repositorio.Remover(id) ? NoContent() : NotFound(new { mensagem = $"sócio {id} não existe" });
 }
