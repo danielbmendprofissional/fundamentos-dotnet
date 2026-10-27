@@ -1,0 +1,31 @@
+========================== FUNDAMENTOS ==========================
+
+========================== CONCORRENCIA
+THREADS:
+	- A thread é uma linha de execução dentro do SO, cada uma tem sua stack e cada processo tem o heap de memória com os objetos list<> etc..
+	- Uma thread executa uma tarefinha por vez e o SO que define tudo
+	- No dia a dia usa-se o ThreadPoll que é um grupo de threads prontas que o .NET usa, sem precisar do gasto de tempo de criar uma
+	- No dia a dia usa-se Task com async/await que rodam em cima do threadpool.
+
+ASYNC/AWAIT:
+	- Vamós lá, esse não tem tópicos é um pouco confuso e será explicado de uma vez mesmo, eu tenho uma pilha de processos a serem feitos e
+	uma quantidade X de threads para executa-los, imagine tenho uns processos que consultam banco ou api externa e fazem um processo fora do escopo
+	da thread que pode demorar... o ASYNC avisa a thread que durante TODO o processo desse processo (kkkk) em algum momento tera um "await", quando a thread
+	chegar ela vai executar o await e deixar pra la, vai embora pega o proximo processo e contniua o trampo... 
+	Quando termina o processo do await ele avisa o .net e ele volta pra fila e alguma outra thread termina o processo
+
+LOCKS e RACE CONDITIONS: 
+	- race condiction é um problema onde duas threads "disputam" o mesmo processo, não acontece no dia a dia do desenvolvimento web porém
+	é como se fosse um processo e duas threads o executarem ao mesmo tempo haverá problema ou perca de dados, sendo assim criou o lock
+	- lock basicamente bloqueia o race condition de acontecer kkkkk
+
+CONCURRENT COLLECTIONS:
+	- Coleções comuns (List, Dictionary...) não são seguras para várias threads: itens somem ou a estrutura corrompe, sem exceção
+	- Versões seguras: ConcurrentDictionary, ConcurrentQueue, ConcurrentStack, ConcurrentBag (sem ordem). Não existe List concorrente
+	- Cada operação é segura, mas uma sequência não: use GetOrAdd, AddOrUpdate, TryAdd, TryDequeue
+	- Mais lentas e pesadas que as comuns: só usar com compartilhamento real (cache próprio, contadores, estado Singleton)
+	- Channel<T>: produtor-consumidor com espera sem bloquear thread e buffer limitado (backpressure)
+
+PARALELISMO:
+	- É literalmente para a mesma tarefa usar 2 nucleos para executa-la juntos em paralelo para terminar mais rapido (exemplo)
+	- Difere da concorrencia porque ai concorrencia seria o mesmo thread podendo lidar com 2 coisas ao mesmo tempo (async await)
