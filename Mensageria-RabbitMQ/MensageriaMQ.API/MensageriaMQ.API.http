@@ -1,0 +1,6 @@
+@MensageriaMQ.API_HostAddress = http://localhost:5189
+
+GET {{MensageriaMQ.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

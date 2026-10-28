@@ -1,0 +1,11 @@
+@Mensageria.API_HostAddress = http://localhost:5015
+
+GET {{Mensageria.API_HostAddress}}/todos/
+Accept: application/json
+
+###
+
+GET {{Mensageria.API_HostAddress}}/todos/1
+Accept: application/json
+
+###
