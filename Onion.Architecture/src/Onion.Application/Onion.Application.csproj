@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Accounts\Mappings\**" />
+    <Compile Remove="Appointments\Mappings\**" />
+    <Compile Remove="Invitations\Mappings\**" />
+    <Compile Remove="Partners\Mappings\**" />
+    <EmbeddedResource Remove="Accounts\Mappings\**" />
+    <EmbeddedResource Remove="Appointments\Mappings\**" />
+    <EmbeddedResource Remove="Invitations\Mappings\**" />
+    <EmbeddedResource Remove="Partners\Mappings\**" />
+    <None Remove="Accounts\Mappings\**" />
+    <None Remove="Appointments\Mappings\**" />
+    <None Remove="Invitations\Mappings\**" />
+    <None Remove="Partners\Mappings\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Onion.Domain\Onion.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Accounts\EventHandlers\" />
+    <Folder Include="Appointments\EventHandlers\" />
+    <Folder Include="Invitations\DTOs\Responses\" />
+    <Folder Include="Invitations\EventHandlers\" />
+    <Folder Include="Partners\DTOs\Responses\" />
+    <Folder Include="Partners\EventHandlers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
+  </ItemGroup>
+
+</Project>

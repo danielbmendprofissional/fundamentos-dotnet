@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>c5ed9667-a1c0-48ff-88c3-1eb76586bae6</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.25" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.25" />
+	<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.25" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Onion.Application\Onion.Application.csproj" />
+    <ProjectReference Include="..\Onion.Infrastructure\Onion.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

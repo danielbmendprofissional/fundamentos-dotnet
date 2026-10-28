@@ -1,0 +1,36 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Onion.Domain.Common.Base
+{
+    public abstract class ValueObject
+    {
+        protected abstract IEnumerable<object> GetEqualityComponents();
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || obj.GetType() != GetType()) return false;
+
+            var other = (ValueObject)obj;
+            return GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
+        }
+
+        public override int GetHashCode()
+        {
+            return GetEqualityComponents()
+                .Aggregate(new HashCode(), (code, obj) => {
+                    code.Add(obj);
+                    return code;
+                }).ToHashCode();
+        }
+
+        public static bool operator ==(ValueObject a, ValueObject b)
+            => a?.Equals(b) ?? b is null;
+
+        public static bool operator !=(ValueObject a, ValueObject b)
+            => !(a == b);
+    }
+}

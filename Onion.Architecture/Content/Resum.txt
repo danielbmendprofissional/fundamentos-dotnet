@@ -1,0 +1,77 @@
+﻿===========================================================================
+=								  RESUM
+===========================================================================
+
+The dependency always points to the center, Domain is the center.
+
+===========================================================================
+=								STRUCTURE
+===========================================================================
+ 
+CORE LAYER (Heart): Don´t know about nothing, data, framework, UI, nothing.
+- Domain: Entities, VOs, Enums, Domain Exceptions, Repository interfaces is
+the business logic.
+
+- Application: Orquestrate the data fluxo, use cases, Services Interfaces 
+and Services, DTOs, Mappings, Validators, Application Exceptions.
+
+INFRASTRUCTURE LAYER:
+- Persistence: Context, Repositories implementation, Migrations, Maps, etc.
+
+- AntiCorruption: External services, e-mails, rabbit integration, etc...
+
+EXTERNAL LAYER:
+- Presentation: Controllers, program.cs, views, middlewares, extensions, DI...
+
+- Tests: Auto Explained.
+
+
+===========================================================================
+=								PRINCIPLES
+===========================================================================
+
+1. The application is built around an independent object model 
+system.
+
+2. The internal layers define the interfaces, external layers implementing
+interfaces.
+
+3. The coupling direction is directed towards the center.
+
+4. The software main code can be compiled and executed separatetly of the 
+infrastructure.
+
+5. Presentation, tests and infrastructure are on the same level ih the
+dependency hierarchy, infra solves the data, presentation solves the UI, 
+tests solve the logic veracity.
+
+6. Presentation asks application for data, application asks domain for data.
+Domain dosen´t know about nothing, don´t know how to deal with data, only the
+infrastrucure knows it.
+
+
+===========================================================================
+=						  .NET STRUCTURE FOLDER
+===========================================================================
+
+src/
+├── 1-Domain/
+│   ├── Entities/
+│   ├── Interfaces/ (Ex: IRepository)
+│   └── Exceptions/
+├── 2-Application/
+│   ├── Interfaces/ (Ex: IService)
+│   ├── Services/   (Implementação da lógica de aplicação)
+│   ├── DTOs/
+│   └── Mappings/
+├── 3-Infrastructure/
+│   ├── Data/
+│   │   ├── Context/
+│   │   └── Repositories/ (Implementação dos IRepository)
+│   └── ExternalServices/
+└── 4-Presentation/
+    └── Valuto.API/
+        ├── Controllers/
+        └── Extensions/ (Configurações de DI)
+tests/
+└── UnitTests/
