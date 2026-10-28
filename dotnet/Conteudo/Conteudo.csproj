@@ -7,10 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="angular\" />
-    <Folder Include="devops\" />
-    <Folder Include="architecture\" />
-    <Folder Include="ai\" />
+    <Compile Remove="ai\**" />
+    <Compile Remove="angular\**" />
+    <Compile Remove="architecture\**" />
+    <Compile Remove="devops\**" />
+    <EmbeddedResource Remove="ai\**" />
+    <EmbeddedResource Remove="angular\**" />
+    <EmbeddedResource Remove="architecture\**" />
+    <EmbeddedResource Remove="devops\**" />
+    <None Remove="ai\**" />
+    <None Remove="angular\**" />
+    <None Remove="architecture\**" />
+    <None Remove="devops\**" />
   </ItemGroup>
 
 </Project>
