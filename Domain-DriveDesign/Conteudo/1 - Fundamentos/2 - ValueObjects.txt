@@ -1,0 +1,45 @@
+﻿========================== FUNDAMENTOS ==========================
+
+==========================
+VALUE OBJECTS:
+
+	- Definido pelos valores de suas propriedades, sem identificador único.
+	- Ao comparar 2 valueObjet, caso uma de suas propriedades distinguirem uma da outra, já são objetos diferentes.
+	- É imutavel, não pode alterar/adicionar propriedades.
+	- Validação é feita no momento da criação.
+    - NÃO TEM ID
+    - NÃO TEM SET (é imutavel)
+
+	EXEMPLO CORRETO:
+
+public sealed class Endereco
+{
+    public string Logradouro { get; }
+    public string Complemento { get; }
+    public string Cep { get; }
+    public string Cidade { get; }
+    public string Estado { get; }
+    public string Pais { get; }
+
+    public Endereco(
+        string logradouro,
+        string cep,
+        string cidade,
+        string estado,
+        string pais,
+        string? complemento = null)
+    {
+        if (string.IsNullOrWhiteSpace(logradouro))
+            throw new DomainException("Logradouro inválido");
+
+        if (!CepValidador.EhValido(cep))
+            throw new DomainException("CEP inválido");
+
+        Logradouro = logradouro;
+        Complemento = complemento ?? string.Empty;
+        Cep = cep;
+        Cidade = cidade;
+        Estado = estado;
+        Pais = pais;
+    }
+}

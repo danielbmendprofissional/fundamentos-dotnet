@@ -1,0 +1,135 @@
+﻿========================== FUNDAMENTOS ==========================
+
+==========================
+AGGREGATES:
+
+	- Aglomerado de objetos do domínio (entidades e valueObjects) que podem ser tratados como uma unidade única.
+	- Um dos objetos será a raiz do agregado (Aggregate root). A raiz é importante pois garante a integridade do aggregate,
+	tendo quaisquer referências de fora do agregado sendo feitas através dela.
+	- não é agrupamento lógico, é para garantir consistência de regras invariantes (Regras, estados válidos, transições permitidas).
+	- Nada do aggregate pode ser acessado, criado, alterado sem passar pelo root.
+
+	EXEMPLO CORRETO:
+
+	AGREGADO 1 (VO) ->
+    //imutável (sem set)
+    //sem ID
+    //Validado no construtor
+
+	public sealed class Endereco
+    {
+        public string Logradouro { get; }
+        public string Numero { get; }
+        public string Bairro { get; }
+        public string Cep { get; }
+
+        public Endereco(
+            string logradouro,
+            string numero,
+            string bairro,
+            string cep)
+        {
+            if (string.IsNullOrWhiteSpace(logradouro))
+                throw new DomainException("Logradouro inválido");
+
+            if (string.IsNullOrWhiteSpace(cep))
+                throw new DomainException("CEP inválido");
+
+            Logradouro = logradouro;
+            Numero = numero;
+            Bairro = bairro;
+            Cep = cep;
+        }
+    }
+
+    
+    AGREGADO 2 (Entity) ->
+    //mutável somente pelo root
+    //tem identidade
+    //Sem repositório próprio
+
+    public class Banco
+    {
+        public long Id { get; private set; }
+        public string Nome { get; private set; }
+        public string Agencia { get; private set; }
+        public string Conta { get; private set; }
+
+        protected Banco() { }
+
+        internal Banco(string nome, string agencia, string conta)
+        {
+            Nome = nome;
+            Agencia = agencia;
+            Conta = conta;
+        }
+
+        internal void AlterarConta(string agencia, string conta)
+        {
+            Agencia = agencia;
+            Conta = conta;
+        }
+    }
+
+    ROOT (Entity) ->
+    public class Pessoa
+{
+    private readonly List<Banco> _bancos = new();
+
+    public long Id { get; private set; }
+    public string Nome { get; private set; }
+    public DateTime DataNascimento { get; private set; }
+
+    public Endereco Endereco { get; private set; }
+
+    public long IndicadorSexoId { get; private set; }
+    public Indicador? Sexo { get; private set; }
+
+    public IReadOnlyCollection<Banco> Bancos => _bancos.AsReadOnly();
+
+    protected Pessoa() { }
+
+    public Pessoa(
+        string nome,
+        DateTime dataNascimento,
+        Endereco endereco,
+        long indicadorSexoId)
+    {
+        AlterarNome(nome);
+        DataNascimento = dataNascimento;
+        Endereco = endereco;
+        IndicadorSexoId = indicadorSexoId;
+    }
+
+    public void AlterarNome(string nome)
+    {
+        if (string.IsNullOrWhiteSpace(nome))
+            throw new DomainException("Nome inválido");
+
+        Nome = nome;
+    }
+
+    public void AlterarEndereco(Endereco novoEndereco)
+    {
+        Endereco = novoEndereco;
+    }
+
+    public void AdicionarBanco(string nome, string agencia, string conta)
+    {
+        var banco = new Banco(nome, agencia, conta);
+        _bancos.Add(banco);
+    }
+
+    public void RemoverBanco(long bancoId)
+    {
+        var banco = _bancos.FirstOrDefault(b => b.Id == bancoId);
+
+        if (banco == null)
+            throw new DomainException("Banco não encontrado");
+
+        _bancos.Remove(banco);
+    }
+}
+
+
+

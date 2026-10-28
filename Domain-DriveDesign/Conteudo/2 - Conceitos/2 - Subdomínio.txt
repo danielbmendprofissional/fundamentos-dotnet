@@ -1,0 +1,33 @@
+﻿========================== CONCEITOS ==========================
+
+==========================
+SUBDOMÍNIO:
+
+	- Uma parte específica do domínio, com um objetivo claro.
+	- Tipos {
+		- Core Domain (Onde está o diferencial do negócio).
+		- Supporting (apoia o core).
+		- Generic (Comum).
+	}
+	- Se tem vida própria e regras de negóocio próprias, outros contextos dependem dela.
+
+	Exemplo correto:
+		- E-commerce. (Domínio)
+			- Catálogo	(Subdomínio)
+			- Pedido	(Subdomínio)
+			- Pagamento (Subdomínio)
+			- Logística (Subdomínio)
+
+=======================================
+
+Pergunte para cada “candidato a subdomínio”:
+	
+	- Resolve um problema de negócio próprio?
+	- Tem regras próprias relevantes?
+	- Tem linguagem própria (ubíqua)?
+	- Pode existir sem outra entidade?
+	- Tem stakeholders próprios?
+
+Se SIM para a maioria → subdomínio
+
+Se NÃO → apenas conceito do modelo

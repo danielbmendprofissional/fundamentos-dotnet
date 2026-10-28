@@ -1,0 +1,11 @@
+﻿========================== CONCEITOS ==========================
+
+==========================
+DOMÍNIO:
+
+	- É o problema de negócio como um todo (Sistema financeiro, Sistema de contratos).
+	- É o úniverso.
+	- Valuto é um domínio.
+
+	Exemplo correto:
+		- E-commerce.

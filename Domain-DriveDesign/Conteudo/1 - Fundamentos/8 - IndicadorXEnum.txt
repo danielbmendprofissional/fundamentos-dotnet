@@ -1,0 +1,31 @@
+﻿========================== FUNDAMENTOS ==========================
+
+==========================
+INDICADOR X ENUM:
+
+"Se esse valor mudar, muda algo no comportamento do sistema?"
+
+Enum: Tenho um enum StatusPedido {Criado, Pago, Cancelado} 
+	-> Se mudar de criado para pago, muda algo?
+		Sim ele libera entrega, mudou o valor muda o comportamento do sistema.
+
+Indicador: Tenho um Indicador Sexo {Masculino, Feminino, Outro}
+	-> Se mudar de masculino para feminino, muda algo?
+		- Não muda nada, então INDICADOR.
+
+Ai no caso quando for ENUM o banco terá apenas o long armazenado, caso precise 
+retornar a descrição para UI precisa registrar o ENUM assim:
+    {
+        [Description("Pendente")] -- Descrição para UI
+        Pendente = 1,
+        [Description("Pagamento Confirmado")]
+        PagamentoConfirmado = 2,
+        [Description("Em Separacao")]
+        EmSeparacao = 3,
+        [Description("Enviado")]
+        Enviado = 4,
+        [Description("Entregue")]
+        Entregue = 5,
+        [Description("Cancelado")]
+        Cancelado = 6
+    }

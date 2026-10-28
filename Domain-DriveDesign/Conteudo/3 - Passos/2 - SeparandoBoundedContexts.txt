@@ -1,0 +1,67 @@
+﻿========================== PASSOS ==========================
+
+==========================
+SEPARANDO BOUNDED CONTEXTS
+
+
+Gestão de pedidos (context do subdomínio core):
+
+	- Responsabilidade central: Orquestrar todo o processo de compra, desde a criação do pedido até o pagamento e preparação para entrega.
+	É o coração do negócio.
+
+	- Linguagem ubíqua:
+		- Pedido: Uma intenção de compra formalizada pelo cliente.
+		- Item do Pedido: Produto específico com quantidade e preço no contexto do pedido.
+		- Status do pedido: Pendente, Confirmado, Processando, Enviado, Concluído.
+		- Valor total: Soma calculada de todos os itens do pedido.
+		- Cliente ID: Identificador único do cliente que fez o pedido.
+		- Produto ID: Identificador único do produto no item do pedido.
+		- Endereço de Entrega: Local onde o pedido deve ser enviado.
+		- Pagamento: Transação financeira específica deste pedido.
+
+	- Lógica de negócio específicas:
+		- Não se pode adicionar um 'ItemPedido' a um pedido já pago ou cancelado.
+		- O 'ValorTotal' do pedido é sempre calculado pela raiz, somando o valor dos 'ItemPedido'.
+		- Um pedido deve ter pelo menos um 'ItemPedido'.
+		- Um pedido não pode ter seu 'StatusPedido' alterado para Pago se o Pagamento não estiver aprovado.
+		- 'ClienteId' deve ser válido.
+
+
+Gestão de catálogo (context do subdomínio supporting):
+
+	- Responsabilidade central: Gerenciar todas as informações sobre os produtos vendidos no sistema.
+
+	- Linguagem ubíqua:
+		- Produto: Item disponível para venda com todas as suas características.
+		- SKU: Código único de identificação do produto.
+		- Categoria: Agrupamento lógico de produtos similares.
+		- Preço Base: O valor corrente pelo qual o produto é vendido.
+		- Estoque: Quantidade disponível para venda.
+		- Status do Produto: Ativo, Inativo, Descontinuado.
+
+	- Lógica de negócio específicas:
+		- Produto deve ter categoria válida.
+		- Preço deve ser sempre positivo.
+		- Controle de disponibilidade em estoque.
+		- Regras de ativação/desativação de produts.
+		- Um Produto com status Inativo não poder ser listado para novos pedidos.
+
+
+Gestão de clientes (context do subdomínio supporting):
+	
+	- Responsabilidade Central: Manter o cadastro e o histórico de interações dos clientes.
+	
+	- Linguagem ubíqua:
+		- Cliente: Pessoa ou empresa que pode fazer compras.
+		- Perfil do Cliente: Classificação baseada em histórico (VIP, Premium, Regular).
+		- Endereço de Cadastro: endereço cadastrado no perfil (mutável).
+		- Histórico de Compras: Registro de todos os pedidos (referenciados por PedidoId) do cliente.
+		- Status do cliente: Ativo, Inativo, Bloqueado.
+
+	- Lógica de negócio específicas:
+		- Validação de documentos (CPF/CNPJ).
+		- Regras de crédito baseadas no perfil.
+		- Gestão de múltiplos endereços.
+		- Políticas de bloqueio/desbloqueio.
+		- Um Cliente não pode ser extraído se possuir histórico de compras.
+		- O EndereçoCadastro usado para entraga em um novo pedido é copiado para o EndereçoEntrega no BC de Pedidos.

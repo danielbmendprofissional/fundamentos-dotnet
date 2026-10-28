@@ -1,0 +1,45 @@
+﻿========================== PASSOS ==========================
+
+==========================
+MAPEANDO
+
+========================================
+   (DOWSTREAM)          (UPSTREAM)
+GESTÃO DE PEDIDOS -> GESTÃO DE CATÁLOGO
+   (COSTUMER)           (SUPPLIER)
+========================================
+Problema: Costumer precisa de dados do suppplier, mas os modelos são diferentes.
+
+Solução: Usar a relação com OHS/PLS e ACL.
+
+Fluxo: Supplier fornece utilizando o padrão OHS (criação de uma API) e COSTUMER vai receber e tratar 
+esses dados por meio da ACL (Camada de antcorruption).
+
+	- UPSTREAM: GET api/produtos -> RESPONSE = {id, nome e preco}.
+	- DOWNSTREAM: PEDIDO { ItemPedido = [ new {id = id, nome = nome} + precoUnitario = preco.] }.
+
+========================================
+   (DOWSTREAM)          (UPSTREAM)
+GESTÃO DE PEDIDOS -> GESTÃO DE CLIENTES
+   (COSTUMER)           (SUPPLIER)
+========================================
+Problema: Costumer precisa do endereço de cliente, mas os modelos são diferentes.
+
+Solução: Usar a relação com OHS/PLS e ACL.
+
+Fluxo: Supplier fornece utilizando o padrão OHS (criação de uma API) e COSTUMER vai receber e tratar 
+esses dados por meio da ACL (Camada de antcorruption).
+
+	- UPSTREAM: GET api/cliente/{id}/endereco/{enderecoId} -> RESPONSE = {id, cep, bairro, rua}.
+	- DOWNSTREAM: PEDIDO { (SNAPSHOT) -> vai criar um new EnderecoEntrega e colar os dados no novo objeto (imutável) }.
+
+========================================
+			 SEPARATE WAYS
+GESTÃO DE CLIENTE -> GESTÃO DE CATÁLOGO
+
+========================================
+Problema: Clientes e Catálogo têm propósitos distintos, sem necessidade de integração.
+
+Solução: Usar a relação Separate Ways.
+
+Fluxo: Cada contexto opera de forma isolada.

@@ -1,0 +1,10 @@
+﻿========================== CONCEITOS ==========================
+
+==========================
+CLAUSE GUARD:
+
+É um padrão de validação que pode ser usado no DDD para centralizar a lógica de verificação de pré-
+condições (ex: não pode ser null, não pode ser vazio).
+
+Lança uma DomainException se a condição for violada, tornando o código das Entidades/VOs mais limpo
+e legível.

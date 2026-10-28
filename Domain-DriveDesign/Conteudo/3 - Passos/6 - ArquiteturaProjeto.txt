@@ -1,0 +1,47 @@
+﻿========================== PASSOS ==========================
+
+==========================
+ARQUITETURA DO PROJETO: CLENA ARCHITECTURE
+
+DOMAIN {
+
+	- Entities.
+	- Value Objects.
+	- Aggregates.
+	- Rich Domain (Guard Validations, Domain Services).
+	- Domain Events.
+
+}
+
+APPLICATION (USE CASES) {
+
+	- Handlers.
+	- DTOs.
+	- Orquestração.
+	- Validações específicas de Use cases.
+	- Interfaces de Repositórios
+	- Depende apenas do Domain
+
+	Coordena o fluxo entre domínio e infrastructure.
+}
+
+INFRASTRUCTURE {
+
+	- EF Core.
+	- Repositórios.
+	- Migrations.
+	- ACL para chamadas externas.
+	- Configurações de banco, serviços, caches, etc.
+
+	É a camada mais volátil e a que menos deve afetar o domínio.
+}
+
+PRESENTATION (API) {
+
+	- Controllers.
+	- Auth
+	- Conexão com application
+
+	É apenas a porta de entrada.
+
+}

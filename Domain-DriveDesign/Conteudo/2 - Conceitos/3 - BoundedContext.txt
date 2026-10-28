@@ -1,0 +1,75 @@
+﻿========================== CONCEITOS ==========================
+
+==========================
+BONDEDCONTEXT:
+
+	- O limite onde um modelo é consistente e uma linguagem ubíqua e valida.
+	- "como".
+	- linguagem ubíqua.
+	- Regras de negócio.
+	- Fronteira.
+
+	Exemplo correto:
+		- E-commerce. (Domínio)
+			- Catálogo	(Subdomínio)
+			{
+				- Entidade: Pedido
+				- Cliente = Quem compra
+				- Status =  Criado, Pago, Enviado.
+			}
+			- Pedido	(Subdomínio)
+			{
+				- Entidade: Pagamento
+				- Cliente = pagador
+				- Status =  Autorizado, Capturado, Estornado.
+			}
+			- Pagamento (Subdomínio)
+			- Logística (Subdomínio)
+
+
+=============================================== EXEMPLO COMPLETO VALUTO
+DOMÍNIO: Valuto 
+
+SUBDOMÍNIOS:
+	CORE DOMAIN{
+		- Gestão financeira.
+		- Gestão pessoal.
+	}
+
+	SUPPORTING:
+		- Gestão de Pessoas
+		- Gestão de Empresas   (se tiver vida própria)
+		- Gestão Financeira Básica (se existir)
+
+	Generic{
+		- Autenticação
+		- Autorização
+		- Usuários
+		- Logs
+		- Indicadores
+	}
+
+BOUNDED CONTEXTS:
+	GESTÃO DE PESSOAS{
+		RESPONSABILIDADE: Manter e gerenciar dados pessoas e relacionamentos cadastrais de pessoas.
+		LINGUAGEM UBÍQUA: Pessoa, Endereço, CPF, Empresa, CadastrarPessoa
+		Aggregate: Pessoa (Entity + root), Endereço (VO), Banco (Entity), Empresa (Entity), CPF (Identificador + VO), Id (Identificador tecnico)
+	}
+
+
+	Valuto
+ ├── src
+ │   ├── Valuto.GestaoPessoas
+ │   │   ├── Domain
+ │   │   ├── Application
+ │   │   └── Infrastructure
+ │   │
+ │   ├── Valuto.Identidade
+ │   │   ├── Domain
+ │   │   ├── Application
+ │   │   └── Infrastructure
+ │   │
+ │   └── Valuto.Api
+ │       ├── Controllers
+ │       │   ├── GestaoPessoas
+ │       │   └── Identidade

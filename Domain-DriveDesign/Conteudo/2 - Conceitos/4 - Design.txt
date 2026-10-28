@@ -1,0 +1,21 @@
+﻿========================== CONCEITOS ==========================
+
+==========================
+Design estratégico:
+
+Separar dentro do nosso negócio qual é o Domain, Quais os subdomínios, Definir os BoundedContext e como eles se comunicam entre si.
+
+	- Obter uma visão geral do domínio.
+	- Dividir o problema em Subdomínios.
+	- Classificar cada Subdomínio: Core, Supporting, Generic.
+	- Definir um Bound Context para cada subdomínio.
+	- Definir em cada Context sua linguagem ubíqua.
+	- Mapear os relacionamentos entre os contextos (Context Map).
+	- Definir os detalhes da integração (Shared Kernel).
+
+	*Começamos sempre pelo mapa de domínio, depois código.*
+==========================
+Design tecnico:
+
+Aqui é onde fazemos a modelagem do design estratégico, Modelamos as entidades, os Value Objects, define os agregados, as factories,
+os serviços de domínio, os eventos de domínio.

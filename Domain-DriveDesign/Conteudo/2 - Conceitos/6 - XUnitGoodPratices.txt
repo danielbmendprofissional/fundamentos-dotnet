@@ -1,0 +1,20 @@
+﻿========================== CONCEITOS ==========================
+
+==========================
+XUNIT GOOD PRATICES:
+
+1- Teste somente o domínio (Isolamento Total):
+	- Os testes de unidade devem carregar e interagir apenas com as classes do seu Core Domain
+	(Value Objects, Entities, Aggregate Roots).
+
+2 - Priorize o Teste de Invariantes (Exceptions):
+	- Teste exaustivamente os construtores de VOs e os métodos do Aggregate Root para garantir
+	que eles lancem uma DomainException quando recebem dados inváldios.
+
+3 - Nomeie os testes pela intenção do Negócio:
+	- O nome do seu método de teste deve descrever a Regra de Negócio que está sendo verificada, 
+	não apenas a chamada do código. Ex: Criar_Endereco_Valido();
+
+4 - Teste a igualdade estrutural de Value Objects
+	- Sempre inclua testes que comprovem que dois Value Objects com os mesmos valores são consi-
+	derados iguais e que a alteração de um único componente os torna diferentes.
