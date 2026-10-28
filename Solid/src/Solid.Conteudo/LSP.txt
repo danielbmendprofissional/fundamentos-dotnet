@@ -1,0 +1,32 @@
+﻿===================================== LISKOV SUBSTITUTION PRINCIPLE =====================================
+
+The LSP states that objects of a derived class should be able to replace objects of their base class 
+without changing the program’s behavior.
+
+- Benefits: Consistency and reliability (derived classes preserve the expected behavior of the base class)
+and safe polymorphism (substitutions do not break the code).
+
+- Bad pratice example: Derived classes that alter or invalidate the base class’s functionality.
+
+The idea behind “a derived class should be substitutable for its base class” is to validate whether that 
+class truly should inherit from the base. If substituting the derived class causes unexpected behavior, 
+the inheritance model is likely wrong.
+
+Practical example in .NET:
+	Consider a base class Customer with a required method IsPremium that determines premium status based on 
+	RegistrationDate. 
+
+		- HiredCustomer inherits and works fine. 
+		- ProspectCustomer inherits but breaks because it doesn’t have RegistrationDate yet, so it can’t 
+		implement IsPremium correctly. 
+
+	In this scenario, either ProspectCustomer should not inherit from Customer, or the base contract must
+	change to avoid forcing behavior that doesn’t make sense for all children.
+
+
+========================
+ALWAYS WORTH CONSIDERING
+
+If, upon inheriting, you find yourself writing NotSupported, NotImplemented, discarding the parent’s method, 
+or adding “if (X) use parent method, else don’t,” you’ve already violated LSP. The fix is to redesign the 
+hierarchy or extract a more appropriate abstraction so every derived type can honor the base contract.

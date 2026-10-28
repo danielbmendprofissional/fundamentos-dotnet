@@ -1,0 +1,23 @@
+﻿===================================== SINGLE RESPOSIBILITY PRINCIPLE =====================================
+
+The SRP states that a class should have only one responsibility and one reason to change.
+
+- Benefits: Easier maintenance, reusability, and testing.
+
+- Bad practice example: A class that handles business logic and also saves data to the database (e.g., report.cs).
+
+- Good practice example: One class for business logic and another for database operations (report, printService, and reportRepository).
+
+- Each class has a clear purpose and can be modified without impacting other parts of the system.
+
+- Always ask: Does this class have more than one reason to change? If yes, it’s better to split it.
+
+================
+PRATICAL EXAMPLE
+It’s not about creating a new class for every single method, but rather separating responsibilities in a meaningful way:
+
+Pessoa.cs -> Domain entity for Person (properties, constructor, domain methods, and validations).
+Pessoa.Controller -> Controller endpoints for Person.
+Pessoa.Application.Service -> Business methods for Person (create, get, list, update, delete).
+Pessoa.Application.Service -> Business validations for Person.
+Pessoa.Infrastructure.Repository -> Database methods for Person (create, read, update, delete, save).

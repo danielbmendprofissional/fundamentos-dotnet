@@ -1,0 +1,35 @@
+﻿===================================== OPEN-CLOSED PRINCIPLE =====================================
+
+The OCP states that classes should be open for extension but closed for modification
+
+- Benefits: New functionality can be added without altering existing code, minimizing risks to 
+already implemented features.
+
+- Bad practice example: Modifying a class directly to add new behavior {
+
+	A Calculator class with a Calculate method that uses if (sum), else if (division), else if 
+	(multiplication). Every time a new calculation method is added, another if must be introduced, 
+	which risks breaking existing functionality.
+
+}
+
+
+
+- Good pratice example: Classe base com Polimorfismo {
+
+	A Calculation base class with an abstract Calculate(value) method.
+	Several classes inherit from Calculation and override the Calculate method 
+	(e.g., Sum → Calculate => value1 + value2).
+
+	The base class remains closed for modification but open for extension.
+}
+
+The base class remains closed to modification but open to extension through inheritance.
+
+An abstract class cannot be instantiated directly—it serves only as a base to be inherited. The 
+ideal approach is to use polymorphism to extend behavior without modifying the base class.
+
+========================
+ALWAYS WORTH CONSIDERING
+
+Always aim to create extensible code. New additions must never alter existing code — they should always extend it...
