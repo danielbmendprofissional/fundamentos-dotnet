@@ -1,0 +1,61 @@
+======================================= DESIGN PATTERNS =======================================
+================== PATTERNS
+
+São padrões desenvolvidos para problemas conhecidos no mundo da programação, existem a anos e
+continuam sendo usados por serem soluções testadas e aprovadas.
+
+Sempre ser claro nas nomenclaturas ao utilizar os padrões.
+
+Os padrões são divididos em três grandes grupos:
+- Padrões Criacionais: Lidam com a criação de objetos, abstraindo o processo de instanciação.
+- Padrões Estruturais: Lidam com a composição de classes ou objetos, focando em como eles se
+  relacionam e se organizam.
+- Padrões Comportamentais: Lidam com a comunicação entre objetos, focando em como eles interagem.
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+- Não precisa reinvetar a roda.
+- Facilitam o entendimento do projeto.
+- Evita refatoração desnecessária.
+- Facilita a criação de testes.
+- Mantém firme aos principios SOLID.
+- Abstrai e nome partes do código.
+
+Malefícios:
+- Pode adicionar complexidade desnecessária.
+- Pode levar a um uso inadequado se não for bem compreendido.
+- Pode resultar em excesso de padrões, tornando o código difícil de seguir.
+- Pode trazer otimizações prematuras.
+
+
+================== GERAL
+
+CRIACIONAIS:
+	- Abstract Factory
+	- Factory Method
+	- Builder
+	- Prototype
+	- Singleton
+
+ESTRUTURAIS:
+	- Adapter
+	- Bridge
+	- Composite
+	- Decorator
+	- Facade
+	- Flyweight
+	- Proxy
+
+COMPORTAMENTAIS:
+	- Interpreter
+	- Template Method
+	- Chain of Responsibility
+	- Iterator
+	- Command
+	- Mediator
+	- Memento
+	- Observer
+	- State
+	- Strategy
+	- Visitor

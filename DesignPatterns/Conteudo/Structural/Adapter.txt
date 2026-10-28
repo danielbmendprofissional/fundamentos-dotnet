@@ -1,0 +1,33 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= STRUCTURAL 
+================== ADAPTER
+
+SOLID TRABALHADO: SRP e OCP
+
+INTENÇÃO OFICIAL:
+
+Converter a interface de uma classe em outra interface esperada pelos clientes. O Adapter permite
+que certas classes trabalhem juntas, pois de outra forma seria impossível por causa de suas inter-
+faces incompatíveis.
+
+Sempre bom usar o adapter na AntiCorruption Layer (ACL) para integrar sistemas legados ou de 
+terceiros, mas se o sistema for simples e gerenciado pela mesma equipe, talvez não seja necessário, 
+usar somente mapeamento.
+
+APLICABILIDADE:
+	- Ao consumir API de terceiros.
+	- Ao integrar sistemas legados com novos sistemas.
+	- Definir limites dentro de camadas da aplicação. (Mais complexo)
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- Desacopla o código da aplicação de códigos de terceiros.
+	- Aplica o SRP ao separar a conversão de interfaces da lógica da aplicação.
+	- Aplica o OCP ao permitir a adição de novos Adapters para código existente.
+
+Malefícios:
+	- Para mim, não possui.
+
+================== IMPORTANTE

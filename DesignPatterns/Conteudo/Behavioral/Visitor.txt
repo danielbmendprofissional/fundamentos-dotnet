@@ -1,0 +1,50 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= BEHAVIORAL
+================== VISITOR
+
+SOLID TRABALHADO: SRP e OCP
+
+INTENÇÃO OFICIAL:
+	- Representar uma operação a ser realizada sobre os elementos de uma estrutura de objetos. O
+	Visitor permite definir uma nova operação sem mudar as classes dos elementos sobre os quais
+	opera.
+
+SOBRE:
+	- Trata-se de Separação de Algoritmos da estrutura de dados. Imainge que você tem uma árvore
+	de objetos (ex: um pedido com vários itens). Você já terminou as classes de negócio. Agore
+	surge um novo requisito: "Precisamos gerar um relatório de impostos desses itens". Em vez de
+	abrir cada classe de item e adicionar um novo método, você cria um Visitor que passa por cada
+	objeto e executa essa lógica internamente.
+
+APLICABILIDADE:
+	- Quando você tem uma estrutura de objetos com muitas classes de interfaces diferentes e pre-
+	cisa realizar operações que dependem das classes concretas.
+
+	- Quando as classes da estrutura raramente mudam, mas você precisa adicionar nova operações
+	constantemente.
+
+	- Quando você quer evitar "poluir" as classes de negócio com lógicas que não pertencem ao seu
+	núcleo (como exportação, auditoria ou formatação).
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- Agrupamento de lógica: Operações relacionadas são centralizadas em uma única classe Visitor.
+
+	- Flexibilidade: Adicionar uma nova operação é tão simples quanto criar uma nova classe que im-
+	plementa a interface do Visitor.
+
+	- Visita Acumulativa: O Visitor pode manter um estado interno enquanto percorre a estrutura (ex:
+	soamr o peso total de uma carga enquanto visita cada item).
+
+Malefícios:
+	- Quebra de encapsulamento: Para o visitor funcionar, as classes visitadas precisam expor seus 
+	atributos publicamente, o que é perigoso.
+
+	- Rigidez de estrutura: Se você adicionar uma nova classe na sua hierarquia, terá que atualizar
+	todos os Visitor para incluir o método VisitNewClass().
+
+	- Complexidade: Exige um entendimento claro de como funciona um Double Dispatch.
+
+================== IMPORTANTE

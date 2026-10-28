@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DesignPatterns.ChainOfResponsibility": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

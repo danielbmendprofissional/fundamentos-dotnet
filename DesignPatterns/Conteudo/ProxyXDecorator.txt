@@ -1,0 +1,17 @@
+O Proxy existe mais para CONTROLAR um recurso.
+O Decorator está ali para ADICIONAR funcionalidades a um objeto.
+
+Agora fica a grande dúvida: "O Proxy inteligente não faz exatammente isso?".
+
+- Sim e não, o Proxy Inteligente ele adicionar coisas novas no fluxo de execução do recurso, por exemplo:
+	Ele adiciona um LOG antes e depois de chamar o recurso, mas o produto final entregue é o mesmo.
+	Ele adiciona um cache para não chamar o recurso toda vez, mas o produto final entregue é o mesmo.
+	Ele adiciona uma trava de segurança, para ver quem pode acessar, mas o produto final entregue é o mesmo.
+	Ele adiciona um controle de acesso ao recurso somente quando necessário, mas o produto final entregue é o mesmo.
+	Ele adiciona para si um responsabilidade de lidar com remoto, mas o produto final entregue é o mesmo.
+
+- O Decorator o produto se mantém o mesmo INTERNAMENTE, mas para o cliente o produto entregue é diferente.
+	Ele adiciona funcionalidades novas ao produto, por exemplo:
+	Ele adiciona um enfeite novo a uma janela, o produto final entregue é uma janela enfeitada.
+	Ele adiciona uma borda nova a um texto, o produto final entregue é um texto com borda.
+	Ele adiciona uma funcionalidade nova a um café, o produto final entregue é um café com leite e chantilly.

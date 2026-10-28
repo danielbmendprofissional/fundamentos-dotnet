@@ -1,0 +1,15 @@
+=================================================================================
+Por que esse cenário é ruim?
+
+- Duplicação de Código (DRY): O fluxo de execução é o mesmo, mas está espalhado. 
+Se você decidir que agora o Log deve ser feito no final, terá que alterar todas 
+as classes de pagamento.
+
+- Inconsistência: Um desenvolvedor pode esquecer de chamar o "Validar" em um novo 
+tipo de pagamento, gerando bugs de segurança.
+
+- Dificuldade de Extensão: Para criar um "Pagamento via Pix", você é obrigado a 
+copiar toda a estrutura de Log e Email novamente.
+
+- Rigidez: Não existe um contrato que obrigue os processos a seguirem o mesmo padrão
+de etapas.

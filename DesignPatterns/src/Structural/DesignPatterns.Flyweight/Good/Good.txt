@@ -1,0 +1,17 @@
+=================================================================================
+
+A solução é aplicar o FlyWeight, nesse caso ele vai separar quais são as proprie-
+dades Intrínsecas e Extrínsecas, compreendendo quais propriedades que sempre se
+repetem e as que não.
+
+Caso nessa separação as propriedades PESADAS se enquadrarem comó Intrínsecas você
+aplica o método.
+
+Basicamente você vai:
+
+- gerenciar um objeto pesado que se repete para todos, dentro 
+dele estão as propriedades intrínsecas.
+
+- gerenciar os mil objetos leves cada um com suas propriedades
+extrínsecas, mas sempre acessando o objeto único que é comum
+para todos.

@@ -1,0 +1,40 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= BEHAVIORAL
+================== MEDIATOR
+
+SOLID TRABALHADO:
+
+INTENÇÃO OFICIAL:
+	- Define um objeto que encapsula como um conjunto de objetos interage. O mediator promove
+	acoplamento fraco ao evitar que os objetos se refiram explicitamente uns aos outros, permitindo
+	que você varie suas interações.
+
+SOBRE:
+	- Visa encapsular a comunicação direta entre objetos.
+
+	- Desacopla objetos que estariam intimamente ligados.
+
+	- Centraliza toda a comunicação em apenas um objeto.
+
+APLICABILIDADE:
+	- Quando você quer diminuir ou extinguir o acoplamento direto entre as classes que poderiam
+	estar diretamente acopladas.
+
+	- Quando você quer simplificar comunicações de N para N para comunicações de 1 para N.
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- Desacopla objetos que poderiam estar firmemente acoplados.
+
+	- Facilita a reutilização de objetos.
+
+	- Facilita a adição de novos mediadores e classes participantes na comunicação.
+
+	- Encapsula a comunicação entre objetos.
+
+Malefícios:
+	- É fácil criar um mediator "faz tudo" (god class).
+
+================== IMPORTANTE

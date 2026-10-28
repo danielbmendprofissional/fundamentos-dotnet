@@ -1,0 +1,16 @@
+=================================================================================
+A implementação deste padrão transforma um bloco monolítico de decisões em uma li-
+nha de montagem inteligente. Em vez de uma classe "sabe-tudo", temos especialistas
+encadeados.
+
+- Desacoplamento de Remetente e Receptor: O cliente que solicita a aprovação não
+sabe qual objeto da corrente finalmente tratará a requisição.
+
+- Cumprimento do SRP: Cada classe de "Handler" foca apenas em uma regra de negócio
+específica.
+
+- Cumprimento do OCP: Você pode extender e adicionar novos objetos a cadeia, sem 
+ferir já existentes.
+
+- Simplificação de código e flexibilidade: Eliminação de IFs e liberdade para reor-
+denar corrente em tempo de execução.

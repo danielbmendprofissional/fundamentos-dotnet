@@ -1,0 +1,41 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= CRIACIONAL 
+================== SINGLETON
+
+INTENÇÃO OFICIAL:
+
+Garantir que uma classe tenha somente uma instância no programa e fornecer um ponto de acesso
+global para a mesma.
+
+É como se voce estivesse em uma situação que durante a execução da aplicação, seu recurso carre-
+ga, ok, mas se ele acabar sendo iniciado novamente você perde todo o estado anterior, ou seja, você
+precisa garantir que esse recurso seja instanciado apenas uma vez.	
+
+Deve-se proteger a instância dessa classe com encapsulamento para que nenhuma outra parte do código
+consiga criar uma nova instância/sobrescrever seu valor.
+
+APLICABILIDADE:
+
+- Gerenciamento de conexões com banco de dados.
+- Gerenciamento de configuração da aplicação.
+- Gerenciamento de logs.
+- Gerenciamento de cache.
+- Gerenciamento de recursos compartilhados.
+- Gerenciamento de sessões de usuário.
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- Controle de acesso à única instância.
+	- Redução do uso de memória.
+	- Facilita a manutenção do estado global.
+	- Fornece um ponto de acesso global, sem necessidade de varíavel global.
+	- Pode ser implementado de forma preguiçosa (lazy), ou seja, a instância só é criada quando
+	  necessária.
+
+Malefícios:
+	- Mais difícil de testar, pois pode introduzir dependências globais.
+	- Viola o princípio de responsabilidade única, pois gerencia sua própria criação e ciclo de vida.
+	- Pode levar a problemas de concorrência em ambientes multithread se não for implementado
+	  corretamente.

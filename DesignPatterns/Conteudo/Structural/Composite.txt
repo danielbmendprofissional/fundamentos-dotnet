@@ -1,0 +1,46 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= STRUCTURAL 
+================== COMPOSITE
+
+SOLID TRABALHADO: OCP 
+
+INTENÇÃO OFICIAL:
+	- Compor objetos em estruturas de árvore para representar hierarquias partes/todo. Composite
+	permite aos clientes tratarem de maneira uniforme objetos individuais e composições de objetos.
+
+	- Faz mais sentido em estruturas que podem ser hierarquicas, mas prioriza COMPOSIÇÃO ao invés
+	de herança.
+
+	- Composite e Leaf, compartilham da mesma interface, normalmente Composite delega função para o
+	leaf.
+
+	- Exemplo: 1 Produto solto com preço e 1 caixa com vários do mesmo produto, também com o preço.
+	- Exemplo: o Cliente chama o Component(Abstract) pedindo a execução do método GetPrice(), e ai
+	o Composite começa a executar forEach Leaf o método GetPrice e se um dos filhos forem outro
+	composite ai abre-se outro forEach até retornar o GetPrice(), de todas as folhas.
+
+APLICABILIDADE:
+	- Quando sua estrutura de objetos possa ser representada hierarquicamente, estrutura
+	de árvore (ex: Pastas e Arquivos, Menus e Submenus).
+
+	- Quando um objeto é composto por outros objetos que seguem a mesma interface (recursividade).
+
+	- Quando quiser que o cliente trate objetos compostos e simples da mesma maneira.
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- É muito fácil criar objetos complexos por composição.
+	- É fácil gerar uma hierarquia de objetos.
+	- É facil usar polimorfismo e recursão.
+	- É facil adicionar novos tipos de elementos na estrutura (OCP)
+
+Malefícios:
+	- Dependendo da estrutura quebra o ISP, pois objetos LEAF, tendem a ter métodos que não usam, pois
+	compartilham da mesma interface do composite.
+
+================== IMPORTANTE
+
+Dentro de um Composite, os objetos internos que têm outros filhos são Composite, os que não tem são 
+chamados de folha.

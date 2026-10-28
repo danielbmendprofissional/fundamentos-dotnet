@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DesignPatterns.Iterator": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

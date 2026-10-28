@@ -1,0 +1,32 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= BEHAVIORAL
+================== OBSERVER 
+
+SOLID TRABALHADO: SRP e OCP
+
+INTENÇÃO OFICIAL:
+	- Define uma dependência 1 para N entre objetos, de modo que, quando um objeto muda de estado,
+	todos os seus dependentes são automaticamente notificados e atualizados.
+
+SOBRE:
+	- Implementado com dois tipos de objeto, observable e observer.
+	
+	- Observable têm uma referência para todos os seus observers, isso torna possível adicionar,
+	remover e notificar todos os observabers quando seu estado muda.
+	
+	- Observers devem ter meios de receber notificações de seus observables, geralmente isso é
+	feito com apenas um método.
+
+APLICABILIDADE:
+	- Quando você precisa notificar vários objetos sobre a mudança de estado de outro(s) objeto(s).
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- Facilita a comunicação entre os objetos em tempo de execução.
+
+Malefícios:
+	- Pode ser complexo ou impossível manter a ordem em que as notificações são enviadas.
+
+================== IMPORTANTE

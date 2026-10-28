@@ -1,0 +1,37 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= BEHAVIORAL
+================== INTERPRETER
+
+SOLID TRABALHADO: SRP e OCP
+
+INTENÇÃO OFICIAL:
+	- Dada uma linguagem, definir uma representação para sua gramática juntamente com um inter-
+	pretador que usa a representação para interpretar sentenças na linguagem.
+
+SOBRE:
+	- O Interpreter trata de converter uma cadeia de símbolos (uma sentença) em uma árvore de
+	objetos (Abstract Syntax Tree - AST) e, em seguida, percorrer essa árvore para executar uma 
+	ação. Imagine que você quer permitir que o usuário final escreva uma regra como: (Valor > 100)
+	AND (Status == 'Ativo'). O Interpreter é o padrão que entende e executa isso.
+
+APLICABILIDADE:
+	- Quando você tem uma gramática simples que pode ser representada como uma árvore.
+
+	- Quando a eficiência de execução não é o fator crítico (interpretadores baseados em árvores
+	são mais lentos que compiladores nativos).
+
+	- Motores de busca simplificados, avaliadores de fórmulas em planilhas ou scripts de automação.
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- É fácil mudar ou estender a gramática adicionando novas classes de expressão.
+
+Malefícios:
+	- Não aparece muito no dia a dia de aplicações comerciais comuns.
+
+	- Para gramáticas complexas, a hierarquia de classes torna-se incontrolável. Nesses casos, 
+	ferramentas como ANTLR ou Roslyn são preferíveis.
+
+================== IMPORTANTE

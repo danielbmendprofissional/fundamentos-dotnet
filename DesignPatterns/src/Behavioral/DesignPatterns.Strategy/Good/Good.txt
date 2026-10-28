@@ -1,0 +1,11 @@
+=================================================================================
+Nesse cenário agora nós definimos o contrato que todos os algoritmos de cálculo 
+devem seguir.
+
+O client não precisa mais saber como calcular, ele só sabe pedir o calculo, apli-
+cado o SRP.
+
+Agora caso apareça uma nova modalidade de frete é só criar uma nova classe que herde
+a interface, não precisa alterar código existente somente extender, aplicando o OCP.
+
+E também o código fica mais objetivo e claro, retirando os Ifs.

@@ -1,0 +1,31 @@
+=================================================================================
+Neste exemplo, introduzimos a "Torre de Controle". Em vez de os componentes 
+(Carrinho, Estoque, Financeiro) serem um emaranhado de dependências, eles passam
+a ser peças independentes que apenas reportam eventos a um mediador central.
+
+As melhorias trazidas por este padrão são:
+
+	- Desacoplamento de Objetos: Os componentes não possuem mais referências uns 
+	para os outros. O Carrinho não precisa saber que o Financeiro existe para que
+	uma compra seja processada.
+
+	- Centralização da Lógica de Interação: As regras de orquestração (quem deve
+	ser chamado após quem) ficam em um único lugar, facilitando a visualização do 
+	fluxo de negócio.
+
+	- Facilidade de Manutenção (OCP): Para adicionar um novo passo ao processo (como 
+	enviar um E-mail), você não precisa mexer em todos os componentes, apenas 
+	registrar essa nova reação no Mediador (ou criar um novo Handler no modelo 
+	Microsoft).
+
+	- Simplificação de Componentes (SRP): Cada classe volta a ter uma única respon-
+	sabilidade. O Financeiro apenas cobra; ele não precisa mais saber quando ou quem 
+	o chamou.
+
+	- Reutilização de Código: Como os componentes são independentes, você pode usar 
+	o mesmo Estoque em um fluxo de "Venda de Balcão" e em um fluxo de "E-commerce" 
+	sem carregar dependências desnecessárias.
+
+	- Eliminação do "Efeito Cascata": Uma alteração na assinatura de um método do 
+	Financeiro impacta apenas o Mediador, e não 10 classes diferentes que o chamavam 
+	diretamente no cenário BAD.

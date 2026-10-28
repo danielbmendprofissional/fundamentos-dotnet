@@ -1,0 +1,12 @@
+=================================================================================
+Imagine um Pedido. Ele pode estar Aberto, Pago ou Entregue. No cenário ruim, você
+enche a classe de if ou switch.
+
+Complexidade Ciclomática: Cada novo estado adicionado (ex: Enviado) obriga você a 
+caçar todos os switch/case do sistema para adicionar a nova regra.
+
+Violação do SRP: A classe Pedido fica responsável por conhecer as regras de transição
+de todos os estados possíveis.
+
+Dificuldade de Manutenção: É muito fácil esquecer um if em algum método perdido, 
+gerando estados inconsistentes (ex: cancelar algo que já foi entregue).

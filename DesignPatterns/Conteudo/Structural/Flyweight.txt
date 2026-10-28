@@ -1,0 +1,34 @@
+======================================= DESIGN PATTERNS =======================================
+
+======================================= STRUCTURAL 
+================== FLYWEIGHT 
+
+SOLID TRABALHADO: ...
+
+INTENÇÃO OFICIAL:
+	- É um padrão de projeto estrutural que tem a intenção de usar compartilhamento para suportar
+	eficientemente grandes quantidades de objetos de forma granular.
+
+SOBRE:
+	- É um padrão de otimização, visa economizar memória RAM e esolve problema de desempenho divi-
+	dindo o estado de um objeto em INTRÍNSECO e EXTRÍNSECO.
+		- INTRÍSECO (Estado que geralmene não muda).
+		- EXTRÍNSECO (Estado que pode ser movido para fora do objeto por mudar frequentemente).
+
+APLICABILIDADE (Todos precisam ser verdadeiros para aplicar esse PATTERN):
+	- Quando a aplicação estiver com problemas de alto consumo de memória RAM.
+	- Quando a aplicação utiliza uma grande quantidade de objetos.
+	- Quando os custos de armazenamento são altos por causa da quantidade de objetos.
+	- Quando a maioria dos estados de objetos podem se tornar extrínsecos.
+	- Quando os objetos podem ser substituídos por poucos objetos compartilhados.
+	- Quando a aplicação não depende da identidade dos objetos.
+
+================== CONSEQUÊNCIAS
+
+Benefícios:
+	- Pode economizar memória RAM.
+
+Malefícios:
+	- Muito complexo, aplicar somente se precisar muito.
+
+==== ============== IMPORTANTE

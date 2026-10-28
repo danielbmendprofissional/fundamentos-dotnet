@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DesignPatterns.Memento": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
