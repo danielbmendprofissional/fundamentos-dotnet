@@ -1,0 +1,160 @@
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Valuto.AuditTrail.Abstractions.Commom;
+using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
+using Valuto.AuditTrail.Abstractions.Model.Snapshots;
+using Valuto.AuditTrail.EFCore.Adapters;
+using Valuto.AuditTrail.Abstractions.Commom;
+using Valuto.AuditTrail.Abstractions.Contracts.Auditoria;
+using Valuto.AuditTrail.Abstractions.Model.Snapshots;
+using Valuto.AuditTrail.EFCore.Adapters;
+
+namespace Valuto.AuditTrail.EFCore
+{
+    /// <summary>
+    /// Classe base para o contexto do banco de dados que integra automaticamente o sistema de auditoria.
+    /// </summary>
+    /// <typeparam name="TContext">O tipo do DbContext derivado.</typeparam>
+    public abstract class ValutoDbContext<TContext> : DbContext
+        where TContext : DbContext
+    {
+        private bool _isSaving;
+        /// <summary>
+        /// Serviço de auditoria que será iniciado no DI
+        /// </summary>
+        public IAuditoriaInterna AuditoriaInterna { get; set; }
+
+        /// <summary>
+        /// Inicializa uma nova instância do contexto de auditoria.
+        /// </summary>
+        /// <param name="options">As opções de configuração do DbContext.</param>
+        protected ValutoDbContext(DbContextOptions<TContext> options) : base(options) { }
+
+        /// <summary>
+        /// Método estendido disparado imediatamente antes do processamento da auditoria e persistência síncrona.
+        /// Para o client colocar suas configurações especificas de saveChanges
+        /// </summary>
+        protected virtual void OnBeforeSaveChanges() { }
+
+        /// <summary>
+        /// Método estendido disparado imediatamente antes do processamento da auditoria e persistência assíncrona.
+        /// Para o client colocar suas configurações especificas de saveChanges
+        /// </summary>
+        protected virtual Task OnBeforeSaveChangesAsync() => Task.FromResult(0);
+
+        /// <summary>
+        /// Sobrescrita selada para garantir que o fluxo de 
+        /// Iniciar, Persistir e Finalizar auditoria seja respeitado.
+        /// </summary>
+        public sealed override int SaveChanges()
+            => SaveChanges(acceptAllChangesOnSuccess: true);
+
+        /// <summary>
+        /// Sobrescrita selada para garantir que o fluxo de 
+        /// Iniciar, Persistir e Finalizar auditoria seja respeitado.
+        /// </summary>
+        public sealed override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+            => SaveChangesAsync(acceptAllChangesOnSuccess: true, cancellationToken);
+
+        /// <summary>
+        /// Sobrescrita selada para garantir que o fluxo de 
+        /// Iniciar, Persistir e Finalizar auditoria seja respeitado.
+        /// </summary>
+        /// <param name="acceptAllChangesOnSuccess">Padrão do EF Core</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">Caso o client chame o base.saveChanges de maneira equivocada</exception>
+        public sealed override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            if (_isSaving) throw new InvalidOperationException(AuditConstants.RecursionError);
+
+            _isSaving = true;
+            var tracker = new TrackerAdapter(this.ChangeTracker);
+
+            try
+            {
+                OnBeforeSaveChanges();
+
+                var (snapshots, materializadores) = AuditoriaInterna.GerarSnapshot(tracker);
+                var result = base.SaveChanges(acceptAllChangesOnSuccess);
+
+                if (snapshots.Count > 0)
+                {
+                    materializadores.ForEach(materializar => materializar());
+
+                    _ = Task.Run(() =>
+                    {
+                        SafeAction(() =>
+                            AuditoriaInterna.ProcessarAuditoriaAsync(snapshots));
+
+                    }, CancellationToken.None);
+
+                }
+
+                return result;
+            }
+            finally { _isSaving = false; }
+        }
+        /// <summary>
+        /// Sobrescrita selada para garantir que o fluxo de 
+        /// Iniciar, Persistir e Finalizar auditoria seja respeitado.
+        /// </summary>
+        /// <param name="acceptAllChangesOnSuccess">Padrão do EF Core</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">Caso o client chame o base.saveChanges de maneira equivocada</exception>
+        public sealed override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            if (_isSaving) throw new InvalidOperationException(AuditConstants.RecursionError);
+
+            _isSaving = true;
+            var tracker = new TrackerAdapter(this.ChangeTracker);
+
+            try
+            {
+                await OnBeforeSaveChangesAsync();
+
+                var (snapshots, materializadores) = AuditoriaInterna.GerarSnapshot(tracker);
+                var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+
+                if (snapshots.Count > 0)
+                {
+                    materializadores.ForEach(materializar => materializar());
+
+                    _ = Task.Run(async () =>
+                    {
+                        await SafeActionAsync(async () =>
+                        {
+                            await AuditoriaInterna.ProcessarAuditoriaAsync(snapshots, cancellationToken);
+                        });
+                    });
+                }
+
+                return result;
+            }
+            finally { _isSaving = false; }
+        }
+
+        private void SafeAction(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch { }
+        }
+
+
+        private async Task SafeActionAsync(Func<Task> action)
+        {
+            try
+            {
+                await action();
+            }
+            catch { }
+        }
+    }
+
+}
