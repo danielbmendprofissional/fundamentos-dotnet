@@ -1,0 +1,27 @@
+=================================================== CQRS ===================================================
+*Recommended for complex projects with high scalability*
+*Some scenarios choose to separate databases, I prefer a single database with different contexts*
+
+The CQRS (Command Query Responsibility Segregation) pattern separates read operations (queries) from write
+operations (commands) in a system. This means that actions that change the system state (such as creating,
+updating, or deleting data) are handled separately from actions that only query the system state.
+
+This separation of responsibilities allows each path to be optimized independently to meet specific needs,
+maximizing performance, scalability, and security.
+
+Most important points of CQRS:
+
+1- Separation of responsibilities:
+    - Separates reads and writes into different models, using commands to update data and queries to read data.
+    
+2- Uses distinct domain models:
+    - You can create different domain models for read operations and write operations.
+
+3- Encourages scalability:
+    - Facilitates scalability, since read and write operations can be scaled independently of each other.
+
+4- Access control and security:
+    - Allows more granular control over data security and access.
+
+5- Encourages flexibility:
+    - With CQRS, you can choose the most appropriate technologies and strategies to handle commands and queries.

@@ -1,0 +1,12 @@
+=================================================== Queries ===================================================
+
+A Query represents a request to read data from the system without modifying its state.
+
+    - It is a class that contains the parameters and necessary information for the query and does not
+      contain business logic; its main purpose is to transport input data for the query.
+
+A QueryHandler is a class used to process a specific query and contains the logic to retrieve data
+from the system based on the query.
+
+    - It receives the query as input, executes the query against the database or other data sources,
+      transforms the data into a view model (Response), and returns the result.

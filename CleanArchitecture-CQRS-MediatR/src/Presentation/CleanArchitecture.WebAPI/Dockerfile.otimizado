@@ -1,0 +1,63 @@
+# ESTÁGIO 1: BUILD (A Cozinha) Pode continuar com o SDK normal ou Alpine, que é mais leve
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
+WORKDIR /app
+
+# 1. Copia a Solution e TODOS os .csproj de uma vez só preservando as pastas
+# O segredo: usamos o caminho relativo para não quebrar o .sln
+COPY *.sln ./
+
+# Remove o projeto de teste da solução para o restore não reclamar dele
+RUN dotnet sln CleanArchitecture.sln remove src/Test/CleanArchitecture.UnitTest/CleanArchitecture.UnitTest.csproj
+
+# é mais seguro copiar os principais para o restore não falhar:
+COPY src/Core/CleanArchitecture.Domain/*.csproj ./src/Core/CleanArchitecture.Domain/
+COPY src/Core/CleanArchitecture.Application/*.csproj ./src/Core/CleanArchitecture.Application/
+COPY src/Infrastructure/CleanArchitecture.Infrastructure/*.csproj ./src/Infrastructure/CleanArchitecture.Infrastructure/
+COPY src/Presentation/CleanArchitecture.WebAPI/*.csproj ./src/Presentation/CleanArchitecture.WebAPI/
+
+RUN dotnet restore
+
+# 2. Agora sim copia o código e publica
+# deixar o copy abaixo do restore para aproveitar o cache do docker.
+COPY src/ ./src/
+RUN dotnet publish "src/Presentation/CleanArchitecture.WebAPI/CleanArchitecture.WebAPI.csproj" -c Release -o /publish
+
+# -----------------------------------------------------------------------
+
+# ESTÁGIO 2: RUNTIME (O Prato Pronto)
+# Usamos uma imagem MUITO menor que não tem o SDK, só o motor para rodar
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine
+WORKDIR /app
+
+# Configurações de ambiente (Igual ao seu)
+ENV ASPNETCORE_HTTP_PORTS=5139
+EXPOSE 5139
+
+# Copiamos APENAS a pasta /publish do estágio anterior
+# Copy fica para baixo de ENV e de EXPOSE para caso ser alterado não precisar refazer tudo de novo, ENV e EXPOSE são mais estáticos,
+# quando ele fica acima, qualquer alteração no código força ele a refazer tudo que está abaixo.
+COPY --from=build /publish .
+
+# No Alpine, é comum rodar com um usuário não-root por segurança
+USER $APP_UID
+
+ENTRYPOINT ["dotnet", "CleanArchitecture.WebAPI.dll"]
+
+# ========================================== FIM ==========================================
+# Agora essses são os comandos para rodar no terminal
+# Criar pela primeira vez sua imagem:
+
+# docker build -t minha-api-clean-arch -f src/Presentation/CleanArchitecture.WebAPI/Dockerfile .
+# -t = nomear a imagem
+# -f = informar localidade do dockerFile se não estiver na mesma raiz, se não nem precisa.
+
+# Pode criar varios builds da mesma imagem, tipo imagem:v2, mas o ideal é sempre que atualizar o código,
+# gera um build novo, verifica e apaga o antigo.
+
+# Com a imagem gerada podemos agora rodar o container:
+# docker run -p 5139:5139 -e ASPNETCORE_ENVIRONMENT=Development minha-api-clean-arch:v1
+
+# -p = mapear a porta do container para a porta da máquina hospedeira
+# -e = setar variaveis de ambiente, como o ambiente de desenvolvimento (Padrão é Production se não setar nada)
+# minha-api-clean-arch:v1 = nome da imagem que você quer rodar
+# Agora sua API estará rodando na porta 5139 da sua máquina

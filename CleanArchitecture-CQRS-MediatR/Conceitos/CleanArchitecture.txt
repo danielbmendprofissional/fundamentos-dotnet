@@ -1,0 +1,80 @@
+=================================================== CLEAN ARCHITECTURE ===================================================
+
+It is a software architecture pattern proposed by Robert C. Martin that aims to create well-structured,
+highly testable, and easily maintainable software systems, focusing on the separation of responsibilities
+and the creation of independent layers, allowing the code to be more flexible and adaptable to changes.
+
+Officially it is divided into circles:
+
+- APPLICATION acts as a bridge between the domain layer and the external interfaces of the application.
+
+NOTE: Infrastructure and Persistence can both be considered Infrastructure...
+NOTE: The separation is not super rigid, it varies from scenario to scenario, but this is the foundation.
+
+outer circle {
+    Presentation (Interface Adapters):
+        - Web Pages
+        - Web Components
+        - Web APIs
+        - Controllers
+        - Views
+        - Filters
+        - Attributes
+        - View Models
+        - Style Sheets
+        - JavaScript
+
+    Infrastructure (Frameworks & Drivers):
+        - Auth and Identity
+        - File and Object Storage
+        - Message Queue Storage
+        - Services
+        - Email/Notification Services
+        - Logging Services
+        - Payment Services
+        - Social Logins
+
+    Persistence (Frameworks & Drivers):
+        - Data Context
+        - Repositories
+        - Data Migrations
+        - Data Seeding
+        - In-Memory Caching
+        - Cache
+}
+middle circle {
+    Application (Use cases):
+        - Abstractions
+        - Contracts
+        - Ports
+        - Business Services
+        - Commands and Queries
+        - Application Exceptions
+        - DTOs
+        - Request and Response Models
+        - Mapping DTOs
+        - Validators
+        - Behaviors
+        - Specifications
+        - Persistence Interfaces
+}    
+inner circle {
+    Domain:
+        - Domain Entities
+        - Aggregates
+        - Value Objects
+        - Domain Events
+        - Enumerations
+        - Constants
+        - Rule Interfaces
+        - Domain Exceptions
+}
+
+There is a clear concept regarding dependencies:
+- It goes from outside to inside.
+- Nothing in the inner circle knows about the outer circle, but the outer circle knows about the inner one.
+*Analyze the project dependencies for better understanding*
+    - Domain has no dependencies.
+    - Application depends on Domain.
+    - Persistence depends on Application.
+    - API depends on Application and Persistence (only at runtime).
